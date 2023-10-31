@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:postgresql://database-news-service:5432/news-service-db
+    username: postgres
+    password: postgres
+#    url: ${DATABASE_URL}
+#    username: ${DATABASE_USERNAME}
+#    password: ${DATABASE_PASSWORD}
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: true
+logging:
+  level:
+    root: info
+    by.nata.newscommentsservice: debug

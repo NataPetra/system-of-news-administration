@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="changelog-data-comm" author="natalapetracenko@gmail.com">
+        <sql>
+            INSERT INTO "news-service-db".comments (text, username, news_id)
+            SELECT
+                'Comment ' || (s1.i) as text,
+                'user' || (s1.i % 10) + 1 as username,
+                (s1.i % 20) + 1 as news_id
+            FROM
+                (SELECT generate_series(1, 200) as i) s1;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
