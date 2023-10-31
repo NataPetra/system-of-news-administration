@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  news-service:
+    image: news-comments-service-1.0.0
+    build: news-comments-service
+    depends_on:
+      - database-news-service
+    restart: always
+    environment:
+      DATABASE_URL: jdbc:postgresql://database-news-service:5432/clever_bank
+      DATABASE_PASSWORD: postgres
+      DATABASE_USERNAME: postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - news_application_ntwrk
+
+  database-news-service:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: news-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - news_application_ntwrk
+    volumes:
+      - postgres-db:/var/lib/postgres
+
+volumes:
+  postgres-db:
+
+networks:
+  news_application_ntwrk:
