@@ -2,6 +2,7 @@ package by.nata.newscommentsservice.service.api;
 
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
+import by.nata.newscommentsservice.service.dto.NewsWithCommentsResponseDto;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface INewsService {
     NewsResponseDto getNewsById(Long id);
 
     List<NewsResponseDto> getAllNews(int pageNumber, int pageSize);
+
+    NewsWithCommentsResponseDto getNewsWithComments(Long newsId, int pageNumber, int pageSize);
 }
