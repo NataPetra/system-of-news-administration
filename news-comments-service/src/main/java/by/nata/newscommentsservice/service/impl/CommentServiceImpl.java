@@ -26,6 +26,8 @@ public class CommentServiceImpl implements ICommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
+    public static final String MESSAGE_COMMENT_NOT_FOUND = "Comment with id %d not found";
+
     @Override
     @Transactional
     public CommentResponseDto save(CommentRequestDto comment) {
@@ -40,7 +42,7 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     public CommentResponseDto update(Long id, CommentRequestDto comment) {
         Comment existingComment = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         existingComment.setText(comment.text());
         Comment updatedComment = commentRepository.save(existingComment);
         return commentMapper.entityToDto(updatedComment);
@@ -50,7 +52,7 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional(readOnly = true)
     public CommentResponseDto getCommentById(Long id) {
         Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         return commentMapper.entityToDto(comment);
     }
 
@@ -77,7 +79,7 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         commentRepository.delete(comment);
     }
 

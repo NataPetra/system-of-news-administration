@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +33,8 @@ public class NewsServiceImpl implements INewsService {
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
     private final ICommentService commentService;
+
+    public static final String MESSAGE_NEWS_NOT_FOUND = "News with id %d not found";
 
     @Override
     @Transactional
@@ -49,7 +50,7 @@ public class NewsServiceImpl implements INewsService {
     @Transactional
     public NewsResponseDto update(Long id, NewsRequestDto news) {
         News existingNews = newsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("News with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
         existingNews.setTitle(news.title());
         existingNews.setText(news.text());
         News updatedNews = newsRepository.save(existingNews);
@@ -60,7 +61,7 @@ public class NewsServiceImpl implements INewsService {
     @Transactional(readOnly = true)
     public NewsResponseDto getNewsById(Long id) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("News with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
         return newsMapper.entityToDto(news);
     }
 
@@ -78,7 +79,7 @@ public class NewsServiceImpl implements INewsService {
     @Transactional(readOnly = true)
     public NewsWithCommentsResponseDto getNewsWithComments(Long newsId, int pageNumber, int pageSize) {
         News news = newsRepository.findById(newsId)
-                .orElseThrow(() -> new EntityNotFoundException("News with id " + newsId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, newsId)));
 
         List<CommentResponseDto> comments = commentService.findByNewsIdOrderByTimeDesc(newsId, pageNumber, pageSize);
 
@@ -95,52 +96,16 @@ public class NewsServiceImpl implements INewsService {
     @Transactional
     public void delete(Long id) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("News with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
         newsRepository.delete(news);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<NewsResponseDto> searchNews(String keyword, String dateString, int pageNumber, int pageSize) {
-        if (keyword != null && dateString != null) {
-            return searchNewsByDateAndKeyword(dateString, keyword, pageNumber, pageSize);
-        } else if (dateString != null) {
-            return searchNewsByDate(dateString, pageNumber, pageSize);
-        } else if (keyword != null) {
-            return searchNewsByKeyword(keyword, pageNumber, pageSize);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    private List<NewsResponseDto> searchNewsByKeyword(String keyword, int pageNumber, int pageSize) {
-        Specification<News> spec = NewsSpecification.search(keyword);
+        Specification<News> spec = NewsSpecification.search(keyword, convertStringToDate(dateString));
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("time").descending());
         Page<News> newsPage = newsRepository.findAll(spec, pageable);
-        return newsPage.map(newsMapper::entityToDto).getContent();
-    }
-
-    private List<NewsResponseDto> searchNewsByDate(String dateString, int pageNumber, int pageSize) {
-        Date date = convertStringToDate(dateString);
-        if (date == null) {
-            return Collections.emptyList();
-        }
-        Specification<News> spec = NewsSpecification.newsCreatedOnDate(date);
-        Page<News> newsPage = newsRepository.findAll(spec, PageRequest.of(pageNumber, pageSize, Sort.by("time").descending()));
-        return newsPage.getContent().stream()
-                .map(newsMapper::entityToDto)
-                .toList();
-    }
-
-    private List<NewsResponseDto> searchNewsByDateAndKeyword(String dateString, String keyword, int pageNumber, int pageSize) {
-        Date date = convertStringToDate(dateString);
-        if (date == null) {
-            return Collections.emptyList();
-        }
-        Specification<News> dateSpec = NewsSpecification.newsCreatedOnDate(date);
-        Specification<News> keywordSpec = NewsSpecification.search(keyword);
-        Specification<News> combinedSpec = Specification.where(dateSpec).and(keywordSpec);
-        Page<News> newsPage = newsRepository.findAll(combinedSpec, PageRequest.of(pageNumber, pageSize, Sort.by("time").descending()));
         return newsPage.getContent().stream()
                 .map(newsMapper::entityToDto)
                 .toList();

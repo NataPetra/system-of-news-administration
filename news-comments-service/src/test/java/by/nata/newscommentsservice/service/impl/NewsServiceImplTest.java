@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static by.nata.newscommentsservice.util.NewsTestData.createNewsList;
+import static by.nata.newscommentsservice.util.NewsTestData.createNewsResponseDtoList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -134,9 +136,9 @@ class NewsServiceImplTest {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        List<News> newsList = NewsTestData.createNewsList();
+        List<News> newsList = createNewsList();
 
-        List<NewsResponseDto> expectedResponse = NewsTestData.createNewsResponseDtoList();
+        List<NewsResponseDto> expectedResponse = createNewsResponseDtoList();
 
         Page<News> newsPage = new PageImpl<>(newsList, pageable, newsList.size());
 
@@ -202,43 +204,43 @@ class NewsServiceImplTest {
 
     @Test
     void searchNews() {
-        String keyword = "Test";
+        String keyword = "text";
         int pageNumber = 0;
         int pageSize = 10;
 
-        News news1 = NewsTestData.createNews()
-                .withId(1L)
-                .withTime(new Date())
-                .withTitle("Test News 1")
-                .withText("This is a test news 1")
-                .build();
-        News news2 = NewsTestData.createNews()
-                .withId(2L)
-                .withTime(new Date())
-                .withTitle("Test News 2")
-                .withText("This is a test news 2")
-                .build();
-
-        List<News> newsList = Arrays.asList(news1, news2);
+        List<News> newsList = createNewsList();
+        List<NewsResponseDto> newsResponseDtoList = createNewsResponseDtoList();
         Page<News> newsPage = new PageImpl<>(newsList);
 
-        Specification<News> newsSpec = NewsSpecification.search(keyword);
+        Specification<News> newsSpec = NewsSpecification.search(keyword, null);
         try (MockedStatic<NewsSpecification> newsSpecUtil = Mockito.mockStatic(NewsSpecification.class)) {
-            newsSpecUtil.when(() -> NewsSpecification.search(keyword)).then(invocation -> newsSpec);
+            newsSpecUtil.when(() -> NewsSpecification.search(keyword, null)).then(invocation -> newsSpec);
 
             when(newsRepository.findAll(newsSpec, PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
                     .thenReturn(newsPage);
 
-//            when(newsRepository.findAll(NewsSpecification.newsCreatedOnDate(new Date()), PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
-//                    .thenReturn(newsPage);
-//
-//            when(newsRepository.findAll(Specification.where(NewsSpecification.newsCreatedOnDate(new Date())).and(NewsSpecification.search(keyword)), PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
-//                    .thenReturn(newsPage);
+            when(newsMapper.entityToDto(any(News.class)))
+                    .thenAnswer(invocation -> {
+                        News news = (News) invocation.getArguments()[0];
+                        return newsResponseDtoList.stream()
+                                .filter(dto -> dto.id().equals(news.getId()))
+                                .findFirst()
+                                .orElse(null);
+                    });
 
             List<NewsResponseDto> result = newsService.searchNews(keyword, null, pageNumber, pageSize);
 
             assertNotNull(result);
-            assertEquals(2, result.size());
+            assertEquals(3, result.size());
+
+            for (int i = 0; i < result.size(); i++) {
+                NewsResponseDto expected = newsResponseDtoList.get(i);
+                NewsResponseDto actual = result.get(i);
+
+                assertEquals(expected.id(), actual.id());
+                assertEquals(expected.text(), actual.text());
+                assertEquals(expected.title(), actual.title());
+            }
         }
     }
 }

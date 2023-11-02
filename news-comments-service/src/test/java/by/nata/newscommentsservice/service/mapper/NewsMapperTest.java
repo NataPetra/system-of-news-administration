@@ -10,6 +10,8 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -36,7 +38,12 @@ class NewsMapperTest {
 
     @Test
     void entityToDto() {
-        News news = NewsTestData.createNews().build();
+        News news = NewsTestData.createNews()
+                .withId(1L)
+                .withTitle("News")
+                .withText("Some text")
+                .withTime(new Date())
+                .build();
 
         NewsResponseDto responseDto = newsMapper.entityToDto(news);
 

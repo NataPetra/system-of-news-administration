@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = CommentController.class)
 class CommentControllerTest {
 
+    public static final Long COMMENT_ID = 1L;
     @Autowired
     private MockMvc mockMvc;
 
@@ -59,13 +60,12 @@ class CommentControllerTest {
 
     @Test
     void updateComment() throws Exception {
-        Long commentId = 1L;
         CommentRequestDto request = CommentTestData.createCommentRequestDto().build();
         CommentResponseDto response = CommentTestData.createCommentResponseDto().build();
 
-        when(commentService.update(commentId, request)).thenReturn(response);
+        when(commentService.update(COMMENT_ID, request)).thenReturn(response);
 
-        mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, commentId)
+        mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, COMMENT_ID)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -74,12 +74,11 @@ class CommentControllerTest {
 
     @Test
     void getComment() throws Exception {
-        Long commentId = 1L;
         CommentResponseDto response = CommentTestData.createCommentResponseDto().build();
 
-        when(commentService.getCommentById(commentId)).thenReturn(response);
+        when(commentService.getCommentById(COMMENT_ID)).thenReturn(response);
 
-        mockMvc.perform(get(URL_TEMPLATE_UPDATE_GET_DELETE, commentId))
+        mockMvc.perform(get(URL_TEMPLATE_UPDATE_GET_DELETE, COMMENT_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(response)));
     }
