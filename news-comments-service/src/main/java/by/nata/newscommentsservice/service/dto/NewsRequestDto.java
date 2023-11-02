@@ -1,13 +1,13 @@
 package by.nata.newscommentsservice.service.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record NewsRequestDto(
-        @NotNull(message = "Title must not be null")
+        @NotBlank(message = "Title must not be null or empty")
         String title,
-        @NotNull(message = "Text must not be null")
+        @NotBlank(message = "Text must not be null or empty")
         String text
 ) {
 }

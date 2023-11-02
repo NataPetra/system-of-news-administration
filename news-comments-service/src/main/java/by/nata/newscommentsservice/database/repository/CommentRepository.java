@@ -3,7 +3,6 @@ package by.nata.newscommentsservice.database.repository;
 import by.nata.newscommentsservice.database.model.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -14,6 +13,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, JpaSpec
     Page<Comment> findByNewsIdOrderByTimeDesc(Long newsId, Pageable pageable);
 
     List<Comment> findAllByNewsId(Long newsId);
-
-    Page<Comment> findAll(Specification<Comment> spec, Pageable pageable);
 }

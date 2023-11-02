@@ -39,43 +39,41 @@ public class NewsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NewsResponseDto> updateNews(@PathVariable Long id, @RequestBody @Valid NewsRequestDto request) {
+    public NewsResponseDto updateNews(@PathVariable Long id, @RequestBody @Valid NewsRequestDto request) {
         log.debug("Input data for updating news: {}", request);
-        NewsResponseDto response = newsService.update(id, request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return newsService.update(id, request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NewsResponseDto> getNews(@PathVariable Long id) {
+    public NewsResponseDto getNews(@PathVariable Long id) {
         NewsResponseDto response = newsService.getNewsById(id);
         log.debug("Getting news section of id {} from database: {} ", id, response);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
     @GetMapping
-    public ResponseEntity<List<NewsResponseDto>> getAllNews(@RequestParam int pageNumber,
-                                                            @RequestParam int pageSize) {
+    public List<NewsResponseDto> getAllNews(@RequestParam int pageNumber,
+                                            @RequestParam int pageSize) {
         List<NewsResponseDto> response = newsService.getAllNews(pageNumber, pageSize);
         log.debug("Getting news from database: {} ", response);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
     @GetMapping("/{newsId}/comments")
-    public ResponseEntity<NewsWithCommentsResponseDto> getNewsWithComments(@PathVariable Long newsId,
-                                                                           @RequestParam int pageNumber,
-                                                                           @RequestParam int pageSize) {
+    public NewsWithCommentsResponseDto getNewsWithComments(@PathVariable Long newsId,
+                                                           @RequestParam int pageNumber,
+                                                           @RequestParam int pageSize) {
         NewsWithCommentsResponseDto response = newsService.getNewsWithComments(newsId, pageNumber, pageSize);
         log.debug("Getting news with comments section of id {} from database: {} ", newsId, response);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<NewsResponseDto>> searchNews(@RequestParam(required = false) String keyword,
-                                                            @RequestParam(required = false) String dateString,
-                                                            @RequestParam int pageNumber,
-                                                            @RequestParam int pageSize) {
-        List<NewsResponseDto> newsList = newsService.searchNews(keyword, dateString, pageNumber, pageSize);
-        return new ResponseEntity<>(newsList, HttpStatus.OK);
+    public List<NewsResponseDto> searchNews(@RequestParam(required = false) String keyword,
+                                            @RequestParam(required = false) String dateString,
+                                            @RequestParam int pageNumber,
+                                            @RequestParam int pageSize) {
+        return newsService.searchNews(keyword, dateString, pageNumber, pageSize);
     }
 
     @DeleteMapping("/{id}")

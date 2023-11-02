@@ -14,10 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Date;
 import java.util.List;
@@ -28,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceImplTest {
@@ -56,8 +59,9 @@ class CommentServiceImplTest {
 
         CommentResponseDto savedComment = commentService.save(commentRequestDto);
 
-        Assertions.assertThat(savedComment).isNotNull();
-        Assertions.assertThat(savedComment).isEqualTo(responseDto);
+        Assertions.assertThat(savedComment)
+                .isNotNull()
+                .isEqualTo(responseDto);
 
         verify(commentMapper, times(1)).dtoToEntity(commentRequestDto);
         verify(commentRepository, times(1)).save(comment);
@@ -89,8 +93,9 @@ class CommentServiceImplTest {
 
         CommentResponseDto updatedCommentDto = commentService.update(COMMENT_ID, commentRequestDto);
 
-        Assertions.assertThat(updatedCommentDto).isNotNull();
-        Assertions.assertThat(updatedCommentDto).isEqualTo(responseDto);
+        Assertions.assertThat(updatedCommentDto)
+                .isNotNull()
+                .isEqualTo(responseDto);
 
         verify(commentRepository, times(1)).findById(COMMENT_ID);
         verify(commentRepository, times(1)).save(updatedComment);
@@ -113,8 +118,9 @@ class CommentServiceImplTest {
 
         CommentResponseDto retrievedComment = commentService.getCommentById(COMMENT_ID);
 
-        Assertions.assertThat(retrievedComment).isNotNull();
-        Assertions.assertThat(retrievedComment).isEqualTo(responseDto);
+        Assertions.assertThat(retrievedComment)
+                .isNotNull()
+                .isEqualTo(responseDto);
 
         verify(commentRepository, times(1)).findById(COMMENT_ID);
         verify(commentMapper, times(1)).entityToDto(comment);
@@ -131,8 +137,9 @@ class CommentServiceImplTest {
 
         List<CommentResponseDto> commentResponseDtoList = commentService.findByNewsIdOrderByTimeDesc(newsId, pageNumber, pageSize);
 
-        Assertions.assertThat(commentResponseDtoList).isNotEmpty();
-        Assertions.assertThat(commentResponseDtoList).hasSize(commentPage.getNumberOfElements());
+        Assertions.assertThat(commentResponseDtoList)
+                .isNotEmpty()
+                .hasSize(commentPage.getNumberOfElements());
 
         verify(commentRepository, times(1)).findByNewsIdOrderByTimeDesc(newsId, PageRequest.of(pageNumber, pageSize));
     }
@@ -146,8 +153,9 @@ class CommentServiceImplTest {
 
         List<CommentResponseDto> commentResponseDtoList = commentService.findAllByNewsId(newsId);
 
-        Assertions.assertThat(commentResponseDtoList).isNotEmpty();
-        Assertions.assertThat(commentResponseDtoList).hasSize(comments.size());
+        Assertions.assertThat(commentResponseDtoList)
+                .isNotEmpty()
+                .hasSize(comments.size());
 
         verify(commentRepository, times(1)).findAllByNewsId(newsId);
     }
@@ -170,46 +178,51 @@ class CommentServiceImplTest {
         assertThrows(EntityNotFoundException.class, () -> commentService.delete(COMMENT_ID));
     }
 
-//    @Test
-//    void searchComment() {
-//        List<Comment> commentList = CommentTestData.createCommentList();
-//        List<CommentResponseDto> commentResponseDtoList = CommentTestData.createCommentResponseDtoList();
-//
-//        String keyword = "test";
-//        int pageNumber = 0;
-//        int pageSize = 10;
-//        Page<Comment> commentPage = new PageImpl<>(commentList);
-//
-//        when(commentRepository.findAll(CommentSpecification.search(keyword), PageRequest.of(pageNumber, pageSize)))
-//                .thenReturn(commentPage);
-//
-//        when(commentMapper.entityToDto(any(Comment.class)))
-//                .thenAnswer(invocation -> {
-//                    Comment comment = (Comment) invocation.getArguments()[0];
-//                    return commentResponseDtoList.stream()
-//                            .filter(dto -> dto.id().equals(comment.getId()))
-//                            .findFirst()
-//                            .orElse(null);
-//                });
-//
-//        List<CommentResponseDto> result = commentService.searchComment(keyword, pageNumber, pageSize);
-//
-//        assertNotNull(result);
-//        assertEquals(commentList.size(), result.size());
-//
-//        for (int i = 0; i < commentList.size(); i++) {
-//            CommentResponseDto expected = commentResponseDtoList.get(i);
-//            CommentResponseDto actual = result.get(i);
-//
-//            assertEquals(expected.id(), actual.id());
-//            assertEquals(expected.getText(), actual.getText());
-//            assertEquals(expected.getUsername(), actual.getUsername());
-//            assertEquals(expected.getTime(), actual.getTime());
-//            assertEquals(expected.getNewsId(), actual.getNewsId());
-//        }
-//
-//        verify(commentRepository, times(1)).findAll(CommentSpecification.search(keyword), PageRequest.of(pageNumber, pageSize));
-//        verify(commentMapper, times(commentList.size())).entityToDto(any(Comment.class));
-//    }
+    @Test
+    void searchComment() {
+        List<Comment> commentList = CommentTestData.createCommentList();
+        List<CommentResponseDto> commentResponseDtoList = CommentTestData.createCommentResponseDtoList();
 
+        String keyword = "test";
+        int pageNumber = 0;
+        int pageSize = 10;
+        Page<Comment> commentPage = new PageImpl<>(commentList);
+
+        Specification<Comment> commentSpec = CommentSpecification.search(keyword);
+        try (MockedStatic<CommentSpecification> commSpecUtil = Mockito.mockStatic(CommentSpecification.class)) {
+            commSpecUtil.when(() -> CommentSpecification.search(keyword)).then(invocation -> commentSpec);
+
+            when(commentRepository.findAll(commentSpec, PageRequest.of(pageNumber, pageSize)))
+                    .thenReturn(commentPage);
+
+            when(commentMapper.entityToDto(any(Comment.class)))
+                    .thenAnswer(invocation -> {
+                        Comment comment = (Comment) invocation.getArguments()[0];
+                        return commentResponseDtoList.stream()
+                                .filter(dto -> dto.id().equals(comment.getId()))
+                                .findFirst()
+                                .orElse(null);
+                    });
+
+
+            List<CommentResponseDto> result = commentService.searchComment(keyword, pageNumber, pageSize);
+
+            assertNotNull(result);
+            assertEquals(commentList.size(), result.size());
+
+            for (int i = 0; i < commentList.size(); i++) {
+                CommentResponseDto expected = commentResponseDtoList.get(i);
+                CommentResponseDto actual = result.get(i);
+
+                assertEquals(expected.id(), actual.id());
+                assertEquals(expected.text(), actual.text());
+                assertEquals(expected.username(), actual.username());
+                assertEquals(expected.time(), actual.time());
+                assertEquals(expected.newsId(), actual.newsId());
+            }
+
+            verify(commentRepository, times(1)).findAll(commentSpec, PageRequest.of(pageNumber, pageSize));
+            verify(commentMapper, times(commentList.size())).entityToDto(any(Comment.class));
+        }
+    }
 }

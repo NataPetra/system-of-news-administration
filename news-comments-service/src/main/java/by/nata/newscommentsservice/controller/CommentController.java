@@ -38,32 +38,30 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long id, @RequestBody @Valid CommentRequestDto request) {
+    public CommentResponseDto updateComment(@PathVariable Long id, @RequestBody @Valid CommentRequestDto request) {
         log.debug("Input data for updating comment: {}", request);
-        CommentResponseDto response = commentService.update(id, request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return commentService.update(id, request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> getComment(@PathVariable Long id) {
+    public CommentResponseDto getComment(@PathVariable Long id) {
         CommentResponseDto response = commentService.getCommentById(id);
         log.debug("Getting comment of id {} from database: {}", id, response);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
     @GetMapping("/news/{newsId}")
-    public ResponseEntity<List<CommentResponseDto>> getCommentsByNewsId(@PathVariable Long newsId) {
+    public List<CommentResponseDto> getCommentsByNewsId(@PathVariable Long newsId) {
         List<CommentResponseDto> response = commentService.findAllByNewsId(newsId);
         log.debug("Getting comments for news with id {} from database: {}", newsId, response);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<CommentResponseDto>> searchComments(@RequestParam(required = false) String keyword,
-                                                                   @RequestParam int pageNumber,
-                                                                   @RequestParam int pageSize) {
-        List<CommentResponseDto> commentList = commentService.searchComment(keyword, pageNumber, pageSize);
-        return new ResponseEntity<>(commentList, HttpStatus.OK);
+    public List<CommentResponseDto> searchComments(@RequestParam(required = false) String keyword,
+                                                   @RequestParam int pageNumber,
+                                                   @RequestParam int pageSize) {
+        return commentService.searchComment(keyword, pageNumber, pageSize);
     }
 
     @DeleteMapping("/{id}")

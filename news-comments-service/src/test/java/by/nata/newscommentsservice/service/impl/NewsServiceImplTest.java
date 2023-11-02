@@ -10,11 +10,13 @@ import by.nata.newscommentsservice.service.dto.NewsWithCommentsResponseDto;
 import by.nata.newscommentsservice.service.mapper.NewsMapper;
 import by.nata.newscommentsservice.util.CommentTestData;
 import by.nata.newscommentsservice.util.NewsTestData;
-import org.junit.Ignore;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,7 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -199,54 +200,45 @@ class NewsServiceImplTest {
         assertThrows(EntityNotFoundException.class, () -> newsService.delete(NEWS_ID));
     }
 
-//    @Test
-//    void searchNews() {
-//        String keyword = "test";
-//        String dateString = "2023-10-31";
-//        int pageNumber = 0;
-//        int pageSize = 10;
-//
-//        News news1 = NewsTestData.createNews()
-//                .withId(1L)
-//                .withTime(new Date())
-//                .withTitle("Test News 1")
-//                .withText("This is a test news 1")
-//                .build();
-//        News news2 = NewsTestData.createNews()
-//                .withId(2L)
-//                .withTime(new Date())
-//                .withTitle("Test News 2")
-//                .withText("This is a test news 2")
-//                .build();
-//
-//        List<News> newsList = Arrays.asList(news1, news2);
-//        Page<News> newsPage = new PageImpl<>(newsList);
-//
-//        when(newsRepository.findAll(NewsSpecification.search(keyword), PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
-//                .thenReturn(newsPage);
-//
-//        when(newsRepository.findAll(NewsSpecification.newsCreatedOnDate(new Date()), PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
-//                .thenReturn(newsPage);
-//
-//        when(newsRepository.findAll(Specification.where(NewsSpecification.newsCreatedOnDate(new Date())).and(NewsSpecification.search(keyword)), PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
-//                .thenReturn(newsPage);
-//
-//        List<NewsResponseDto> result = newsService.searchNews(keyword, dateString, pageNumber, pageSize);
-//
-//        assertNotNull(result);
-//        assertEquals(2, result.size());
-//
-//        NewsResponseDto newsResponse1 = result.get(0);
-//        assertEquals(news1.getId(), newsResponse1.id());
-//        assertEquals(news1.getTime(), newsResponse1.time());
-//        assertEquals(news1.getTitle(), newsResponse1.title());
-//        assertEquals(news1.getText(), newsResponse1.text());
-//
-//        NewsResponseDto newsResponse2 = result.get(1);
-//        assertEquals(news2.getId(), newsResponse2.id());
-//        assertEquals(news2.getTime(), newsResponse2.time());
-//        assertEquals(news2.getTitle(), newsResponse2.title());
-//        assertEquals(news2.getText(), newsResponse2.text());
-//    }
+    @Test
+    void searchNews() {
+        String keyword = "Test";
+        int pageNumber = 0;
+        int pageSize = 10;
 
+        News news1 = NewsTestData.createNews()
+                .withId(1L)
+                .withTime(new Date())
+                .withTitle("Test News 1")
+                .withText("This is a test news 1")
+                .build();
+        News news2 = NewsTestData.createNews()
+                .withId(2L)
+                .withTime(new Date())
+                .withTitle("Test News 2")
+                .withText("This is a test news 2")
+                .build();
+
+        List<News> newsList = Arrays.asList(news1, news2);
+        Page<News> newsPage = new PageImpl<>(newsList);
+
+        Specification<News> newsSpec = NewsSpecification.search(keyword);
+        try (MockedStatic<NewsSpecification> newsSpecUtil = Mockito.mockStatic(NewsSpecification.class)) {
+            newsSpecUtil.when(() -> NewsSpecification.search(keyword)).then(invocation -> newsSpec);
+
+            when(newsRepository.findAll(newsSpec, PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
+                    .thenReturn(newsPage);
+
+//            when(newsRepository.findAll(NewsSpecification.newsCreatedOnDate(new Date()), PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
+//                    .thenReturn(newsPage);
+//
+//            when(newsRepository.findAll(Specification.where(NewsSpecification.newsCreatedOnDate(new Date())).and(NewsSpecification.search(keyword)), PageRequest.of(pageNumber, pageSize, Sort.by("time").descending())))
+//                    .thenReturn(newsPage);
+
+            List<NewsResponseDto> result = newsService.searchNews(keyword, null, pageNumber, pageSize);
+
+            assertNotNull(result);
+            assertEquals(2, result.size());
+        }
+    }
 }
