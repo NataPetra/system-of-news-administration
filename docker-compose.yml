@@ -7,7 +7,7 @@ services:
       - database-news-service
     restart: always
     environment:
-      DATABASE_URL: jdbc:postgresql://database-news-service:5432/clever_bank
+      DATABASE_URL: jdbc:postgresql://database-news-service:5432/news-service-db
       DATABASE_PASSWORD: postgres
       DATABASE_USERNAME: postgres
     ports:

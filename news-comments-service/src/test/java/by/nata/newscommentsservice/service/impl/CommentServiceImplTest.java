@@ -8,6 +8,7 @@ import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
 import by.nata.newscommentsservice.service.mapper.CommentMapper;
 import by.nata.newscommentsservice.util.CommentTestData;
+import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -148,6 +150,24 @@ class CommentServiceImplTest {
         Assertions.assertThat(commentResponseDtoList).hasSize(comments.size());
 
         verify(commentRepository, times(1)).findAllByNewsId(newsId);
+    }
+
+    @Test
+    void deleteComment() {
+        Comment comment = Comment.builder().withId(COMMENT_ID).build();
+
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(comment));
+
+        commentService.delete(COMMENT_ID);
+
+        verify(commentRepository).delete(comment);
+    }
+
+    @Test
+    void deleteCommentNotFound() {
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> commentService.delete(COMMENT_ID));
     }
 
 //    @Test

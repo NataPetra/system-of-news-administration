@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -30,6 +31,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -179,6 +181,23 @@ class NewsServiceImplTest {
         assertEquals(expectedResponse, result);
     }
 
+    @Test
+    void deleteNews() {
+        News news = News.builder().withId(NEWS_ID).build();
+
+        when(newsRepository.findById(NEWS_ID)).thenReturn(Optional.of(news));
+
+        newsService.delete(NEWS_ID);
+
+        verify(newsRepository).delete(news);
+    }
+
+    @Test
+    void deleteNewsNotFound() {
+        when(newsRepository.findById(NEWS_ID)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> newsService.delete(NEWS_ID));
+    }
 
 //    @Test
 //    void searchNews() {

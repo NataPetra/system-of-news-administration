@@ -18,5 +18,7 @@ public interface INewsService {
 
     NewsWithCommentsResponseDto getNewsWithComments(Long newsId, int pageNumber, int pageSize);
 
+    void delete(Long id);
+
     List<NewsResponseDto> searchNews(String keyword, String dateString, int pageNumber, int pageSize);
 }
