@@ -17,4 +17,6 @@ public interface INewsService {
     List<NewsResponseDto> getAllNews(int pageNumber, int pageSize);
 
     NewsWithCommentsResponseDto getNewsWithComments(Long newsId, int pageNumber, int pageSize);
+
+    List<NewsResponseDto> searchNews(String keyword, String dateString, int pageNumber, int pageSize);
 }

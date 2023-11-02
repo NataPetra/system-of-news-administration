@@ -2,6 +2,7 @@ package by.nata.newscommentsservice.service.impl;
 
 import by.nata.newscommentsservice.database.model.Comment;
 import by.nata.newscommentsservice.database.repository.CommentRepository;
+import by.nata.newscommentsservice.database.util.CommentSpecification;
 import by.nata.newscommentsservice.service.api.ICommentService;
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +69,18 @@ public class CommentServiceImpl implements ICommentService {
     public List<CommentResponseDto> findAllByNewsId(Long newsId) {
         List<Comment> comments = commentRepository.findAllByNewsId(newsId);
         return comments.stream()
+                .map(commentMapper::entityToDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize) {
+        Specification<Comment> spec = CommentSpecification.search(keyword);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Comment> commentPage = commentRepository.findAll(spec, pageable);
+
+        return commentPage.getContent().stream()
                 .map(commentMapper::entityToDto)
                 .toList();
     }

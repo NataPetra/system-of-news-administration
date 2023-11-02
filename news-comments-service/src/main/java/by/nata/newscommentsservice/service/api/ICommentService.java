@@ -16,4 +16,6 @@ public interface ICommentService {
     List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, int pageNumber, int pageSize);
 
     List<CommentResponseDto> findAllByNewsId(Long newsId);
+
+    List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize);
 }
