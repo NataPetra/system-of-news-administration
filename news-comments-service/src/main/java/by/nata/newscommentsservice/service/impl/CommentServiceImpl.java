@@ -74,6 +74,14 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
+    @Transactional
+    public void delete(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
+        commentRepository.delete(comment);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize) {
         Specification<Comment> spec = CommentSpecification.search(keyword);

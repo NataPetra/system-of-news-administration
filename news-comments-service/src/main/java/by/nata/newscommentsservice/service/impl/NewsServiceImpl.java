@@ -92,6 +92,14 @@ public class NewsServiceImpl implements INewsService {
     }
 
     @Override
+    @Transactional
+    public void delete(Long id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("News with id " + id + " not found"));
+        newsRepository.delete(news);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<NewsResponseDto> searchNews(String keyword, String dateString, int pageNumber, int pageSize) {
         if (keyword != null && dateString != null) {

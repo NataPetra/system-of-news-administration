@@ -17,5 +17,7 @@ public interface ICommentService {
 
     List<CommentResponseDto> findAllByNewsId(Long newsId);
 
+    void delete(Long id);
+
     List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize);
 }
