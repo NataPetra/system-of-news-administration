@@ -1,6 +1,8 @@
 spring:
-  profiles:
-    active: dev
+#  profiles:
+#    active: dev
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:postgresql://database-news-service:5432/news-service-db
     username: postgres
@@ -12,7 +14,7 @@ spring:
     change-log: classpath:db/changelog/changelog-master.xml
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     open-in-view: true
 logging:
   level:

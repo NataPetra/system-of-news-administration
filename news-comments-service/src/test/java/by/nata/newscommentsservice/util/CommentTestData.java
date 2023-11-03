@@ -30,7 +30,7 @@ public final class CommentTestData {
                 .withId(1L)
                 .withText("Sample Comment")
                 .withUsername("User123")
-                .withTime(new Date())
+                .withTime("2023-11-03 18:56:11")
                 .withNewsId(1L);
     }
 
@@ -59,14 +59,14 @@ public final class CommentTestData {
                 .withId(1L)
                 .withText("Comment1 test")
                 .withUsername("User123 test")
-                .withTime(new Date())
+                .withTime("2023-11-03 18:56:11")
                 .withNewsId(1L)
                 .build());
         commentResponseDtoList.add(CommentResponseDto.builder()
                 .withId(2L)
                 .withText("Comment2 test")
                 .withUsername("User456 test")
-                .withTime(new Date())
+                .withTime("2023-11-03 18:56:11")
                 .withNewsId(2L)
                 .build());
         return commentResponseDtoList;

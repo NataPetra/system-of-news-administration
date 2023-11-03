@@ -3,13 +3,12 @@ package by.nata.newscommentsservice.database.util;
 import by.nata.newscommentsservice.database.model.Comment;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.util.StringUtils;
 
 @UtilityClass
 public class CommentSpecification {
     public static Specification<Comment> search(String keyword) {
         return (root, query, criteriaBuilder) -> {
-            if (StringUtils.isEmpty(keyword)) {
+            if (keyword == null && keyword.trim().isEmpty()) {
                 return null;
             }
             String likePattern = "%" + keyword + "%";

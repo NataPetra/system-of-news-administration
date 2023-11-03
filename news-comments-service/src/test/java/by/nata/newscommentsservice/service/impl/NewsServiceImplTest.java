@@ -25,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -164,7 +166,8 @@ class NewsServiceImplTest {
 
     @Test
     void getNewsWithComments() {
-        News news = NewsTestData.createNews().build();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        News news = NewsTestData.createNews().withTime(convertStringToDate()).build();
         CommentResponseDto comment1 = CommentTestData.createCommentResponseDto().build();
         CommentResponseDto comment2 = CommentTestData.createCommentResponseDto().build();
 
@@ -174,7 +177,7 @@ class NewsServiceImplTest {
 
         NewsWithCommentsResponseDto expectedResponse = NewsWithCommentsResponseDto.builder()
                 .withId(news.getId())
-                .withTime(news.getTime())
+                .withTime(sdf.format(news.getTime()))
                 .withTitle(news.getTitle())
                 .withText(news.getText())
                 .withCommentsList(Arrays.asList(comment1, comment2))
@@ -241,6 +244,16 @@ class NewsServiceImplTest {
                 assertEquals(expected.text(), actual.text());
                 assertEquals(expected.title(), actual.title());
             }
+        }
+    }
+
+    private Date convertStringToDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return sdf.parse("2023-11-03");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

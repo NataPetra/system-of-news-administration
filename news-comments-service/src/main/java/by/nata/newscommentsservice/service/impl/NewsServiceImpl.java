@@ -78,6 +78,7 @@ public class NewsServiceImpl implements INewsService {
     @Override
     @Transactional(readOnly = true)
     public NewsWithCommentsResponseDto getNewsWithComments(Long newsId, int pageNumber, int pageSize) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, newsId)));
 
@@ -85,7 +86,7 @@ public class NewsServiceImpl implements INewsService {
 
         return NewsWithCommentsResponseDto.builder()
                 .withId(news.getId())
-                .withTime(news.getTime())
+                .withTime(sdf.format(news.getTime()))
                 .withTitle(news.getTitle())
                 .withText(news.getText())
                 .withCommentsList(comments)
@@ -123,4 +124,5 @@ public class NewsServiceImpl implements INewsService {
             return null;
         }
     }
+
 }

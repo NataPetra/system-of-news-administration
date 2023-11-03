@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -41,7 +41,7 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private String username;
 
-    @CreatedDate
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date time;
