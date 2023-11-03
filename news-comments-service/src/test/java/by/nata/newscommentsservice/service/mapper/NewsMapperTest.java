@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
+import static by.nata.newscommentsservice.util.DateFormater.formatDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -49,7 +50,7 @@ class NewsMapperTest {
 
         assertNotNull(responseDto);
         assertEquals(news.getId(), responseDto.id());
-        assertEquals(news.getTime(), responseDto.time());
+        assertEquals(formatDate(news.getTime()), responseDto.time());
         assertEquals(news.getTitle(), responseDto.title());
         assertEquals(news.getText(), responseDto.text());
     }

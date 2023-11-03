@@ -12,13 +12,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Date;
 import java.util.List;
 
+import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_GET_ALL;
+import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_GET_WITH_COMMENT;
+import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_SAVE;
+import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_SEARCH;
+import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_UPDATE_GET_DELETE;
 import static by.nata.newscommentsservice.util.NewsTestData.createNewsResponseDtoList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -31,8 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = NewsController.class)
+@MockBean(JpaMetamodelMappingContext.class)
 class NewsControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -42,11 +47,6 @@ class NewsControllerTest {
     @MockBean
     private INewsService newsService;
 
-    public static final String URL_TEMPLATE_SAVE = "/api/v1/app/news/";
-    public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/news/{id}";
-    public static final String URL_TEMPLATE_GET_ALL = "/api/v1/app/news/?pageNumber={pageNumber}&pageSize={pageSize}";
-    public static final String URL_TEMPLATE_GET_WITH_COMMENT = "/api/v1/app/news/{newsId}/comments?pageNumber={pageNumber}&pageSize={pageSize}";
-    public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/news/search?keyword={keyword}&dateString={dateString}&pageNumber={pageNumber}&pageSize={pageSize}";
 
     @Test
     void saveNews() throws Exception {
@@ -121,7 +121,7 @@ class NewsControllerTest {
                 .withTitle("A")
                 .withText("B")
                 .withCommentsList(CommentTestData.createCommentResponseDtoList())
-                .withTime(new Date())
+                .withTime("2023-11-03 18:56:11")
                 .build();
 
         when(newsService.getNewsWithComments(newsId, pageNumber, pageSize)).thenReturn(response);

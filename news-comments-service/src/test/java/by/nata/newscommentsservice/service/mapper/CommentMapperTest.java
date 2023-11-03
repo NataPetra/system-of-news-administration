@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Date;
 import java.util.Optional;
 
+import static by.nata.newscommentsservice.util.DateFormater.formatDate;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +60,7 @@ class CommentMapperTest {
         Assertions.assertThat(commentResponseDto.id()).isEqualTo(comment.getId());
         Assertions.assertThat(commentResponseDto.text()).isEqualTo(comment.getText());
         Assertions.assertThat(commentResponseDto.username()).isEqualTo(comment.getUsername());
-        Assertions.assertThat(commentResponseDto.time()).isEqualTo(comment.getTime());
+        Assertions.assertThat(commentResponseDto.time()).isEqualTo(formatDate(comment.getTime()));
         Assertions.assertThat(commentResponseDto.newsId()).isEqualTo(comment.getNews().getId());
     }
 
