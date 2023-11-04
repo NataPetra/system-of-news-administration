@@ -9,7 +9,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static by.nata.newscommentsservice.util.DateFormater.formatDate;
+
 public final class CommentTestData {
+
+    public static final String URL_TEMPLATE_SAVE = "/api/v1/app/comments/";
+    public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/comments/{id}";
+    public static final String URL_TEMPLATE_GET_BY_NEWS_ID = "/api/v1/app/comments/news/{newsId}";
+    public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/comments/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}";
 
     private CommentTestData() {
     }
@@ -70,5 +77,51 @@ public final class CommentTestData {
                 .withNewsId(2L)
                 .build());
         return commentResponseDtoList;
+    }
+
+    public static CommentResponseDto createCommentResponseDtoIntegr() {
+        return CommentResponseDto.builder()
+                .withId(1L)
+                .withText("Comment 1 for News 1")
+                .withUsername("User1")
+                .withTime("2023-11-03 01:46:22")
+                .withNewsId(1L)
+                .build();
+    }
+
+    public static CommentRequestDto createCommentRequestDtoIntegr() {
+        return CommentRequestDto.builder()
+                .withText("New Comment")
+                .withUsername("User1")
+                .withNewsId(1L)
+                .build();
+    }
+
+    public static CommentResponseDto createExpectedCommentResponseDto() {
+        return CommentResponseDto.builder()
+                .withId(1L)
+                .withText("New Comment")
+                .withUsername("User1")
+                .withTime(formatDate(new Date()))
+                .withNewsId(1L)
+                .build();
+    }
+
+    public static CommentRequestDto createUpdatedCommentRequestDto() {
+        return CommentRequestDto.builder()
+                .withText("Updated Comment")
+                .withUsername("User1")
+                .withNewsId(1L)
+                .build();
+    }
+
+    public static CommentResponseDto createExpectedUpdatedCommentResponseDto() {
+        return CommentResponseDto.builder()
+                .withId(1L)
+                .withText("Updated Comment")
+                .withUsername("User1")
+                .withTime("2023-11-03 01:46:22")
+                .withNewsId(1L)
+                .build();
     }
 }

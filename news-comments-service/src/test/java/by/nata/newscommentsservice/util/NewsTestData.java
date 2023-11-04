@@ -87,14 +87,14 @@ public final class NewsTestData {
         return newsResponseDtoList;
     }
 
-    public static NewsRequestDto createNewsRequestDtoIntrgr() {
+    public static NewsRequestDto createNewsRequestDtoIntegr() {
         return NewsRequestDto.builder()
                 .withTitle("New News")
                 .withText("This is a new test news")
                 .build();
     }
 
-    public static NewsResponseDto createExpectedNewsResponseDtoIntrgr() {
+    public static NewsResponseDto createExpectedNewsResponseDtoIntegr() {
         return NewsResponseDto.builder()
                 .withId(1L)
                 .withTitle("New News")
@@ -103,7 +103,7 @@ public final class NewsTestData {
                 .build();
     }
 
-    public static NewsResponseDto createExpectedNewsResponseDtoForUpdateIntrgr() {
+    public static NewsResponseDto createExpectedNewsResponseDtoForUpdateIntegr() {
         return NewsResponseDto.builder()
                 .withId(1L)
                 .withTitle("New News")
@@ -112,17 +112,17 @@ public final class NewsTestData {
                 .build();
     }
 
-    public static NewsWithCommentsResponseDto createExpectedNewsWithCommentsResponseDtoIntrgr() {
+    public static NewsWithCommentsResponseDto createExpectedNewsWithCommentsResponseDtoIntegr() {
         return NewsWithCommentsResponseDto.builder()
                 .withId(1L)
                 .withTitle("News 1")
                 .withText("This is a test news 1")
                 .withTime("2023-11-03 01:46:22")
-                .withCommentsList(createExpectedCommentsListIntrgr())
+                .withCommentsList(createExpectedCommentsListIntegr())
                 .build();
     }
 
-    public static List<CommentResponseDto> createExpectedCommentsListIntrgr() {
+    public static List<CommentResponseDto> createExpectedCommentsListIntegr() {
         List<CommentResponseDto> comments = new ArrayList<>();
         comments.add(CommentResponseDto.builder()
                 .withId(1L)
@@ -141,7 +141,7 @@ public final class NewsTestData {
         return comments;
     }
 
-    public static NewsResponseDto getNewsResponseDtoIntrgr() {
+    public static NewsResponseDto getNewsResponseDtoIntegr() {
         return NewsResponseDto.builder()
                 .withId(1L)
                 .withTime("2023-11-03 01:46:22")
@@ -150,9 +150,9 @@ public final class NewsTestData {
                 .build();
     }
 
-    public static List<NewsResponseDto> createExpectedNewsListIntrgr() {
+    public static List<NewsResponseDto> createExpectedNewsListIntegr() {
         List<NewsResponseDto> newsList = new ArrayList<>();
-        newsList.add(getNewsResponseDtoIntrgr());
+        newsList.add(getNewsResponseDtoIntegr());
         newsList.add(NewsResponseDto.builder()
                 .withId(2L)
                 .withTime("2023-11-03 01:46:22")

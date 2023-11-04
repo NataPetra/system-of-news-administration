@@ -1,4 +1,4 @@
-package by.nata.newscommentsservice.controller;
+package by.nata.newscommentsservice.controller.integration;
 
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
@@ -31,12 +31,12 @@ import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_GET_WIT
 import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_SAVE;
 import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_SEARCH;
 import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_UPDATE_GET_DELETE;
-import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsListIntrgr;
-import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsResponseDtoForUpdateIntrgr;
-import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsResponseDtoIntrgr;
-import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsWithCommentsResponseDtoIntrgr;
-import static by.nata.newscommentsservice.util.NewsTestData.createNewsRequestDtoIntrgr;
-import static by.nata.newscommentsservice.util.NewsTestData.getNewsResponseDtoIntrgr;
+import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsListIntegr;
+import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsResponseDtoForUpdateIntegr;
+import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsResponseDtoIntegr;
+import static by.nata.newscommentsservice.util.NewsTestData.createExpectedNewsWithCommentsResponseDtoIntegr;
+import static by.nata.newscommentsservice.util.NewsTestData.createNewsRequestDtoIntegr;
+import static by.nata.newscommentsservice.util.NewsTestData.getNewsResponseDtoIntegr;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -82,7 +82,7 @@ class NewsControllerIntegrationTest {
                 NEWS_ID);
 
         NewsResponseDto actualResponse = responseEntity.getBody();
-        NewsResponseDto expectedResponse = getNewsResponseDtoIntrgr();
+        NewsResponseDto expectedResponse = getNewsResponseDtoIntegr();
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -104,7 +104,7 @@ class NewsControllerIntegrationTest {
 
         List<NewsResponseDto> actualResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
         });
-        List<NewsResponseDto> expectedResponse = createExpectedNewsListIntrgr();
+        List<NewsResponseDto> expectedResponse = createExpectedNewsListIntegr();
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -131,7 +131,7 @@ class NewsControllerIntegrationTest {
 
         List<NewsResponseDto> actualResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
         });
-        List<NewsResponseDto> expectedResponse = createExpectedNewsListIntrgr();
+        List<NewsResponseDto> expectedResponse = createExpectedNewsListIntegr();
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -140,7 +140,7 @@ class NewsControllerIntegrationTest {
 
     @Test
     @SqlGroup({
-            @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = "classpath:testdata/add_news_with_comments_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void shouldReturn200AndCorrectJsonWhenGetNewsWithCommentsSuccessful() throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.exchange(
@@ -153,7 +153,7 @@ class NewsControllerIntegrationTest {
                 PAGE_SIZE);
 
         NewsWithCommentsResponseDto actualResponse = objectMapper.readValue(response.getBody(), NewsWithCommentsResponseDto.class);
-        NewsWithCommentsResponseDto expectedResponse = createExpectedNewsWithCommentsResponseDtoIntrgr();
+        NewsWithCommentsResponseDto expectedResponse = createExpectedNewsWithCommentsResponseDtoIntegr();
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -163,7 +163,7 @@ class NewsControllerIntegrationTest {
     @Test
     @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn201WhenSaveNewsSuccessful() {
-        NewsRequestDto newsRequestDto = createNewsRequestDtoIntrgr();
+        NewsRequestDto newsRequestDto = createNewsRequestDtoIntegr();
 
         ResponseEntity<NewsResponseDto> responseEntity = restTemplate.postForEntity(
                 URL_TEMPLATE_SAVE,
@@ -171,7 +171,7 @@ class NewsControllerIntegrationTest {
                 NewsResponseDto.class);
 
         NewsResponseDto actualResponse = responseEntity.getBody();
-        NewsResponseDto expectedResponse = createExpectedNewsResponseDtoIntrgr();
+        NewsResponseDto expectedResponse = createExpectedNewsResponseDtoIntegr();
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(expectedResponse, actualResponse);
 
@@ -183,7 +183,7 @@ class NewsControllerIntegrationTest {
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
     void shouldReturn200AndCorrectJsonWhenUpdateNewsSuccessful() {
-        NewsRequestDto request = createNewsRequestDtoIntrgr();
+        NewsRequestDto request = createNewsRequestDtoIntegr();
 
         ResponseEntity<NewsResponseDto> responseEntity = restTemplate.exchange(
                 URL_TEMPLATE_UPDATE_GET_DELETE,
@@ -193,7 +193,7 @@ class NewsControllerIntegrationTest {
                 NEWS_ID);
 
         NewsResponseDto actualResponse = responseEntity.getBody();
-        NewsResponseDto expectedResponse = createExpectedNewsResponseDtoForUpdateIntrgr();
+        NewsResponseDto expectedResponse = createExpectedNewsResponseDtoForUpdateIntegr();
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
