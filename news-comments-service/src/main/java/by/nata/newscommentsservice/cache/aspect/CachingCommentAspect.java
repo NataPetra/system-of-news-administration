@@ -20,13 +20,12 @@ import java.util.Optional;
 @Profile("dev")
 public class CachingCommentAspect {
 
-    @Value("${cache.algorithm}")
-    private String algorithm;
-
     private final Cache<String, CommentResponseDto> commentCache;
 
     @Autowired
-    public CachingCommentAspect(LFUCache<String, CommentResponseDto> lfuCache, LRUCache<String, CommentResponseDto> lruCache) {
+    public CachingCommentAspect(@Value("${cache.algorithm}") String algorithm,
+                                LFUCache<String, CommentResponseDto> lfuCache,
+                                LRUCache<String, CommentResponseDto> lruCache) {
         if (CacheType.LFU.name().equalsIgnoreCase(algorithm)) {
             this.commentCache = lfuCache;
         } else {

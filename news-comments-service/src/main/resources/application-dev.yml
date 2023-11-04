@@ -5,4 +5,4 @@ spring:
     password: postgres
 cache:
   maxSize: 20
-  algorithm: LRU
+  algorithm: LFU

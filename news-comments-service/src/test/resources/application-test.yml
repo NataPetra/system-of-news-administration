@@ -5,4 +5,4 @@ spring:
     change-log: db.changelog/changelog-test.xml
 cache:
   maxSize: 20
-  algorithm: LRU
+  algorithm: LFU
