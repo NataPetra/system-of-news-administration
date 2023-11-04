@@ -3,3 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/news-service-db
     username: postgres
     password: postgres
+cache:
+  maxSize: 20
+  algorithm: LRU

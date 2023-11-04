@@ -4,6 +4,7 @@ import by.nata.newscommentsservice.cache.algorithm.api.Cache;
 import by.nata.newscommentsservice.cache.config.CacheProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Component
 @Qualifier("LRUCache")
+@Scope("prototype")
 public class LRUCache<K, V> implements Cache<K, V> {
 
     private final int maxSize;

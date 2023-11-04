@@ -4,6 +4,7 @@ import by.nata.newscommentsservice.cache.algorithm.api.Cache;
 import by.nata.newscommentsservice.cache.config.CacheProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.PriorityQueue;
 
 @Component
 @Qualifier("LFUCache")
+@Scope("prototype")
 public class LFUCache<K, V> implements Cache<K, V> {
 
     private final int maxSize;
