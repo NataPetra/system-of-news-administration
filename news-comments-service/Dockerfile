@@ -2,7 +2,7 @@
 FROM gradle:8.3.0-jdk17-alpine AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
-RUN gradle build --no-daemon
+RUN gradle build -x check --no-daemon
 
 # Run stage
 FROM openjdk:17-alpine

@@ -17,6 +17,10 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
+import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_GET_BY_NEWS_ID;
+import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_SAVE;
+import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_SEARCH;
+import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_UPDATE_GET_DELETE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,11 +44,6 @@ class CommentControllerTest {
 
     @MockBean
     private ICommentService commentService;
-
-    public static final String URL_TEMPLATE_SAVE = "/api/v1/app/comments/";
-    public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/comments/{id}";
-    public static final String URL_TEMPLATE_GET_BY_NEWS_ID = "/api/v1/app/comments/news/{newsId}";
-    public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/comments/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}";
 
     @Test
     void saveComment() throws Exception {
