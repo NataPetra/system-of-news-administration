@@ -79,7 +79,8 @@ class CommentControllerIntegrationTest {
                 String.class,
                 newsId);
 
-        List<CommentResponseDto> actualResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+        List<CommentResponseDto> actualResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
+        });
         List<CommentResponseDto> expectedResponse = createExpectedCommentsListIntegr();
 
         assertEquals(expectedResponse, actualResponse);
@@ -92,7 +93,7 @@ class CommentControllerIntegrationTest {
             @Sql(scripts = "classpath:testdata/add_news_with_comments_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void shouldReturn200AndCorrectJsonWhenSearchCommentsSuccessful() throws JsonProcessingException {
-        String keyword = "User";
+        String keyword = "user";
 
         ResponseEntity<String> response = restTemplate.exchange(
                 URL_TEMPLATE_SEARCH,
@@ -103,7 +104,8 @@ class CommentControllerIntegrationTest {
                 PAGE_NUMBER,
                 PAGE_SIZE);
 
-        List<CommentResponseDto> actualResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+        List<CommentResponseDto> actualResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
+        });
         List<CommentResponseDto> expectedResponse = createExpectedCommentsListIntegr();
 
         assertEquals(expectedResponse, actualResponse);

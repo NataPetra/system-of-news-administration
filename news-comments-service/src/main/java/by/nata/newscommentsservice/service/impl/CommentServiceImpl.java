@@ -1,5 +1,6 @@
 package by.nata.newscommentsservice.service.impl;
 
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodGet;
 import by.nata.newscommentsservice.database.model.Comment;
 import by.nata.newscommentsservice.database.repository.CommentRepository;
 import by.nata.newscommentsservice.database.util.CommentSpecification;
@@ -50,6 +51,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional(readOnly = true)
+    @CacheableMethodGet
     public CommentResponseDto getCommentById(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));

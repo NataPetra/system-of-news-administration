@@ -23,8 +23,8 @@ public class NewsSpecification {
                 finalPredicate = cb.or(
                         finalPredicate,
                         cb.or(
-                                cb.like(root.get("title"), likePattern),
-                                cb.like(root.get("text"), likePattern)
+                                cb.like(cb.lower(root.get("title")), likePattern),
+                                cb.like(cb.lower(root.get("text")), likePattern)
                         )
                 );
             }
