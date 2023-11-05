@@ -15,6 +15,10 @@ import by.nata.newscommentsservice.service.dto.NewsWithCommentsResponseDto;
 import by.nata.newscommentsservice.service.mapper.NewsMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +35,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "news")
 public class NewsServiceImpl implements INewsService {
 
     private final NewsRepository newsRepository;
@@ -42,6 +47,7 @@ public class NewsServiceImpl implements INewsService {
     @Override
     @Transactional
     @CacheableMethodPut
+    @CachePut(key = "#result.id")
     public NewsResponseDto save(NewsRequestDto news) {
         return Optional.of(news)
                 .map(newsMapper::dtoToEntity)
@@ -53,6 +59,7 @@ public class NewsServiceImpl implements INewsService {
     @Override
     @Transactional
     @CacheableMethodPut
+    @CachePut(key = "#result.id")
     public NewsResponseDto update(Long id, NewsRequestDto news) {
         News existingNews = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
@@ -65,6 +72,7 @@ public class NewsServiceImpl implements INewsService {
     @Override
     @Transactional(readOnly = true)
     @CacheableMethodGet
+    @Cacheable(key = "#id")
     public NewsResponseDto getNewsById(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
@@ -102,6 +110,7 @@ public class NewsServiceImpl implements INewsService {
     @Override
     @Transactional
     @CacheableMethodDelete
+    @CacheEvict(key = "#id")
     public void delete(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));

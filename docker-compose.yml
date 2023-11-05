@@ -27,6 +27,13 @@ services:
     volumes:
       - postgres-db:/var/lib/postgres
 
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - news_application_ntwrk
+
 volumes:
   postgres-db:
 
