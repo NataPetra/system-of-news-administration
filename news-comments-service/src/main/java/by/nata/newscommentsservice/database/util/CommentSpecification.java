@@ -8,13 +8,13 @@ import org.springframework.data.jpa.domain.Specification;
 public class CommentSpecification {
     public static Specification<Comment> search(String keyword) {
         return (root, query, criteriaBuilder) -> {
-            if (keyword == null && keyword.trim().isEmpty()) {
+            if (keyword == null || keyword.trim().isEmpty()) {
                 return null;
             }
-            String likePattern = "%" + keyword + "%";
+            String likePattern = "%" + keyword.toLowerCase() + "%";
             return criteriaBuilder.or(
-                    criteriaBuilder.like(root.get("text"), likePattern),
-                    criteriaBuilder.like(root.get("username"), likePattern)
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("text")), likePattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("username")), likePattern)
             );
         };
     }

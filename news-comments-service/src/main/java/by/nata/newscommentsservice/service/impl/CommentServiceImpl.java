@@ -1,5 +1,8 @@
 package by.nata.newscommentsservice.service.impl;
 
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodDelete;
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodGet;
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodPut;
 import by.nata.newscommentsservice.database.model.Comment;
 import by.nata.newscommentsservice.database.repository.CommentRepository;
 import by.nata.newscommentsservice.database.util.CommentSpecification;
@@ -9,6 +12,10 @@ import by.nata.newscommentsservice.service.dto.CommentResponseDto;
 import by.nata.newscommentsservice.service.mapper.CommentMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +28,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "comment")
 public class CommentServiceImpl implements ICommentService {
 
     private final CommentRepository commentRepository;
@@ -30,6 +38,8 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
+    @CacheableMethodPut
+    @CachePut(key = "#result.id")
     public CommentResponseDto save(CommentRequestDto comment) {
         return Optional.of(comment)
                 .map(commentMapper::dtoToEntity)
@@ -40,6 +50,8 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
+    @CacheableMethodPut
+    @CachePut(key = "#result.id")
     public CommentResponseDto update(Long id, CommentRequestDto comment) {
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
@@ -50,6 +62,8 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional(readOnly = true)
+    @CacheableMethodGet
+    @Cacheable(key = "#id")
     public CommentResponseDto getCommentById(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
@@ -77,6 +91,8 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
+    @CacheableMethodDelete
+    @CacheEvict(key = "#id")
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
