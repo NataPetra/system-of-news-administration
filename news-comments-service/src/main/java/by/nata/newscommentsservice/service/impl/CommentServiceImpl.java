@@ -1,6 +1,8 @@
 package by.nata.newscommentsservice.service.impl;
 
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodDelete;
 import by.nata.newscommentsservice.cache.annotation.CacheableMethodGet;
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodPut;
 import by.nata.newscommentsservice.database.model.Comment;
 import by.nata.newscommentsservice.database.repository.CommentRepository;
 import by.nata.newscommentsservice.database.util.CommentSpecification;
@@ -31,6 +33,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
+    @CacheableMethodPut
     public CommentResponseDto save(CommentRequestDto comment) {
         return Optional.of(comment)
                 .map(commentMapper::dtoToEntity)
@@ -41,6 +44,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
+    @CacheableMethodPut
     public CommentResponseDto update(Long id, CommentRequestDto comment) {
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
@@ -79,6 +83,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
+    @CacheableMethodDelete
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));

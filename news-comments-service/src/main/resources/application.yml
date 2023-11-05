@@ -17,6 +17,3 @@ logging:
   level:
     root: info
     by.nata.newscommentsservice: debug
-cache:
-  maxSize: 20
-  algorithm: LFU

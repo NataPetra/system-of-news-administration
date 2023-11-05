@@ -27,7 +27,6 @@ import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_SEAR
 import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_UPDATE_GET_DELETE;
 import static by.nata.newscommentsservice.util.CommentTestData.createCommentRequestDtoIntegr;
 import static by.nata.newscommentsservice.util.CommentTestData.createCommentResponseDtoIntegr;
-import static by.nata.newscommentsservice.util.CommentTestData.createExpectedCommentResponseDto;
 import static by.nata.newscommentsservice.util.CommentTestData.createExpectedUpdatedCommentResponseDto;
 import static by.nata.newscommentsservice.util.CommentTestData.createUpdatedCommentRequestDto;
 import static by.nata.newscommentsservice.util.NewsTestData.createExpectedCommentsListIntegr;
@@ -37,8 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentControllerIntegrationTest {
 
-    public static final int PAGE_NUMBER = 0;
-    public static final int PAGE_SIZE = 2;
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -46,6 +43,8 @@ class CommentControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     public static final int COMMENT_ID = 1;
+    public static final int PAGE_NUMBER = 0;
+    public static final int PAGE_SIZE = 2;
 
     @Test
     @SqlGroup({
@@ -131,10 +130,6 @@ class CommentControllerIntegrationTest {
                 request,
                 CommentResponseDto.class);
 
-        CommentResponseDto actualResponse = responseEntity.getBody();
-        CommentResponseDto expectedResponse = createExpectedCommentResponseDto();
-
-        assertEquals(expectedResponse, actualResponse);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     }
 

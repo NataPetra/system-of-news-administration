@@ -3,17 +3,16 @@ package by.nata.newscommentsservice.cache.algorithm.impl;
 import by.nata.newscommentsservice.cache.algorithm.api.Cache;
 import by.nata.newscommentsservice.cache.config.CacheProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Component
-@Qualifier("LRUCache")
 @Scope("prototype")
+@ConditionalOnProperty(prefix = "cache", name = "algorithm", havingValue = "LRU")
 public class LRUCache<K, V> implements Cache<K, V> {
 
     private final int maxSize;
@@ -36,9 +35,9 @@ public class LRUCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public Optional<V> put(K key, V value) {
+    public V put(K key, V value) {
         cache.put(key, value);
-        return Optional.of(value);
+        return value;
     }
 
     @Override

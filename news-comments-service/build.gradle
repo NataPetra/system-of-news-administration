@@ -45,5 +45,9 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-	//exclude '**/*IntegrationTest*'
+
+	testLogging{
+		events 'started', 'skipped', 'failed'
+		exceptionFormat 'full'
+	}
 }

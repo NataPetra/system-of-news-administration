@@ -4,5 +4,5 @@ spring:
     username: postgres
     password: postgres
 cache:
-  maxSize: 20
-  algorithm: LFU
+  maxSize: 3
+  algorithm: LRU
