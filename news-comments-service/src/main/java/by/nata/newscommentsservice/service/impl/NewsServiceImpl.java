@@ -1,5 +1,8 @@
 package by.nata.newscommentsservice.service.impl;
 
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodDelete;
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodGet;
+import by.nata.newscommentsservice.cache.annotation.CacheableMethodPut;
 import by.nata.newscommentsservice.database.model.News;
 import by.nata.newscommentsservice.database.repository.NewsRepository;
 import by.nata.newscommentsservice.database.util.NewsSpecification;
@@ -38,6 +41,7 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional
+    @CacheableMethodPut
     public NewsResponseDto save(NewsRequestDto news) {
         return Optional.of(news)
                 .map(newsMapper::dtoToEntity)
@@ -48,6 +52,7 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional
+    @CacheableMethodPut
     public NewsResponseDto update(Long id, NewsRequestDto news) {
         News existingNews = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
@@ -59,6 +64,7 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional(readOnly = true)
+    @CacheableMethodGet
     public NewsResponseDto getNewsById(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
@@ -95,6 +101,7 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional
+    @CacheableMethodDelete
     public void delete(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));

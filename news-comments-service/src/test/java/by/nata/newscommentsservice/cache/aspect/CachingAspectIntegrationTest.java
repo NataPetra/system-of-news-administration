@@ -1,22 +1,23 @@
 package by.nata.newscommentsservice.cache.aspect;
 
 import by.nata.newscommentsservice.service.api.ICommentService;
+import by.nata.newscommentsservice.service.api.INewsService;
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
+import by.nata.newscommentsservice.service.dto.NewsResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static by.nata.newscommentsservice.util.CommentTestData.createCommentRequestDtoIntegr;
+import static by.nata.newscommentsservice.util.NewsTestData.createNewsRequestDtoIntegr;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,15 +26,14 @@ import static org.mockito.Mockito.verify;
 
 @ActiveProfiles("aspect")
 @SpringBootTest
-@RunWith(SpringRunner.class)
-@SqlGroup({
-        @Sql(scripts = "classpath:testdata/add_news_with_comments_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CachingCommentAspectIntegrationTest {
+class CachingAspectIntegrationTest {
 
     @SpyBean
     private ICommentService commentService;
+
+    @SpyBean
+    private INewsService newsService;
 
     @Test
     @Order(1)
@@ -95,5 +95,37 @@ class CachingCommentAspectIntegrationTest {
         commentService.delete(4L);
 
         assertThrows(EntityNotFoundException.class, () -> commentService.getCommentById(4L));
+    }
+
+    @Test
+    @Order(3)
+    @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void saveNewsWithCache() {
+        NewsResponseDto news = newsService.save(createNewsRequestDtoIntegr());
+        assertNotNull(news);
+
+        NewsResponseDto cachedNews = newsService.getNewsById(news.id());
+        assertNotNull(cachedNews);
+        assertSame(news, cachedNews);
+    }
+
+    @Test
+    @Order(4)
+    @SqlGroup({
+            @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
+    void getNewsByIdWithCache() {
+        NewsResponseDto newsById = newsService.getNewsById(2L);
+        assertNotNull(newsById);
+
+        NewsResponseDto newsById2 = newsService.getNewsById(2L);
+        assertNotNull(newsById2);
+        assertSame(newsById, newsById2);
+
+        NewsResponseDto savedNews = newsService.getNewsById(1L);
+        assertNotNull(savedNews);
+
+        verify(newsService, times(1)).getNewsById(2L);
+        verify(newsService, times(0)).getNewsById(1L);
     }
 }
