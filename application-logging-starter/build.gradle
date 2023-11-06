@@ -32,15 +32,20 @@ publishing {
 	}
 }
 
+ext {
+	springBootVersion = "3.1.5"
+	lombokVersion = "1.18.30"
+}
+
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter:3.1.5'
-	implementation 'org.springframework.boot:spring-boot-starter-aop:3.1.5'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.1.5'
+	implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
+	implementation "org.springframework.boot:spring-boot-starter-aop:$springBootVersion"
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
 
-	compileOnly 'org.projectlombok:lombok:1.18.30'
-	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	compileOnly "org.projectlombok:lombok:$lombokVersion"
+	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.5'
+	testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
 
 tasks.named('test') {
