@@ -1,5 +1,6 @@
 package by.nata.newscommentsservice.controller;
 
+import by.nata.applicationloggingstarter.annotation.MethodLog;
 import by.nata.newscommentsservice.service.api.ICommentService;
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
@@ -30,6 +31,7 @@ public class CommentController {
 
     private final ICommentService commentService;
 
+    @MethodLog
     @PostMapping
     public ResponseEntity<CommentResponseDto> saveComment(@RequestBody @Valid CommentRequestDto request) {
         log.debug("Input data for saving comment: {}", request);
@@ -37,12 +39,14 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @MethodLog
     @PutMapping("/{id}")
     public CommentResponseDto updateComment(@PathVariable Long id, @RequestBody @Valid CommentRequestDto request) {
         log.debug("Input data for updating comment: {}", request);
         return commentService.update(id, request);
     }
 
+    @MethodLog
     @GetMapping("/{id}")
     public CommentResponseDto getComment(@PathVariable Long id) {
         CommentResponseDto response = commentService.getCommentById(id);
@@ -50,6 +54,7 @@ public class CommentController {
         return response;
     }
 
+    @MethodLog
     @GetMapping("/news/{newsId}")
     public List<CommentResponseDto> getCommentsByNewsId(@PathVariable Long newsId) {
         List<CommentResponseDto> response = commentService.findAllByNewsId(newsId);
@@ -57,6 +62,7 @@ public class CommentController {
         return response;
     }
 
+    @MethodLog
     @GetMapping("/search")
     public List<CommentResponseDto> searchComments(@RequestParam(required = false) String keyword,
                                                    @RequestParam int pageNumber,
@@ -64,6 +70,7 @@ public class CommentController {
         return commentService.searchComment(keyword, pageNumber, pageSize);
     }
 
+    @MethodLog
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
         commentService.delete(id);
