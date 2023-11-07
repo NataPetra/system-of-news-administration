@@ -9,3 +9,5 @@ cache:
 starter:
   logger:
     include: true
+logging:
+  config: classpath:logback-dev.xml

@@ -14,3 +14,5 @@ spring:
       - comments
     redis:
       time-to-live: 600s
+logging:
+  config: classpath:logback-prod.xml
