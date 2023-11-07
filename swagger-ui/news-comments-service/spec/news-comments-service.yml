@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: News service
+
+servers:
+  - url: http://{host}:{port}
+    description: news server
+    variables:
+      host:
+        description: host name
+        default: localhost
+      port:
+        description: port value
+        default: "8080"
+
+tags:
+  - name: "Пользователи"
+    description: "Информация о пользователях системы"
+  - name: "Личный кабинет"
+    description: "Доступ к личному кабинету"

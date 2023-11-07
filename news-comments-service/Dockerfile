@@ -11,7 +11,6 @@ COPY news-comments-service/build.gradle .
 COPY news-comments-service/settings.gradle .
 COPY news-comments-service/src ./src
 
-WORKDIR /
 RUN gradle -b /application-logging-starter/build.gradle build --no-daemon \
 &&  gradle -b /news-comments-service/build.gradle build -x test --no-daemon
 

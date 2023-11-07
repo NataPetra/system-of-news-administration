@@ -11,7 +11,7 @@ services:
     environment:
       ACTIVE_PROF: prod
     ports:
-      - "8080:8080"
+      - "8081:8080"
     networks:
       - news_application_ntwrk
     volumes:
@@ -35,6 +35,14 @@ services:
     image: redis
     ports:
       - "6379:6379"
+    networks:
+      - news_application_ntwrk
+
+  swagger-ui:
+    build: swagger-ui
+    image: news_swagger-ui:1.0.0
+    ports:
+      - "81:8080"
     networks:
       - news_application_ntwrk
 
