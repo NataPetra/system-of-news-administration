@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 gradlew
 gradlew.bat
+logs
 
 ### IntelliJ IDEA ###
 .idea

@@ -1,0 +1,57 @@
+plugins {
+	id 'java'
+	id 'maven-publish'
+}
+
+group = 'by.nata'
+version = '2.1'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = group
+			artifactId = project.name
+			version = version
+
+			from components.java
+		}
+	}
+}
+
+ext {
+	springBootVersion = "3.1.5"
+	lombokVersion = "1.18.30"
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
+	implementation "org.springframework.boot:spring-boot-starter-aop:$springBootVersion"
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
+
+	compileOnly "org.projectlombok:lombok:$lombokVersion"
+	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.named("build") {
+	finalizedBy('publishToMavenLocal')
+}

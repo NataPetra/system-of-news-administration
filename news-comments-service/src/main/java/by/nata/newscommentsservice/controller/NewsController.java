@@ -1,5 +1,6 @@
 package by.nata.newscommentsservice.controller;
 
+import by.nata.applicationloggingstarter.annotation.MethodLog;
 import by.nata.newscommentsservice.service.api.INewsService;
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
@@ -31,6 +32,7 @@ public class NewsController {
 
     private final INewsService newsService;
 
+    @MethodLog
     @PostMapping
     public ResponseEntity<NewsResponseDto> saveNews(@RequestBody @Valid NewsRequestDto request) {
         log.debug("Input data for saving news: {}", request);
@@ -38,12 +40,14 @@ public class NewsController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @MethodLog
     @PutMapping("/{id}")
     public NewsResponseDto updateNews(@PathVariable Long id, @RequestBody @Valid NewsRequestDto request) {
         log.debug("Input data for updating news: {}", request);
         return newsService.update(id, request);
     }
 
+    @MethodLog
     @GetMapping("/{id}")
     public NewsResponseDto getNews(@PathVariable Long id) {
         NewsResponseDto response = newsService.getNewsById(id);
@@ -51,6 +55,7 @@ public class NewsController {
         return response;
     }
 
+    @MethodLog
     @GetMapping
     public List<NewsResponseDto> getAllNews(@RequestParam int pageNumber,
                                             @RequestParam int pageSize) {
@@ -59,6 +64,7 @@ public class NewsController {
         return response;
     }
 
+    @MethodLog
     @GetMapping("/{newsId}/comments")
     public NewsWithCommentsResponseDto getNewsWithComments(@PathVariable Long newsId,
                                                            @RequestParam int pageNumber,
@@ -68,6 +74,7 @@ public class NewsController {
         return response;
     }
 
+    @MethodLog
     @GetMapping("/search")
     public List<NewsResponseDto> searchNews(@RequestParam(required = false) String keyword,
                                             @RequestParam(required = false) String dateString,
@@ -76,6 +83,7 @@ public class NewsController {
         return newsService.searchNews(keyword, dateString, pageNumber, pageSize);
     }
 
+    @MethodLog
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
         newsService.delete(id);

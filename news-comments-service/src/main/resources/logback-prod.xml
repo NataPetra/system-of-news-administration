@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="max.file.size" value="10MB" />
+    <property name="max.history" value="30" />
+    <property name="log.path" value="/var/log/" />
+
+    <appender name="SERVICE_INFO_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}serviceINFO.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}serviceINFO.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${max.file.size}</maxFileSize>
+            <maxHistory>${max.history}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="SERVICE_ERROR_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}serviceERROR.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}serviceERROR.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${max.file.size}</maxFileSize>
+            <maxHistory>${max.history}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="REPOSITORY_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}repository.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}repository.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${max.file.size}</maxFileSize>
+            <maxHistory>${max.history}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ROOT_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}root.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}root.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${max.file.size}</maxFileSize>
+            <maxHistory>${max.history}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="by.nata.newscommentsservice.service" level="INFO" additivity="false">
+        <appender-ref ref="SERVICE_INFO_APPENDER" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="by.nata.newscommentsservice.service" level="ERROR" additivity="false">
+        <appender-ref ref="SERVICE_ERROR_APPENDER" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="by.nata.newscommentsservice.repository" level="INFO">
+        <appender-ref ref="REPOSITORY_APPENDER" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ROOT_APPENDER" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <root level="ERROR">
+        <appender-ref ref="ROOT_APPENDER"/>
+        <appender-ref ref="CONSOLE-ROLLING"/>
+    </root>
+
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE-ROLLING"/>
+    </root>
+
+</configuration>

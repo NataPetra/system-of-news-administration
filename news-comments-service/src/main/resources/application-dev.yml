@@ -6,3 +6,8 @@ spring:
 cache:
   maxSize: 3
   algorithm: LRU
+starter:
+  logger:
+    include: true
+logging:
+  config: classpath:logback-dev.xml

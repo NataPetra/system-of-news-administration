@@ -3,3 +3,5 @@ spring:
     url: jdbc:tc:postgresql:15-alpine:///
   liquibase:
     change-log: db.changelog/changelog-test.xml
+logging:
+  config: ""

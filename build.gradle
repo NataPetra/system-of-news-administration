@@ -3,9 +3,10 @@ plugins {
 }
 
 group = 'by.nata'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 

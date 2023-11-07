@@ -12,6 +12,7 @@ import by.nata.newscommentsservice.service.dto.CommentResponseDto;
 import by.nata.newscommentsservice.service.mapper.CommentMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @CacheConfig(cacheNames = "comment")
@@ -41,6 +43,7 @@ public class CommentServiceImpl implements ICommentService {
     @CacheableMethodPut
     @CachePut(key = "#result.id")
     public CommentResponseDto save(CommentRequestDto comment) {
+        log.info("Call methot save() from CommentService with CommentRequestDto: {}", comment);
         return Optional.of(comment)
                 .map(commentMapper::dtoToEntity)
                 .map(commentRepository::save)
@@ -53,10 +56,12 @@ public class CommentServiceImpl implements ICommentService {
     @CacheableMethodPut
     @CachePut(key = "#result.id")
     public CommentResponseDto update(Long id, CommentRequestDto comment) {
+        log.info("Call methot update() from CommentService with id: {} and CommentRequestDto: {}", id, comment);
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         existingComment.setText(comment.text());
         Comment updatedComment = commentRepository.save(existingComment);
+        log.debug("Complet methot update() from CommentService with id: {}, found and update entity Comment: {}", id, updatedComment);
         return commentMapper.entityToDto(updatedComment);
     }
 
@@ -65,14 +70,17 @@ public class CommentServiceImpl implements ICommentService {
     @CacheableMethodGet
     @Cacheable(key = "#id")
     public CommentResponseDto getCommentById(Long id) {
+        log.info("Call methot getCommentById() from CommentService with id: {}", id);
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
+        log.debug("Complet methot getCommentById() from CommentService with id: {}, found entity Comment: {}", id, comment);
         return commentMapper.entityToDto(comment);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, int pageNumber, int pageSize) {
+        log.info("Call methot findByNewsIdOrderByTimeDesc() from CommentService with news id: {}, pageNumber: {}, pageSize: {}", newsId, pageNumber, pageSize);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Comment> commentPage = commentRepository.findByNewsIdOrderByTimeDesc(newsId, pageable);
         return commentPage.getContent().stream()
@@ -83,6 +91,7 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Transactional(readOnly = true)
     public List<CommentResponseDto> findAllByNewsId(Long newsId) {
+        log.info("Call methot findAllByNewsId() from CommentService with news id: {}", newsId);
         List<Comment> comments = commentRepository.findAllByNewsId(newsId);
         return comments.stream()
                 .map(commentMapper::entityToDto)
@@ -94,6 +103,7 @@ public class CommentServiceImpl implements ICommentService {
     @CacheableMethodDelete
     @CacheEvict(key = "#id")
     public void delete(Long id) {
+        log.info("Call methot delete() from CommentService with id: {}", id);
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         commentRepository.delete(comment);
@@ -102,10 +112,10 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Transactional(readOnly = true)
     public List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize) {
+        log.info("Call methot searchNews() from NewsService with keyword: {}, pageNumber: {}, pageSize: {}", keyword, pageNumber, pageSize);
         Specification<Comment> spec = CommentSpecification.search(keyword);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Comment> commentPage = commentRepository.findAll(spec, pageable);
-
         return commentPage.getContent().stream()
                 .map(commentMapper::entityToDto)
                 .toList();

@@ -2,16 +2,20 @@ version: '3.8'
 services:
   news-service:
     image: news-comments-service-1.0.0
-    build: news-comments-service
+    build:
+      context: ./
+      dockerfile: ./news-comments-service/Dockerfile
     depends_on:
       - database-news-service
     restart: always
     environment:
       ACTIVE_PROF: prod
     ports:
-      - "8080:8080"
+      - "8081:8080"
     networks:
       - news_application_ntwrk
+    volumes:
+      - logs:/var/log
 
   database-news-service:
     image: postgres:15.2-alpine
@@ -34,8 +38,17 @@ services:
     networks:
       - news_application_ntwrk
 
+  swagger-ui:
+    build: swagger-ui
+    image: news_swagger-ui:1.0.0
+    ports:
+      - "81:8080"
+    networks:
+      - news_application_ntwrk
+
 volumes:
   postgres-db:
+  logs:
 
 networks:
   news_application_ntwrk:
