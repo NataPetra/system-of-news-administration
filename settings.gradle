@@ -1,3 +1,3 @@
 rootProject.name = 'system-of-news-administration'
-include 'news-comments-service'
+include 'application-logging-starter', 'news-comments-service'
 

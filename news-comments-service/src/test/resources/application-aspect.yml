@@ -6,6 +6,5 @@ spring:
 cache:
   maxSize: 3
   algorithm: LRU
-#ACTIVE_PROF: aspect
 logging:
   config: ""
