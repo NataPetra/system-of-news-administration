@@ -17,6 +17,8 @@ servers:
 tags:
   - name: "Новости"
     description: "Управление новостями"
+  - name: "Комментарии"
+    description: "Управление комментариями"
 
 paths:
   /api/v1/app/news/:
