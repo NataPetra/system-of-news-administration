@@ -15,7 +15,547 @@ servers:
         default: "8080"
 
 tags:
-  - name: "Пользователи"
-    description: "Информация о пользователях системы"
-  - name: "Личный кабинет"
-    description: "Доступ к личному кабинету"
+  - name: "Новости"
+    description: "Управление новостями"
+
+paths:
+  /api/v1/app/news/:
+    post:
+      tags:
+        - "Новости"
+      summary: Сохранение новой новости
+      operationId: saveNews
+      requestBody:
+        description: Запрос на создание новой новости
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsRequestDto"
+      responses:
+        '201':
+          description: Новость успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    get:
+      tags:
+        - "Новости"
+      summary: Получение всех новостей
+      operationId: getAllNews
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Список новостей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/app/news/{id}:
+    get:
+      tags:
+        - "Новости"
+      summary: Получение новости по ID
+      operationId: getNews
+      parameters:
+        - $ref: '#/components/parameters/NewsId'
+      responses:
+        '200':
+          description: Новость успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - "Новости"
+      summary: Обновление новости по ID
+      operationId: updateNews
+      parameters:
+        - $ref: '#/components/parameters/NewsId'
+      requestBody:
+        description: Запрос на обновление новости
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsRequestDto"
+      responses:
+        '200':
+          description: Новость успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    delete:
+      tags:
+        - "Новости"
+      summary: Удаление новости по ID
+      operationId: deleteNews
+      parameters:
+        - $ref: '#/components/parameters/NewsId'
+      responses:
+        '204':
+          description: Новость успешно удалена
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/app/news/{newsId}/comments:
+    get:
+      tags:
+        - "Новости"
+      summary: Получение новости с комментариями
+      operationId: getNewsWithComments
+      parameters:
+        - in: path
+          name: newsId
+          required: true
+          schema:
+            type: integer
+          description: Идентификатор новости
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Новость с комментариями успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsWithCommentsResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/app/news/search:
+    get:
+      tags:
+        - "Новости"
+      summary: Поиск новостей
+      operationId: searchNews
+      parameters:
+        - in: query
+          name: keyword
+          schema:
+            type: string
+          description: Ключевое слово для поиска новостей
+          required: false
+        - in: query
+          name: dateString
+          schema:
+            type: string
+          description: Дата новости в формате строки (поиск по дате)
+          required: false
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Список найденных новостей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/app/comments/:
+    post:
+      tags:
+        - "Комментарии"
+      summary: Создание комментария
+      operationId: saveComment
+      requestBody:
+        description: Запрос на создание комментария
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequestDto'
+      responses:
+        '201':
+          description: Комментарий успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/app/comments/{id}:
+    get:
+      tags:
+        - "Комментарии"
+      summary: Получение комментария по ID
+      operationId: getComment
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+      responses:
+        '200':
+          description: Комментарий успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - "Комментарии"
+      summary: Обновление комментария по ID
+      operationId: updateComment
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+      requestBody:
+        description: Запрос на обновление комментария
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequestDto'
+      responses:
+        '200':
+          description: Комментарий успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    delete:
+      tags:
+        - "Комментарии"
+      summary: Удаление комментария по ID
+      operationId: deleteComment
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+      responses:
+        '204':
+          description: Комментарий успешно удален
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/app/comments/news/{newsId}:
+    get:
+      tags:
+        - "Комментарии"
+      summary: Получение комментариев по ID новости
+      operationId: getCommentsByNewsId
+      parameters:
+        - in: path
+          name: newsId
+          required: true
+          schema:
+            type: integer
+          description: Идентификатор новости
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Список комментариев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/app/comments/search:
+    get:
+      tags:
+        - "Комментарии"
+      summary: Поиск комментариев
+      operationId: searchComments
+      parameters:
+        - in: query
+          name: keyword
+          schema:
+            type: string
+          description: Ключевое слово для поиска комментариев
+          required: false
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Список комментариев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentResponseDto'
+        '400':
+          $ref: '#/components/responses/Bad_Request'
+        '500':
+          $ref: '#/components/responses/Internal_Server_Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  responses:
+    Bad_Request:
+      description: Запрос некорректен. Сервер не может обработать запрос
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/t_error_response'
+              - $ref: '#/components/schemas/t_structured_error_response'
+          examples:
+            t_error_response:
+              value:
+                - logref: error
+                  message: Запрос содержит некорректные данные. Измените запрос и отправьте его ещё раз
+            t_structured_error_response:
+              value:
+                logref: structured_error
+                errors:
+                  - field: time_unit
+                    message: Поле должно быть положительным числом
+    Internal_Server_Error:
+      description: Внутренняя ошибка сервера. Сервер не смог корректно обработать запрос
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/t_error_response'
+          example:
+            - logref: error
+              message: Сервер не смог корректно обработать запрос. Пожалуйста обратитесь к администратору
+    Unauthorized:
+      description: Для выполнения запроса на данный адрес требуется передать токен авторизации
+
+  schemas:
+    NewsRequestDto:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Заголовок новости
+        text:
+          type: string
+          description: Текст новости
+      required:
+        - title
+        - text
+    NewsResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор новости
+        time:
+          type: string
+          description: Время новости
+        title:
+          type: string
+          description: Заголовок новости
+        text:
+          type: string
+          description: Текст новости
+    NewsWithCommentsResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор новости
+        time:
+          type: string
+          description: Время новости
+        title:
+          type: string
+          description: Заголовок новости
+        text:
+          type: string
+          description: Текст новости
+        commentsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentResponseDto'
+          description: Список комментариев к новости
+    CommentRequestDto:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Текст комментария
+        username:
+          type: string
+          description: Имя пользователя
+        newsId:
+          type: integer
+          format: int64
+          description: Идентификатор новости
+      required:
+        - text
+        - username
+        - newsId
+    CommentResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор комментария
+        text:
+          type: string
+          description: Текст комментария
+        username:
+          type: string
+          description: Имя пользователя, оставившего комментарий
+        time:
+          type: string
+          description: Время комментария
+        newsId:
+          type: integer
+          format: int64
+          description: Идентификатор новости, к которой относится комментарий
+    t_error_response:
+      type: object
+      description: Ошибка. Содержит общее описание ошибки
+      required:
+        - logref
+        - message
+      properties:
+        logref:
+          type: string
+          description: |
+            Тип ошибки (предназначено для машинной обработки):
+              * `error` - Признак что ошибка не привязана к полю
+          enum:
+            - "error"
+        message:
+          description: Сообщение ошибки
+          type: string
+          example: Запрос содержит некорректные данные. Измените запрос и отправьте его ещё раз
+    t_structured_error_response:
+      type: object
+      description: Ошибка. Содержит описание ошибок со ссылками на поля сущности
+      required:
+        - logref
+        - errors
+      properties:
+        logref:
+          type: string
+          description: |
+            Тип ошибки (предназначено для машинной обработки):
+              * `structured_error` - Признак что ошибка привязана к полю
+          enum:
+            - "structured_error"
+        errors:
+          description: Наименование ошибочного поля
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Наименование ошибочного поля
+              message:
+                type: string
+                description: Сообщение об ошибке
+  parameters:
+    PageNumber:
+      name: pageNumber
+      in: query
+      description: Номер страницы
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    PageSize:
+      name: pageSize
+      in: query
+      description: Размер страницы
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
+    NewsId:
+      name: id
+      in: path
+      description: Идентификатор новости
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    CommentId:
+      name: id
+      in: path
+      description: Идентификатор комментария
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+

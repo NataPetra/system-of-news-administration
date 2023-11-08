@@ -46,9 +46,20 @@ services:
     networks:
       - news_application_ntwrk
 
+  proxy:
+    build: proxy
+    image: news_proxy:1.0.0
+    ports:
+      - "8080:8080"
+    networks:
+      - news_application_ntwrk
+    volumes:
+      - proxy:/var/log/nginx
+
 volumes:
   postgres-db:
   logs:
+  proxy:
 
 networks:
   news_application_ntwrk:
