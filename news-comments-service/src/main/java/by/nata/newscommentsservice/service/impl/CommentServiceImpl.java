@@ -27,6 +27,26 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The {@code CommentServiceImpl} class provides the service implementation for managing comments in the application.
+ *
+ * <p>Usage:</p>
+ * <p>- Use this service to perform various operations on comments, such as creating, updating, retrieving, and deleting comments associated with news articles.</p>
+ *
+ * <p>Methods:</p>
+ * <p>- {@code save}: Creates a new comment based on the provided {@link CommentRequestDto} and saves it to the database. Returns a {@link CommentResponseDto} representing the saved comment.
+ * <p>- {@code update}: Updates an existing comment with the specified ID based on the provided {@link CommentRequestDto}. Returns a {@link CommentResponseDto} representing the updated comment.
+ * <p>- {@code getCommentById}: Retrieves a comment by its unique identifier and returns a {@link CommentResponseDto} representing the comment.
+ * <p>- {@code findByNewsIdOrderByTimeDesc}: Retrieves a list of comments associated with a specific news article and orders them by time. Supports pagination.
+ * <p>- {@code findAllByNewsId}: Retrieves a list of all comments associated with a specific news article.
+ * <p>- {@code delete}: Deletes a comment with the specified ID.
+ * <p>- {@code searchComment}: Searches for comments based on a keyword, returning a list of matching comments. Supports pagination.
+ * <p>- {@code isCommentExist}: Checks if a comment with a specific ID exists in the database.
+ *
+ * @see ICommentService
+ * @see CommentRequestDto
+ * @see CommentResponseDto
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

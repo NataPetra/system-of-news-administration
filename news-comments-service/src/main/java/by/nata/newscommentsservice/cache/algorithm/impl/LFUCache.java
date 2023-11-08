@@ -11,6 +11,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+/**
+ * The {@code LFUCache} class is an implementation of a Least Frequently Used (LFU) cache.
+ * It stores key-value pairs and evicts the least frequently used items when the cache reaches
+ * its maximum size. This class is annotated with {@code @Component} to be managed as a Spring
+ * bean and is configured with prototype scope to create a new instance for each request.
+ *
+ * <p>Usage:</p>
+ * <p>- Include this class in your Spring application to use an LFU cache for storing and managing
+ *   key-value pairs.</p>
+ *
+ * <p>Dependencies:</p>
+ * <p>- {@link CacheProperties}: A configuration class providing properties for cache behavior,
+ *   including the maximum size of the cache.</p>
+ * <p>- {@link ConditionalOnProperty}: A Spring Boot annotation to conditionally enable the bean
+ *   based on the value of the "cache.algorithm" property.</p>
+ *
+ * @param <K> The type of keys in the cache.
+ * @param <V> The type of values in the cache.
+ */
 @Component
 @Scope("prototype")
 @ConditionalOnProperty(prefix = "cache", name = "algorithm", havingValue = "LFU")
@@ -21,6 +40,11 @@ public class LFUCache<K, V> implements Cache<K, V> {
     private final Map<K, Integer> frequency;
     private final PriorityQueue<K> priorityQueue;
 
+    /**
+     * Constructs an instance of {@code LFUCache} with the specified configuration properties.
+     *
+     * @param cacheProperties The configuration properties for the cache, including the maximum size.
+     */
     @Autowired
     public LFUCache(CacheProperties cacheProperties) {
         this.maxSize = cacheProperties.getMaxSize();
