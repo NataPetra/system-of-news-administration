@@ -11,3 +11,6 @@ starter:
     include: true
 logging:
   config: classpath:logback-dev.xml
+exception:
+  handling:
+    include: true
