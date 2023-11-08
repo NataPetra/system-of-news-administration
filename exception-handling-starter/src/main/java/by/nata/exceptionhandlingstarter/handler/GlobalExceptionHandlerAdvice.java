@@ -6,6 +6,7 @@ import by.nata.exceptionhandlingstarter.exception.StructuredExceptionMessage;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -20,6 +21,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandlerAdvice {
@@ -88,13 +90,12 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public StructuredExceptionMessage handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
-        Map<String, String> errors = new HashMap<>();
-        exception.getBindingResult().getAllErrors()
-                .forEach(error -> {
-                    String fieldName = ((FieldError) error).getField();
-                    String errorMessage = error.getDefaultMessage();
-                    errors.put(fieldName, errorMessage);
-                });
+        Map<String, String> errors = exception.getBindingResult().getAllErrors().stream()
+                .filter(error -> error instanceof FieldError)
+                .collect(Collectors.toMap(
+                        error -> ((FieldError) error).getField(),
+                        DefaultMessageSourceResolvable::getDefaultMessage
+                ));
         return new StructuredExceptionMessage(
                 HttpStatus.BAD_REQUEST.value(),
                 errors,

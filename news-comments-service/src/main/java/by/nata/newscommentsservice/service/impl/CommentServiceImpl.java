@@ -120,4 +120,9 @@ public class CommentServiceImpl implements ICommentService {
                 .map(commentMapper::entityToDto)
                 .toList();
     }
+
+    @Override
+    public boolean isCommentExist(Long id) {
+        return commentRepository.existsById(id);
+    }
 }

@@ -27,8 +27,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -224,5 +226,23 @@ class CommentServiceImplTest {
             verify(commentRepository, times(1)).findAll(commentSpec, PageRequest.of(pageNumber, pageSize));
             verify(commentMapper, times(commentList.size())).entityToDto(any(Comment.class));
         }
+    }
+
+    @Test
+    void isCommentExistWhenCommentExists() {
+        Mockito.when(commentRepository.existsById(COMMENT_ID)).thenReturn(true);
+
+        boolean result = commentService.isCommentExist(COMMENT_ID);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void isCommentExistWhenCommentDoesNotExist() {
+        Mockito.when(commentRepository.existsById(COMMENT_ID)).thenReturn(false);
+
+        boolean result = commentService.isCommentExist(COMMENT_ID);
+
+        assertFalse(result);
     }
 }

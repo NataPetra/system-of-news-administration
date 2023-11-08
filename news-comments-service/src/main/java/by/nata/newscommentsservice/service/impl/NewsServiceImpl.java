@@ -139,6 +139,11 @@ public class NewsServiceImpl implements INewsService {
                 .toList();
     }
 
+    @Override
+    public boolean isNewsExist(Long id) {
+        return newsRepository.existsById(id);
+    }
+
     private Date convertStringToDate(String dateString) {
         if (dateString == null) {
             return null;

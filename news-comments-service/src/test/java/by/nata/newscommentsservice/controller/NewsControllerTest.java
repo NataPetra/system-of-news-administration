@@ -68,6 +68,7 @@ class NewsControllerTest {
         NewsRequestDto request = NewsTestData.createNewsRequestDto().build();
         NewsResponseDto response = NewsTestData.createNewsResponseDto().build();
 
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
         when(newsService.update(newsId, request)).thenReturn(response);
 
         mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, newsId)
@@ -82,6 +83,7 @@ class NewsControllerTest {
         Long newsId = 1L;
         NewsResponseDto response = NewsTestData.createNewsResponseDto().build();
 
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
         when(newsService.getNewsById(newsId)).thenReturn(response);
 
         mockMvc.perform(get(URL_TEMPLATE_UPDATE_GET_DELETE, newsId))
@@ -124,6 +126,7 @@ class NewsControllerTest {
                 .withTime("2023-11-03 18:56:11")
                 .build();
 
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
         when(newsService.getNewsWithComments(newsId, pageNumber, pageSize)).thenReturn(response);
 
         mockMvc.perform(get(URL_TEMPLATE_GET_WITH_COMMENT, newsId, pageNumber, pageSize))
@@ -150,6 +153,7 @@ class NewsControllerTest {
     void deleteNews() throws Exception {
         Long newsId = 1L;
 
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
         mockMvc.perform(delete(URL_TEMPLATE_UPDATE_GET_DELETE, newsId))
                 .andExpect(status().isNoContent());
 
