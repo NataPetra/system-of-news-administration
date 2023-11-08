@@ -1,6 +1,7 @@
 package by.nata.newscommentsservice.controller;
 
 import by.nata.newscommentsservice.service.api.ICommentService;
+import by.nata.newscommentsservice.service.api.INewsService;
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
 import by.nata.newscommentsservice.util.CommentTestData;
@@ -45,11 +46,15 @@ class CommentControllerTest {
     @MockBean
     private ICommentService commentService;
 
+    @MockBean
+    private INewsService newsService;
+
     @Test
     void saveComment() throws Exception {
         CommentRequestDto request = CommentTestData.createCommentRequestDto().build();
         CommentResponseDto response = CommentTestData.createCommentResponseDto().build();
 
+        when(newsService.isNewsExist(1L)).thenReturn(true);
         when(commentService.save(request)).thenReturn(response);
 
         mockMvc.perform(post(URL_TEMPLATE_SAVE)
@@ -64,6 +69,8 @@ class CommentControllerTest {
         CommentRequestDto request = CommentTestData.createCommentRequestDto().build();
         CommentResponseDto response = CommentTestData.createCommentResponseDto().build();
 
+        when(commentService.isCommentExist(COMMENT_ID)).thenReturn(true);
+        when(newsService.isNewsExist(1L)).thenReturn(true);
         when(commentService.update(COMMENT_ID, request)).thenReturn(response);
 
         mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, COMMENT_ID)
@@ -77,6 +84,7 @@ class CommentControllerTest {
     void getComment() throws Exception {
         CommentResponseDto response = CommentTestData.createCommentResponseDto().build();
 
+        when(commentService.isCommentExist(COMMENT_ID)).thenReturn(true);
         when(commentService.getCommentById(COMMENT_ID)).thenReturn(response);
 
         mockMvc.perform(get(URL_TEMPLATE_UPDATE_GET_DELETE, COMMENT_ID))
@@ -89,6 +97,7 @@ class CommentControllerTest {
         Long newsId = 1L;
         List<CommentResponseDto> responseList = CommentTestData.createCommentResponseDtoList();
 
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
         when(commentService.findAllByNewsId(newsId)).thenReturn(responseList);
 
         MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE_GET_BY_NEWS_ID, newsId))
@@ -122,6 +131,7 @@ class CommentControllerTest {
     void deleteComment() throws Exception {
         Long commentId = 1L;
 
+        when(commentService.isCommentExist(COMMENT_ID)).thenReturn(true);
         mockMvc.perform(delete(URL_TEMPLATE_UPDATE_GET_DELETE, commentId))
                 .andExpect(status().isNoContent());
 

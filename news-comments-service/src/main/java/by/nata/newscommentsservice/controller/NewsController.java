@@ -5,6 +5,7 @@ import by.nata.newscommentsservice.service.api.INewsService;
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
 import by.nata.newscommentsservice.service.dto.NewsWithCommentsResponseDto;
+import by.nata.newscommentsservice.service.validator.NewsValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class NewsController {
 
     @MethodLog
     @GetMapping("/{id}")
-    public NewsResponseDto getNews(@PathVariable Long id) {
+    public NewsResponseDto getNews(@PathVariable @NewsValidation Long id) {
         NewsResponseDto response = newsService.getNewsById(id);
         log.debug("Getting news section of id {} from database: {} ", id, response);
         return response;
@@ -68,7 +69,7 @@ public class NewsController {
 
     @MethodLog
     @GetMapping("/{newsId}/comments")
-    public NewsWithCommentsResponseDto getNewsWithComments(@PathVariable Long newsId,
+    public NewsWithCommentsResponseDto getNewsWithComments(@PathVariable @NewsValidation Long newsId,
                                                            @RequestParam int pageNumber,
                                                            @RequestParam int pageSize) {
         NewsWithCommentsResponseDto response = newsService.getNewsWithComments(newsId, pageNumber, pageSize);
@@ -87,7 +88,7 @@ public class NewsController {
 
     @MethodLog
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteNews(@PathVariable @NewsValidation Long id) {
         newsService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

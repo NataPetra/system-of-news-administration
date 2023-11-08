@@ -6,12 +6,18 @@ COPY application-logging-starter/build.gradle .
 COPY application-logging-starter/settings.gradle .
 COPY application-logging-starter/src ./src
 
+WORKDIR /exception-handling-starter
+COPY exception-handling-starter/build.gradle .
+COPY exception-handling-starter/settings.gradle .
+COPY exception-handling-starter/src ./src
+
 WORKDIR /news-comments-service
 COPY news-comments-service/build.gradle .
 COPY news-comments-service/settings.gradle .
 COPY news-comments-service/src ./src
 
 RUN gradle -b /application-logging-starter/build.gradle build --no-daemon \
+&&  gradle -b /exception-handling-starter/build.gradle build --no-daemon \
 &&  gradle -b /news-comments-service/build.gradle build -x test --no-daemon
 
 # Run stage

@@ -20,4 +20,6 @@ public interface ICommentService {
     void delete(Long id);
 
     List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize);
+
+    boolean isCommentExist(Long id);
 }

@@ -4,6 +4,8 @@ import by.nata.applicationloggingstarter.annotation.MethodLog;
 import by.nata.newscommentsservice.service.api.ICommentService;
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
+import by.nata.newscommentsservice.service.validator.CommentValidation;
+import by.nata.newscommentsservice.service.validator.NewsValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,14 +45,17 @@ public class CommentController {
 
     @MethodLog
     @PutMapping("/{id}")
-    public CommentResponseDto updateComment(@PathVariable Long id, @RequestBody @Valid CommentRequestDto request) {
+    public CommentResponseDto updateComment(
+            @PathVariable @CommentValidation Long id,
+            @RequestBody @Valid CommentRequestDto request
+    ) {
         log.debug("Input data for updating comment: {}", request);
         return commentService.update(id, request);
     }
 
     @MethodLog
     @GetMapping("/{id}")
-    public CommentResponseDto getComment(@PathVariable Long id) {
+    public CommentResponseDto getComment(@PathVariable @CommentValidation Long id) {
         CommentResponseDto response = commentService.getCommentById(id);
         log.debug("Getting comment of id {} from database: {}", id, response);
         return response;
@@ -58,7 +63,7 @@ public class CommentController {
 
     @MethodLog
     @GetMapping("/news/{newsId}")
-    public List<CommentResponseDto> getCommentsByNewsId(@PathVariable Long newsId) {
+    public List<CommentResponseDto> getCommentsByNewsId(@PathVariable @NewsValidation Long newsId) {
         List<CommentResponseDto> response = commentService.findAllByNewsId(newsId);
         log.debug("Getting comments for news with id {} from database: {}", newsId, response);
         return response;
@@ -66,15 +71,17 @@ public class CommentController {
 
     @MethodLog
     @GetMapping("/search")
-    public List<CommentResponseDto> searchComments(@RequestParam(required = false) String keyword,
-                                                   @RequestParam int pageNumber,
-                                                   @RequestParam int pageSize) {
+    public List<CommentResponseDto> searchComments(
+            @RequestParam(required = false) String keyword,
+            @RequestParam int pageNumber,
+            @RequestParam int pageSize
+    ) {
         return commentService.searchComment(keyword, pageNumber, pageSize);
     }
 
     @MethodLog
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteNews(@PathVariable @CommentValidation Long id) {
         commentService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

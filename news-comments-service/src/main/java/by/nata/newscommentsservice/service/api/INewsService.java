@@ -21,4 +21,6 @@ public interface INewsService {
     void delete(Long id);
 
     List<NewsResponseDto> searchNews(String keyword, String dateString, int pageNumber, int pageSize);
+
+    boolean isNewsExist(Long id);
 }

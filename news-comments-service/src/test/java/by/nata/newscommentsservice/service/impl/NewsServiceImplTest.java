@@ -35,8 +35,10 @@ import java.util.Optional;
 import static by.nata.newscommentsservice.util.NewsTestData.createNewsList;
 import static by.nata.newscommentsservice.util.NewsTestData.createNewsResponseDtoList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -245,6 +247,24 @@ class NewsServiceImplTest {
                 assertEquals(expected.title(), actual.title());
             }
         }
+    }
+
+    @Test
+    void isNewsExistWhenNewsExists() {
+        Mockito.when(newsRepository.existsById(NEWS_ID)).thenReturn(true);
+
+        boolean result = newsService.isNewsExist(NEWS_ID);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void isNewsExistWhenNewsDoesNotExist() {
+        Mockito.when(newsRepository.existsById(NEWS_ID)).thenReturn(false);
+
+        boolean result = newsService.isNewsExist(NEWS_ID);
+
+        assertFalse(result);
     }
 
     private Date convertStringToDate() {

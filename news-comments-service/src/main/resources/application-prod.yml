@@ -16,3 +16,6 @@ spring:
       time-to-live: 600s
 logging:
   config: classpath:logback-prod.xml
+exception:
+  handling:
+    include: true

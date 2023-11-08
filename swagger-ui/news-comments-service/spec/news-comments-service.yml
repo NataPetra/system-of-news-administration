@@ -89,6 +89,12 @@ paths:
                 $ref: '#/components/schemas/NewsResponseDto'
         '400':
           $ref: '#/components/responses/Bad_Request'
+        '404':
+          description: Новость не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '500':
           $ref: '#/components/responses/Internal_Server_Error'
         '401':
@@ -117,6 +123,12 @@ paths:
                 $ref: '#/components/schemas/NewsResponseDto'
         '400':
           $ref: '#/components/responses/Bad_Request'
+        '404':
+          description: Новость не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '500':
           $ref: '#/components/responses/Internal_Server_Error'
         '401':
@@ -132,6 +144,12 @@ paths:
       responses:
         '204':
           description: Новость успешно удалена
+        '404':
+          description: Новость не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '400':
           $ref: '#/components/responses/Bad_Request'
         '500':
@@ -160,6 +178,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NewsWithCommentsResponseDto'
+        '404':
+          description: Новость не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '400':
           $ref: '#/components/responses/Bad_Request'
         '500':
@@ -246,6 +270,12 @@ paths:
                 $ref: '#/components/schemas/CommentResponseDto'
         '400':
           $ref: '#/components/responses/Bad_Request'
+        '404':
+          description: Kомментарий не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '500':
           $ref: '#/components/responses/Internal_Server_Error'
         '401':
@@ -274,6 +304,12 @@ paths:
                 $ref: '#/components/schemas/CommentResponseDto'
         '400':
           $ref: '#/components/responses/Bad_Request'
+        '404':
+          description: Kомментарий не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '500':
           $ref: '#/components/responses/Internal_Server_Error'
         '401':
@@ -291,6 +327,12 @@ paths:
           description: Комментарий успешно удален
         '400':
           $ref: '#/components/responses/Bad_Request'
+        '404':
+          description: Kомментарий не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '500':
           $ref: '#/components/responses/Internal_Server_Error'
         '401':
@@ -321,6 +363,12 @@ paths:
                   $ref: '#/components/schemas/CommentResponseDto'
         '400':
           $ref: '#/components/responses/Bad_Request'
+        '404':
+          description: Новость не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '500':
           $ref: '#/components/responses/Internal_Server_Error'
         '401':
@@ -479,6 +527,13 @@ components:
           type: integer
           format: int64
           description: Идентификатор новости, к которой относится комментарий
+    ErrorModel:
+      type: object
+      properties:
+        logref:
+          type: string
+        message:
+          type: string
     t_error_response:
       type: object
       description: Ошибка. Содержит общее описание ошибки
