@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.verify;
 @ActiveProfiles("aspect")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext
 class CachingAspectIntegrationTest {
 
     @SpyBean

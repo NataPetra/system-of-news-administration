@@ -21,6 +21,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +41,7 @@ public class GlobalExceptionHandlerAdvice {
     private static final String EUROPE_MINSK = "Europe/Minsk";
 
     /**
-     * Handles exceptions of type {@code BadRequestException} and returns a response entity with
+     * Handles exceptions to type {@code BadRequestException} and returns a response entity with
      * a {@code BAD_REQUEST} status code and an {@code ExceptionMessage} containing the error message.
      *
      * @param exception The {@code BadRequestException} that was thrown.
@@ -57,7 +58,7 @@ public class GlobalExceptionHandlerAdvice {
     }
 
     /**
-     * Handles exceptions of type {@code EntityNotFoundException} and returns a response entity with
+     * Handles exceptions to type {@code EntityNotFoundException} and returns a response entity with
      * a {@code NOT_FOUND} status code and an {@code ExceptionMessage} containing the error message.
      *
      * @param exception The {@code EntityNotFoundException} that was thrown.
@@ -74,7 +75,7 @@ public class GlobalExceptionHandlerAdvice {
     }
 
     /**
-     * Handles exceptions of type {@code HttpRequestMethodNotSupportedException} and returns a response
+     * Handles exceptions to type {@code HttpRequestMethodNotSupportedException} and returns a response
      * entity with a {@code METHOD_NOT_ALLOWED} status code and an {@code ExceptionMessage} containing
      * the error message.
      *
@@ -92,7 +93,7 @@ public class GlobalExceptionHandlerAdvice {
     }
 
     /**
-     * Handles exceptions of type {@code HttpMessageNotReadableException} and returns a response
+     * Handles exceptions to type {@code HttpMessageNotReadableException} and returns a response
      * entity with a {@code BAD_REQUEST} status code and an {@code ExceptionMessage} indicating a
      * malformed JSON request.
      *
@@ -108,7 +109,7 @@ public class GlobalExceptionHandlerAdvice {
     }
 
     /**
-     * Handles exceptions of type {@code PSQLException} and returns a response entity with a
+     * Handles exceptions to type {@code PSQLException} and returns a response entity with a
      * {@code BAD_REQUEST} status code and an {@code ExceptionMessage} containing the error message
      * from the database server.
      *
@@ -120,13 +121,13 @@ public class GlobalExceptionHandlerAdvice {
     public ExceptionMessage handlePSQLException(PSQLException exception) {
         return new ExceptionMessage(
                 HttpStatus.BAD_REQUEST.value(),
-                exception.getServerErrorMessage().getDetail(),
+                Objects.requireNonNull(exception.getServerErrorMessage()).getMessage(),
                 ZonedDateTime.now().withZoneSameInstant(ZoneId.of(EUROPE_MINSK))
         );
     }
 
     /**
-     * Handles exceptions of type {@code ConnectException} and returns a response entity with an
+     * Handles exceptions to type {@code ConnectException} and returns a response entity with an
      * {@code INTERNAL_SERVER_ERROR} status code and an {@code ExceptionMessage} containing the
      * error message.
      *
@@ -144,7 +145,7 @@ public class GlobalExceptionHandlerAdvice {
     }
 
     /**
-     * Handles exceptions of type {@code MethodArgumentNotValidException} and returns a structured
+     * Handles exceptions to type {@code MethodArgumentNotValidException} and returns a structured
      * response entity with a {@code BAD_REQUEST} status code and an {@code StructuredExceptionMessage}
      * containing field-specific error messages.
      *
@@ -156,7 +157,7 @@ public class GlobalExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public StructuredExceptionMessage handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
         Map<String, String> errors = exception.getBindingResult().getAllErrors().stream()
-                .filter(error -> error instanceof FieldError)
+                .filter(FieldError.class::isInstance)
                 .collect(Collectors.toMap(
                         error -> ((FieldError) error).getField(),
                         DefaultMessageSourceResolvable::getDefaultMessage
@@ -169,7 +170,7 @@ public class GlobalExceptionHandlerAdvice {
     }
 
     /**
-     * Handles exceptions of type {@code ConstraintViolationException} and returns a structured
+     * Handles exceptions to type {@code ConstraintViolationException} and returns a structured
      * response entity with a {@code BAD_REQUEST} status code and an {@code StructuredExceptionMessage}
      * containing field-specific error messages.
      *

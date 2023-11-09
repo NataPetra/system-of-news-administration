@@ -13,8 +13,3 @@ spring:
     hibernate:
       ddl-auto: none
     open-in-view: true
-logging:
-  level:
-    root: INFO
-    org.springframework: INFO
-    by.nata.newscommentsservice.service: DEBUG

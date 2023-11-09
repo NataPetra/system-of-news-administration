@@ -5,9 +5,14 @@ services:
     build:
       context: ./
       dockerfile: ./news-comments-service/Dockerfile
-    depends_on:
-      - database-news-service
     restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      database-news-service:
+        condition: service_healthy
     environment:
       ACTIVE_PROF: prod
     ports:
@@ -19,11 +24,16 @@ services:
 
   database-news-service:
     image: postgres:15.2-alpine
-    restart: always
     environment:
       POSTGRES_DB: news-service-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    restart: always
+    healthcheck:
+      test: pg_isready -U postgres -d news-service-db
+      interval: 5s
+      timeout: 3s
+      retries: 5
     ports:
       - "5432:5432"
     networks:
@@ -33,6 +43,12 @@ services:
 
   redis:
     image: redis
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     ports:
       - "6379:6379"
     networks:
@@ -49,12 +65,28 @@ services:
   proxy:
     build: proxy
     image: news_proxy:1.0.0
+    depends_on:
+      - news-service
     ports:
       - "8080:8080"
     networks:
       - news_application_ntwrk
     volumes:
       - proxy:/var/log/nginx
+
+  config-server:
+    image: config-server
+    build: config-server
+    restart: always
+    healthcheck:
+      test: curl http://localhost:8888/app/config-server || exit 0
+      interval: 2s
+      timeout: 10s
+      retries: 10
+    networks:
+      - news_application_ntwrk
+    ports:
+      - "8888:8888"
 
 volumes:
   postgres-db:
