@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: ${ACTIVE_PROF}
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
