@@ -9,7 +9,6 @@
             <!-- ADMIN -->
             <column name="username" value="admin"/>
             <column name="password" value="$2a$12$du6QLZsOMNBBDteBcSaaKevtZBfDPwh35gdZ.Mq/68S8QsqmFEeM."/>
-            <column name="email" value="admin@example.com"/>
             <column name="role" value="ADMIN"/>
         </insert>
 
@@ -17,7 +16,6 @@
             <!-- JOURNALIST -->
             <column name="username" value="journalist"/>
             <column name="password" value="$2a$12$NaAuUYadSqPoJQJUvk18kOWSlOeAWqt5wrjiVRA6TocIH.H/ITT8u"/>
-            <column name="email" value="journalist@example.com"/>
             <column name="role" value="JOURNALIST"/>
         </insert>
 
@@ -25,7 +23,6 @@
             <!-- SUBSCRIBER -->
             <column name="username" value="subscriber"/>
             <column name="password" value="$2a$12$3UUBsJtjjLzv6aoJRXGgS.slW0MUpEVyWMrC69.DsOUTNAKEuxN7m"/>
-            <column name="email" value="subscriber@example.com"/>
             <column name="role" value="SUBSCRIBER"/>
         </insert>
     </changeSet>

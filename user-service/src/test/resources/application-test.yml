@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:15-alpine:///
+  liquibase:
+    change-log: db.changelog/changelog-test.xml
+  security:
+    jwt:
+      secret: mySecretKey

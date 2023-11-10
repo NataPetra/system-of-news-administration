@@ -3,3 +3,6 @@ spring:
     url: jdbc:postgresql://database-user-service:5432/app-user-service-db
     username: postgres
     password: postgres
+  security:
+    jwt:
+      secret: kdc.scbhc4vdv

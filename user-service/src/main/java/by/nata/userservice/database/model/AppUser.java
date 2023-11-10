@@ -38,11 +38,8 @@ public class AppUser implements Serializable {
     @Column(nullable = false, length = 72)
     private String password;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String email;
-
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
-    private Boolean blocked;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean unblocked;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)

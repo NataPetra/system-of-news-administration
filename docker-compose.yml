@@ -112,7 +112,7 @@ services:
     build: config-server
     restart: always
     healthcheck:
-      test: wget -qO- http://localhost:8888/config-server/prod
+      test: wget -qO- http://localhost:8888/config-server/dev
       interval: 3s
       timeout: 5s
       retries: 5
