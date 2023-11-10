@@ -7,14 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 /**
  * The {@code CommentSpecification} utility class provides a static method for creating a JPA Specification
  * to search for comments that match a given keyword. It is used for defining dynamic queries for the JPA repository.
- *
- * <p>Usage:</p>
- * <p>- Use the {@code search} method to create a JPA Specification that searches for comments containing the
- *   specified keyword in either the comment text or the author's username.</p>
- *
- * <p>Methods:</p>
- * <p>- {@code search}: Creates a JPA Specification for searching comments by a keyword. It performs a case-insensitive
- *   search in both the comment text and the author's username.</p>
  */
 @UtilityClass
 public class CommentSpecification {

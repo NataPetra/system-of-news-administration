@@ -12,18 +12,12 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
- * The {@code LFUCache} class is an implementation of a Least Frequently Used (LFU) cache.
+ * The {@code LFUCache} class is an implementation of Least Frequently Used (LFU) cache.
  * It stores key-value pairs and evicts the least frequently used items when the cache reaches
  * its maximum size. This class is annotated with {@code @Component} to be managed as a Spring
  * bean and is configured with prototype scope to create a new instance for each request.
  *
- * <p>Usage:</p>
- * <p>- Include this class in your Spring application to use an LFU cache for storing and managing
- *   key-value pairs.</p>
- *
  * <p>Dependencies:</p>
- * <p>- {@link CacheProperties}: A configuration class providing properties for cache behavior,
- *   including the maximum size of the cache.</p>
  * <p>- {@link ConditionalOnProperty}: A Spring Boot annotation to conditionally enable the bean
  *   based on the value of the "cache.algorithm" property.</p>
  *

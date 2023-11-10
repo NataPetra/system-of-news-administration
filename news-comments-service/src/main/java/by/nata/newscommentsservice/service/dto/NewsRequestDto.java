@@ -6,9 +6,6 @@ import lombok.Builder;
 /**
  * The {@code NewsRequestDto} record represents a data transfer object for creating news articles.
  *
- * <p>Usage:</p>
- * <p>- Use this data transfer object to send news article-related information when creating news articles.</p>
- *
  * <p>Properties:</p>
  * <p>- {@code title}: The title of the news article. It must not be null or empty.
  * <p>- {@code text}: The text content of the news article. It must not be null or empty.

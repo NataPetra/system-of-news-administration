@@ -13,16 +13,6 @@ import java.util.List;
  * <p>- Implement this interface to provide business logic and functionality for managing news articles, including saving,
  *   updating, retrieving, and deleting news articles, as well as searching for news articles and checking the existence of a news article.</p>
  *
- * <p>Methods:</p>
- * <p>- {@code save}: Saves a new news article based on the provided {@link NewsRequestDto}.
- * <p>- {@code update}: Updates an existing news article with the specified ID using the provided {@link NewsRequestDto}.
- * <p>- {@code getNewsById}: Retrieves a news article by its unique identifier.
- * <p>- {@code getAllNews}: Retrieves a list of all news articles with pagination support.
- * <p>- {@code getNewsWithComments}: Retrieves a news article along with its associated comments, with pagination support.
- * <p>- {@code delete}: Deletes a news article with the specified ID.
- * <p>- {@code searchNews}: Searches for news articles based on a keyword, date, and pagination parameters.
- * <p>- {@code isNewsExist}: Checks whether a news article with a specific ID exists.
- *
  * @see NewsRequestDto
  * @see NewsResponseDto
  * @see NewsWithCommentsResponseDto

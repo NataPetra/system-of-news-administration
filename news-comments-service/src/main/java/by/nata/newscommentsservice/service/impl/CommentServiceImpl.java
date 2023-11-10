@@ -1,8 +1,5 @@
 package by.nata.newscommentsservice.service.impl;
 
-import by.nata.newscommentsservice.cache.annotation.CacheableMethodDelete;
-import by.nata.newscommentsservice.cache.annotation.CacheableMethodGet;
-import by.nata.newscommentsservice.cache.annotation.CacheableMethodPut;
 import by.nata.newscommentsservice.database.model.Comment;
 import by.nata.newscommentsservice.database.repository.CommentRepository;
 import by.nata.newscommentsservice.database.util.CommentSpecification;
@@ -30,19 +27,6 @@ import java.util.Optional;
 /**
  * The {@code CommentServiceImpl} class provides the service implementation for managing comments in the application.
  *
- * <p>Usage:</p>
- * <p>- Use this service to perform various operations on comments, such as creating, updating, retrieving, and deleting comments associated with news articles.</p>
- *
- * <p>Methods:</p>
- * <p>- {@code save}: Creates a new comment based on the provided {@link CommentRequestDto} and saves it to the database. Returns a {@link CommentResponseDto} representing the saved comment.
- * <p>- {@code update}: Updates an existing comment with the specified ID based on the provided {@link CommentRequestDto}. Returns a {@link CommentResponseDto} representing the updated comment.
- * <p>- {@code getCommentById}: Retrieves a comment by its unique identifier and returns a {@link CommentResponseDto} representing the comment.
- * <p>- {@code findByNewsIdOrderByTimeDesc}: Retrieves a list of comments associated with a specific news article and orders them by time. Supports pagination.
- * <p>- {@code findAllByNewsId}: Retrieves a list of all comments associated with a specific news article.
- * <p>- {@code delete}: Deletes a comment with the specified ID.
- * <p>- {@code searchComment}: Searches for comments based on a keyword, returning a list of matching comments. Supports pagination.
- * <p>- {@code isCommentExist}: Checks if a comment with a specific ID exists in the database.
- *
  * @see ICommentService
  * @see CommentRequestDto
  * @see CommentResponseDto
@@ -60,7 +44,6 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    @CacheableMethodPut
     @CachePut(key = "#result.id")
     public CommentResponseDto save(CommentRequestDto comment) {
         log.info("Call methot save() from CommentService with CommentRequestDto: {}", comment);
@@ -73,7 +56,6 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    @CacheableMethodPut
     @CachePut(key = "#result.id")
     public CommentResponseDto update(Long id, CommentRequestDto comment) {
         log.info("Call methot update() from CommentService with id: {} and CommentRequestDto: {}", id, comment);
@@ -87,7 +69,6 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional(readOnly = true)
-    @CacheableMethodGet
     @Cacheable(key = "#id")
     public CommentResponseDto getCommentById(Long id) {
         log.info("Call methot getCommentById() from CommentService with id: {}", id);
@@ -120,7 +101,6 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    @CacheableMethodDelete
     @CacheEvict(key = "#id")
     public void delete(Long id) {
         log.info("Call methot delete() from CommentService with id: {}", id);

@@ -11,10 +11,6 @@ import org.springframework.stereotype.Component;
  * <p>- Create an instance of this class to customize cache behavior through application properties.</p>
  * <p>- Use the "cache.maxSize" property to set the maximum size of the cache.</p>
  * <p>- Use the "cache.algorithm" property to specify the caching algorithm (e.g., "LRU" or "LFU").</p>
- *
- * <p>Configuration Properties:</p>
- * <p>- "maxSize": An integer property that defines the maximum size of the cache.</p>
- * <p>- "algorithm": A string property that specifies the caching algorithm (e.g., "LRU" or "LFU").</p>
  */
 @Component
 @ConfigurationProperties("cache")

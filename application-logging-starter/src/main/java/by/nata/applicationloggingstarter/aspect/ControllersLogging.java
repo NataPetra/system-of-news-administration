@@ -13,8 +13,6 @@ import org.aspectj.lang.reflect.MethodSignature;
  * invocations in controllers that are annotated with the `@MethodLog` annotation.
  * It provides before and after returning advice to log request and response details.
  * <p>
- * It uses AspectJ annotations and Lombok's `@Slf4j` for logging.
- * <p>
  * Usage:
  * - Annotate your controller methods with `@MethodLog` to enable logging.
  * <p>

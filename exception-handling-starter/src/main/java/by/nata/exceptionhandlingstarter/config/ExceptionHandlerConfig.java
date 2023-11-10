@@ -19,14 +19,6 @@ import org.springframework.context.annotation.Configuration;
  * - `exception.handling.include`: A property that controls whether the exception handling
  *   should be enabled (default is "true").
  * <p>
- * Conditional Checks:
- * - This configuration is conditionally enabled only if a bean of type `GlobalExceptionHandlerAdvice`
- *   is not already defined in the application context.
- * <p>
- * Dependencies:
- * - `by.nata.exceptionhandlingstarter.handler.GlobalExceptionHandlerAdvice`: The global exception
- *   handler advice responsible for handling exceptions.
- * <p>
  * @see by.nata.exceptionhandlingstarter.handler.GlobalExceptionHandlerAdvice
  */
 @Configuration
