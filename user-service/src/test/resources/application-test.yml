@@ -5,4 +5,4 @@ spring:
     change-log: db.changelog/changelog-test.xml
   security:
     jwt:
-      secret: mySecretKey
+      secret: mySecretKeymySecretKeymySecretKeymySecretKey

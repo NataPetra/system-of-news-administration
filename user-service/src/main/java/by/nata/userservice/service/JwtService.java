@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,8 @@ public class JwtService {
     }
 
     public String generateAccessToken(UserDetails user) {
-        GrantedAuthority grantedAuthority = user.getAuthorities().stream()
+        String grantedAuthority = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElseThrow();
 
@@ -64,9 +66,9 @@ public class JwtService {
         return getClaims(token).getExpiration();
     }
 
-    @SuppressWarnings("unchecked")
     public Collection<GrantedAuthority> getAuthorities(String token) {
-        return getClaims(token).get("role", List.class);
+        String role = getClaims(token).get("role", String.class);
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     public boolean isValid(String token) {

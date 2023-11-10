@@ -29,7 +29,7 @@ public class AppUserService implements UserDetailsService {
                 .accountExpired(isDisabled)
                 .accountLocked(isDisabled)
                 .credentialsExpired(isDisabled)
-                .roles(user.getRole().name())  // но все равно достаем authorities
+                .roles(user.getRole().name())
                 .build();
     }
 

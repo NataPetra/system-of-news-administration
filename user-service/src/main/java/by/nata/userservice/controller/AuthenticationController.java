@@ -27,7 +27,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    @PostMapping
+    @PostMapping(produces = "application/json")
     public ResponseEntity<String> authenticate(@RequestBody @Valid AppUserRequestDto request) {
         try {
             Authentication authentication = authenticationManager

@@ -18,8 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class RegistrationControllerTest {
+class RegistrationControllerIntegrationTest {
 
+    public static final String URL_REGISTRATION = "/api/v1/app/users/register/";
     @Autowired
     private AppUserRepository userRepository;
 
@@ -30,14 +31,14 @@ class RegistrationControllerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"admin", "journalist", "subscriber"})
-    void should_return201AndCorrectUsername_when_registerAdministratorWithValidCredentials(String registrationUrlType) {
+    void shouldReturn201AndCorrectUsernameWhenRegisterAdministratorWithValidCredentials(String registrationUrlType) {
         AppUserRequestDto request = AppUserRequestDto.builder()
                 .withUsername(USERNAME)
                 .withPassword("password")
                 .build();
         HttpEntity<AppUserRequestDto> requestEntity = new HttpEntity<>(request);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                "/api/v1/app/users/register/" + registrationUrlType,
+                URL_REGISTRATION + registrationUrlType,
                 HttpMethod.POST,
                 requestEntity,
                 String.class
@@ -50,5 +51,4 @@ class RegistrationControllerTest {
 
         userRepository.findByUsername(USERNAME).ifPresent(userRepository::delete);
     }
-
 }
