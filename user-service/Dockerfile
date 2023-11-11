@@ -1,12 +1,18 @@
 # Build stage
 FROM gradle:8.3.0-jdk17-alpine AS build
 
-WORKDIR /user-service
-COPY build.gradle .
-COPY settings.gradle .
-COPY src ./src
+WORKDIR /exception-handling-starter
+COPY exception-handling-starter/build.gradle .
+COPY exception-handling-starter/settings.gradle .
+COPY exception-handling-starter/src ./src
 
-RUN gradle build --no-daemon
+WORKDIR /user-service
+COPY user-service/build.gradle .
+COPY user-service/settings.gradle .
+COPY user-service/src ./src
+
+RUN gradle -b /exception-handling-starter/build.gradle build --no-daemon \
+&&  gradle -b /user-service/build.gradle build -x test --no-daemon
 
 # Run stage
 FROM openjdk:17-alpine

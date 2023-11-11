@@ -6,3 +6,6 @@ spring:
   security:
     jwt:
       secret: mySecretKeymySecretKeymySecretKeymySecretKey
+exception:
+  handling:
+    include: true

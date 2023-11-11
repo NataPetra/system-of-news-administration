@@ -1,6 +1,7 @@
 package by.nata.userservice.config;
 
 import by.nata.userservice.filter.AuthenticationJwtFilter;
+import by.nata.userservice.filter.ExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,19 +27,27 @@ public class SecurityConfig {
 
     private final AuthenticationJwtFilter authJwtFilter;
     private final UserDetailsService userDetailsService;
+    private final ExceptionFilter exceptionFilter;
 
-    //TODO: exceptionHandling
+    //TODO: check logic exceptionHandling
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(handling -> handling
+                        .authenticationEntryPoint((req, resp, exception) -> exceptionFilter.sendUnauthorizedException(resp, exception))
+                        .authenticationEntryPoint((req, resp, exception) -> exceptionFilter.sendForbiddenException(resp, exception))
+                )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/api/v1/app/users/login", "/api/v1/app/users/").anonymous()
+                        //.requestMatchers("/test/**").authenticated()
+                        //.requestMatchers("/test/protected/subscriber").hasRole("SUBSCRIBER")
                         .requestMatchers(HttpMethod.GET).permitAll()
                         .requestMatchers("/api/v1/app/users/register/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionFilter, AuthenticationJwtFilter.class)
                 .build();
     }
 
