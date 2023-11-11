@@ -1,5 +1,6 @@
 package by.nata.userservice.controller;
 
+import by.nata.applicationloggingstarter.annotation.MethodLog;
 import by.nata.userservice.service.JwtService;
 import by.nata.userservice.service.dto.AppUserRequestDto;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
+    @MethodLog
     @PostMapping(produces = "application/json")
     public ResponseEntity<String> authenticate(@RequestBody @Valid AppUserRequestDto request) {
         try {

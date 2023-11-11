@@ -1,4 +1,4 @@
-package by.nata.userservice.config;
+package by.nata.userservice.util;
 
 import by.nata.userservice.filter.AuthenticationJwtFilter;
 import by.nata.userservice.filter.ExceptionFilter;
@@ -24,8 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Profile({"dev", "prod"})
-public class SecurityConfig {
+@Profile("test")
+public class SecurityConfigTest {
 
     private final AuthenticationJwtFilter authJwtFilter;
     private final UserDetailsService userDetailsService;
@@ -35,14 +35,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(handling -> handling
-                        .authenticationEntryPoint((req, resp, exception) -> exceptionFilter.sendUnauthorizedException(resp, exception))
-                        .authenticationEntryPoint((req, resp, exception) -> exceptionFilter.sendForbiddenException(resp, exception))
-                )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/api/v1/app/users/login").anonymous()
-                        .requestMatchers(HttpMethod.GET).permitAll()
+                        .requestMatchers("/test/protected/admin").hasRole("ADMIN")
+                        .requestMatchers("/test/protected/journalist").hasRole("JOURNALIST")
+                        .requestMatchers("/test/protected/subscriber").hasRole("SUBSCRIBER")
+                        .requestMatchers("/test").permitAll()
                         .requestMatchers("/api/v1/app/users/register/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)

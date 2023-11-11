@@ -1,8 +1,8 @@
 package by.nata.userservice.service;
 
+import by.nata.exceptionhandlingstarter.exception.AppUserNameExistsException;
 import by.nata.userservice.database.model.AppUser;
 import by.nata.userservice.database.repository.AppUserRepository;
-import by.nata.userservice.ex.AppUserNameExistsException;
 import by.nata.userservice.service.dto.AppUserRequestDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

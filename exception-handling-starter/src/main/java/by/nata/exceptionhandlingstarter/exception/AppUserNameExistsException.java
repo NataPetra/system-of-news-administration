@@ -1,4 +1,4 @@
-package by.nata.userservice.ex;
+package by.nata.exceptionhandlingstarter.exception;
 
 public class AppUserNameExistsException extends RuntimeException {
 

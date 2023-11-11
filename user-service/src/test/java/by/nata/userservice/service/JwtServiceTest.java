@@ -32,14 +32,27 @@ class JwtServiceTest {
     @Autowired
     private JwtService jwtService;
 
+    public static final String TEST_USER = "testUser";
+    public static final String PASSWORD = "password";
+
+    UserDetails userDetailsSubscriber = new User(
+            TEST_USER,
+            PASSWORD,
+            List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.SUBSCRIBER.name()))
+    );
+
     @Test
     void generateAccessToken() {
-        UserDetails userDetails = new User("testUser", "password", List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.ADMIN.name())));
+        UserDetails userDetails = new User(
+                TEST_USER,
+                PASSWORD,
+                List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.ADMIN.name()))
+        );
         String token = jwtService.generateAccessToken(userDetails);
 
         assertNotNull(token);
         assertTrue(jwtService.isValid(token));
-        assertEquals("testUser", jwtService.getUsername(token));
+        assertEquals(TEST_USER, jwtService.getUsername(token));
 
         Collection<GrantedAuthority> authorities = jwtService.getAuthorities(token);
         assertEquals(1, authorities.size());
@@ -48,18 +61,16 @@ class JwtServiceTest {
 
     @Test
     void getUsername() {
-        UserDetails userDetails = new User("testUser", "password", List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.SUBSCRIBER.name())));
-        String token = jwtService.generateAccessToken(userDetails);
+        String token = jwtService.generateAccessToken(userDetailsSubscriber);
 
         String username = jwtService.getUsername(token);
 
-        assertEquals("testUser", username);
+        assertEquals(TEST_USER, username);
     }
 
     @Test
     void getExpirationDate() {
-        UserDetails userDetails = new User("testUser", "password", List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.SUBSCRIBER.name())));
-        String token = jwtService.generateAccessToken(userDetails);
+        String token = jwtService.generateAccessToken(userDetailsSubscriber);
 
         Date expirationDate = jwtService.getExpirationDate(token);
 
@@ -68,7 +79,10 @@ class JwtServiceTest {
 
     @Test
     void getAuthorities() {
-        UserDetails userDetails = new User("testUser", "password", List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.JOURNALIST.name())));
+        UserDetails userDetails = new User(
+                TEST_USER,
+                PASSWORD,
+                List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.JOURNALIST.name())));
         String token = jwtService.generateAccessToken(userDetails);
 
         Collection<GrantedAuthority> authorities = jwtService.getAuthorities(token);
@@ -79,8 +93,7 @@ class JwtServiceTest {
 
     @Test
     void isValidWithValidToken() {
-        UserDetails userDetails = new User("testUser", "password", List.of(new SimpleGrantedAuthority("ROLE_" + AppUserRole.SUBSCRIBER.name())));
-        String token = jwtService.generateAccessToken(userDetails);
+        String token = jwtService.generateAccessToken(userDetailsSubscriber);
 
         assertTrue(jwtService.isValid(token));
     }
