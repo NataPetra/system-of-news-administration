@@ -27,6 +27,11 @@ import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.util.List;
 
+import static by.nata.newscommentsservice.util.NewsTestData.JOURNALIST;
+import static by.nata.newscommentsservice.util.NewsTestData.NEWS_ID;
+import static by.nata.newscommentsservice.util.NewsTestData.PAGE_NUMBER;
+import static by.nata.newscommentsservice.util.NewsTestData.PAGE_SIZE;
+import static by.nata.newscommentsservice.util.NewsTestData.ROLE_JOURNALIST;
 import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_GET_ALL;
 import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_GET_WITH_COMMENT;
 import static by.nata.newscommentsservice.util.NewsTestData.URL_TEMPLATE_SAVE;
@@ -52,12 +57,7 @@ class NewsControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public static final Long NEWS_ID = 1L;
-    public static final int PAGE_NUMBER = 0;
-    public static final int PAGE_SIZE = 10;
     public static final String TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-    public static final String JOURNALIST = "journalist";
-    public static final String ROLE_JOURNALIST = "ROLE_JOURNALIST";
 
     @Test
     @SqlGroup({

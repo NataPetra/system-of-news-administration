@@ -17,6 +17,11 @@ public final class CommentTestData {
     public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/comments/{id}";
     public static final String URL_TEMPLATE_GET_BY_NEWS_ID = "/api/v1/app/comments/news/{newsId}";
     public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/comments/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}";
+    public static final String ROLE_SUBSCRIBER = "ROLE_SUBSCRIBER";
+    public static final String SUBSCRIBER = "subscriber";
+    public static final int COMMENT_ID = 1;
+    public static final int PAGE_NUMBER = 0;
+    public static final int PAGE_SIZE = 2;
 
     private CommentTestData() {
     }

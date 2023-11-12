@@ -26,6 +26,11 @@ import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.util.List;
 
+import static by.nata.newscommentsservice.util.CommentTestData.COMMENT_ID;
+import static by.nata.newscommentsservice.util.CommentTestData.PAGE_NUMBER;
+import static by.nata.newscommentsservice.util.CommentTestData.PAGE_SIZE;
+import static by.nata.newscommentsservice.util.CommentTestData.ROLE_SUBSCRIBER;
+import static by.nata.newscommentsservice.util.CommentTestData.SUBSCRIBER;
 import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_GET_BY_NEWS_ID;
 import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_SAVE;
 import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_SEARCH;
@@ -49,12 +54,7 @@ class CommentControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public static final String ROLE_SUBSCRIBER = "ROLE_SUBSCRIBER";
-    public static final String SUBSCRIBER = "subscriber";
     public static final String TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-    public static final int COMMENT_ID = 1;
-    public static final int PAGE_NUMBER = 0;
-    public static final int PAGE_SIZE = 2;
 
     @Test
     @SqlGroup({
