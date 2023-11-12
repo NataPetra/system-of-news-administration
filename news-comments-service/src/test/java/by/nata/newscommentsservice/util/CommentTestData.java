@@ -83,7 +83,7 @@ public final class CommentTestData {
         return CommentResponseDto.builder()
                 .withId(1L)
                 .withText("Comment 1 for News 1")
-                .withUsername("User1")
+                .withUsername("subscriber")
                 .withTime("2023-11-03 01:46:22")
                 .withNewsId(1L)
                 .build();
@@ -110,7 +110,7 @@ public final class CommentTestData {
     public static CommentRequestDto createUpdatedCommentRequestDto() {
         return CommentRequestDto.builder()
                 .withText("Updated Comment")
-                .withUsername("User1")
+                .withUsername("subscriber")
                 .withNewsId(1L)
                 .build();
     }
@@ -119,7 +119,7 @@ public final class CommentTestData {
         return CommentResponseDto.builder()
                 .withId(1L)
                 .withText("Updated Comment")
-                .withUsername("User1")
+                .withUsername("subscriber")
                 .withTime("2023-11-03 01:46:22")
                 .withNewsId(1L)
                 .build();

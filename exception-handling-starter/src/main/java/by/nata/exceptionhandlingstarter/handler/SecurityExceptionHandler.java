@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -58,7 +59,7 @@ public class SecurityExceptionHandler implements AccessDeniedHandler, Authentica
     @SneakyThrows
     private void sendException(HttpServletResponse response, ExceptionMessage exceptionMessage) {
         response.setStatus(exceptionMessage.statusCode());
-        response.setContentType("application/json");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(mapper.writeValueAsString(exceptionMessage));
     }
 }

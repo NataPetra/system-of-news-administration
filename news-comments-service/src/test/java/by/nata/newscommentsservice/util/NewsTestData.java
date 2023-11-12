@@ -127,14 +127,14 @@ public final class NewsTestData {
         comments.add(CommentResponseDto.builder()
                 .withId(1L)
                 .withText("Comment 1 for News 1")
-                .withUsername("User1")
+                .withUsername("subscriber")
                 .withTime("2023-11-03 01:46:22")
                 .withNewsId(1L)
                 .build());
         comments.add(CommentResponseDto.builder()
                 .withId(2L)
                 .withText("Comment 2 for News 1")
-                .withUsername("User2")
+                .withUsername("subscriber2")
                 .withTime("2023-11-02 21:00:24")
                 .withNewsId(1L)
                 .build());

@@ -50,8 +50,6 @@ dependencies {
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:postgresql'
 	testImplementation "org.wiremock:wiremock:$wiremockVersion"
-	//testImplementation 'org.springframework.security:spring-security-test'
-	//testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner:4.0.4'
 }
 
 tasks.named('test') {

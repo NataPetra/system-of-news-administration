@@ -11,6 +11,9 @@ spring:
       uri: http://localhost:8180/api/v1/app/users
 cache:
   maxSize: 3
-  algorithm: LRU
+  algorithm: LFU
 logging:
   config: ""
+exception:
+  handling:
+    include: true
