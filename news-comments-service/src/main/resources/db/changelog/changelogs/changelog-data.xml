@@ -8,82 +8,102 @@
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Breaking News 1"/>
             <column name="text" value="Lorem ipsum dolor sit amet, consectetur adipiscing elit."/>
+            <column name="username" value="journalist1"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Latest Updates 2"/>
             <column name="text" value="Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+            <column name="username" value="journalist2"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Tech Trends 3"/>
             <column name="text" value="Vivamus id mauris eget orci."/>
+            <column name="username" value="journalist3"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="World Events 4"/>
             <column name="text" value="Pellentesque eget nunc nunc."/>
+            <column name="username" value="journalist4"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Business News 5"/>
             <column name="text" value="Fusce varius ligula sed euismod."/>
+            <column name="username" value="journalist1"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Health Updates 6"/>
             <column name="text" value="Proin eget augue et urna."/>
+            <column name="username" value="journalist5"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Sports Headlines 7"/>
             <column name="text" value="Nulla nec cursus orci."/>
+            <column name="username" value="journalist1"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Entertainment News 8"/>
             <column name="text" value="Duis ut facilisis purus."/>
+            <column name="username" value="journalist5"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Science Breakthroughs 9"/>
             <column name="text" value="Cras sit amet augue eget sapien."/>
+            <column name="username" value="journalist3"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Travel Tips 10"/>
             <column name="text" value="Suspendisse vel turpis in arcu."/>
+            <column name="username" value="journalist6"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Food and Cooking 11"/>
             <column name="text" value="Praesent quis hendrerit sapien."/>
+            <column name="username" value="journalist7"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Fashion Trends 12"/>
             <column name="text" value="Aenean dictum dui id mauris."/>
+            <column name="username" value="journalist"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Education Insights 13"/>
             <column name="text" value="Etiam non est nec enim."/>
+            <column name="username" value="journalist"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Environment News 14"/>
             <column name="text" value="Sed aliquam libero vitae urna."/>
+            <column name="username" value="journalist1"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Technology Updates 15"/>
             <column name="text" value="Vestibulum eget semper justo."/>
+            <column name="username" value="journalist"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Home and Lifestyle 16"/>
             <column name="text" value="Fusce in eros et quam."/>
+            <column name="username" value="journalist1"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Economy Insights 17"/>
             <column name="text" value="Nunc a elit in lectus volutpat."/>
+            <column name="username" value="journalist8"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Travel Destinations 18"/>
             <column name="text" value="Donec euismod dolor nec bibendum."/>
+            <column name="username" value="journalist"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Arts and Culture 19"/>
             <column name="text" value="Phasellus ac placerat ligula."/>
+            <column name="username" value="journalist9"/>
         </insert>
         <insert schemaName="news-service-db" tableName="news">
             <column name="title" value="Books and Literature 20"/>
             <column name="text" value="Aenean sed diam non odio."/>
+            <column name="username" value="journalist1"/>
         </insert>
     </changeSet>
 

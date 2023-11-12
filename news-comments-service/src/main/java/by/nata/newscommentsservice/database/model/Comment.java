@@ -49,7 +49,7 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private String text;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String username;
 
     @CreationTimestamp

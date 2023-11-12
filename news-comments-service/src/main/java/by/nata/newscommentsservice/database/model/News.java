@@ -62,6 +62,9 @@ public class News implements Serializable {
     @Column(nullable = false)
     private String text;
 
+    @Column(nullable = false, length = 40)
+    private String username;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "news", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -15,5 +15,6 @@ import java.io.Serializable;
  */
 @Builder(setterPrefix = "with")
 public record NewsResponseDto(Long id, String time,
-                              String title, String text) implements Serializable {
+                              String title, String text,
+                              String username) implements Serializable {
 }
