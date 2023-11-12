@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SqlGroup({
         @Sql(scripts = "classpath:testdata/data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(scripts = "classpath:testdata/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
-class ExceptionFilterTest {
+class ExceptionHandlingIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -81,7 +81,7 @@ class ExceptionFilterTest {
     }
 
     @Test
-    void shouldReturn401WithoutAuthorizationHeaderWhenLoginWithValidCredentialsButUseerBlosk() {
+    void shouldReturn401WithoutAuthorizationHeaderWhenLoginWithValidCredentialsButUserBlock() {
         AppUserRequestDto request = AppUserRequestDto.builder()
                 .withUsername("lockedUser")
                 .withPassword(SUBSCRIBER)
@@ -93,6 +93,7 @@ class ExceptionFilterTest {
                 requestEntity,
                 String.class);
 
+        System.out.println(response.getBody());
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
@@ -110,7 +111,7 @@ class ExceptionFilterTest {
     }
 
     @Test
-    void shouldReturn403WithoutAuthorizationHeaderWhenAccessIsDenied() {
+    void shouldReturn401WithoutAuthorizationHeaderWhenAccessIsDenied() {
         AppUserRequestDto request = AppUserRequestDto.builder()
                 .withUsername(ADMIN)
                 .withPassword(ADMIN)
@@ -131,7 +132,8 @@ class ExceptionFilterTest {
                 new HttpEntity<>(new HttpHeaders()),
                 String.class);
 
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        System.out.println(response.getBody());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test
@@ -159,6 +161,7 @@ class ExceptionFilterTest {
                 new HttpEntity<>(headers),
                 String.class);
 
+        System.out.println(response.getBody());
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 }

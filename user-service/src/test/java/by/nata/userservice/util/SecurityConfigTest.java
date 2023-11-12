@@ -1,7 +1,7 @@
 package by.nata.userservice.util;
 
+import by.nata.exceptionhandlingstarter.handler.SecurityExceptionHandler;
 import by.nata.userservice.filter.AuthenticationJwtFilter;
-import by.nata.userservice.filter.ExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,13 +29,16 @@ public class SecurityConfigTest {
 
     private final AuthenticationJwtFilter authJwtFilter;
     private final UserDetailsService userDetailsService;
-    private final ExceptionFilter exceptionFilter;
+    private final SecurityExceptionHandler securityExceptionHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(xh -> xh
+                        .accessDeniedHandler(securityExceptionHandler)
+                        .authenticationEntryPoint(securityExceptionHandler))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/api/v1/app/users/login").anonymous()
                         .requestMatchers("/test/protected/admin").hasRole("ADMIN")
@@ -43,9 +46,9 @@ public class SecurityConfigTest {
                         .requestMatchers("/test/protected/subscriber").hasRole("SUBSCRIBER")
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/api/v1/app/users/register/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(exceptionFilter, AuthenticationJwtFilter.class)
                 .build();
     }
 
@@ -61,6 +64,7 @@ public class SecurityConfigTest {
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

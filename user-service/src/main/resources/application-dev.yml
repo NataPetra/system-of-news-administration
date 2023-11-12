@@ -5,4 +5,4 @@ spring:
     password: postgres
   security:
     jwt:
-      secret: mySecretKey
+      secret: mySecretKeymySecretKeymySecretKeymySecretKeymySecretKeymySecretKeymySecretKey

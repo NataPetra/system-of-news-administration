@@ -3,6 +3,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/news-service-db
     username: postgres
     password: postgres
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  settings:
+    user-service:
+      uri: http://localhost:8082/api/v1/app/users
 cache:
   maxSize: 3
   algorithm: LRU

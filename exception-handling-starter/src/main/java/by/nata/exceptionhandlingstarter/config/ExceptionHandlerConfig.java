@@ -1,6 +1,7 @@
 package by.nata.exceptionhandlingstarter.config;
 
 import by.nata.exceptionhandlingstarter.handler.GlobalExceptionHandlerAdvice;
+import by.nata.exceptionhandlingstarter.handler.SecurityExceptionHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +14,13 @@ import org.springframework.context.annotation.Configuration;
  * <p>
  * Usage:
  * - Include this class in your Spring application to enable exception handling with
- *   the `GlobalExceptionHandlerAdvice`.
+ * the `GlobalExceptionHandlerAdvice`.
  * <p>
  * Configuration Properties:
  * - `exception.handling.include`: A property that controls whether the exception handling
- *   should be enabled (default is "true").
+ * should be enabled (default is "true").
  * <p>
+ *
  * @see by.nata.exceptionhandlingstarter.handler.GlobalExceptionHandlerAdvice
  */
 @Configuration
@@ -34,5 +36,11 @@ public class ExceptionHandlerConfig {
     @ConditionalOnMissingBean
     public GlobalExceptionHandlerAdvice globalHandlerAdvice() {
         return new GlobalExceptionHandlerAdvice();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SecurityExceptionHandler securityExceptionHandler() {
+        return new SecurityExceptionHandler();
     }
 }

@@ -1,5 +1,6 @@
 package by.nata.userservice.service;
 
+import by.nata.userservice.service.dto.AppUserResponseDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -67,7 +68,7 @@ public class JwtService {
     }
 
     public Collection<GrantedAuthority> getAuthorities(String token) {
-        String role = getClaims(token).get("role", String.class);
+        String role = getClaims(token).get(ROLE_KEY, String.class);
         return List.of(new SimpleGrantedAuthority(role));
     }
 
@@ -82,5 +83,13 @@ public class JwtService {
             log.error("Bad JWT credentials - {}", e.getMessage());
             return false;
         }
+    }
+
+    public AppUserResponseDto getUserFromToken(String token) {
+        Claims claims = getClaims(token);
+        return AppUserResponseDto.builder()
+                .withUsername(claims.getSubject())
+                .withRole(claims.get(ROLE_KEY, String.class))
+                .build();
     }
 }

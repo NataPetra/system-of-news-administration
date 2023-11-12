@@ -5,4 +5,4 @@ spring:
     password: postgres
   security:
     jwt:
-      secret: kdc.scbhc4vdv
+      secret: kdc.scbhc4vdvkdc.scbhc4vdvkdc.scbhc4vdvkdc.scbhc4vdvkdc.scbhc4vdv.scbhc4vdv

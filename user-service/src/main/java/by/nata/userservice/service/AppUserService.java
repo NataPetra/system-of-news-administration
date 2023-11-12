@@ -32,6 +32,5 @@ public class AppUserService implements UserDetailsService {
                 .roles(user.getRole().name())
                 .build();
     }
-
 }
 

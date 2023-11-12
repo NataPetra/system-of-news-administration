@@ -15,6 +15,9 @@ spring:
     jwt:
       secret: ${JWT_SECRET}
       expiration: 3600000
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
 exception:
   handling:
     include: true
