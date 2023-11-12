@@ -12,16 +12,6 @@ import java.util.List;
  * <p>- Implement this interface to provide business logic and functionality for managing comments, including saving,
  *   updating, retrieving, and deleting comments, as well as searching for comments and checking the existence of a comment.</p>
  *
- * <p>Methods:</p>
- * <p>- {@code save}: Saves a new comment based on the provided {@link CommentRequestDto}.
- * <p>- {@code update}: Updates an existing comment with the specified ID using the provided {@link CommentRequestDto}.
- * <p>- {@code getCommentById}: Retrieves a comment by its unique identifier.
- * <p>- {@code findByNewsIdOrderByTimeDesc}: Retrieves a list of comments for a specific news article, ordered by time in descending order.
- * <p>- {@code findAllByNewsId}: Retrieves a list of comments for a specific news article.
- * <p>- {@code delete}: Deletes a comment with the specified ID.
- * <p>- {@code searchComment}: Searches for comments based on a keyword, with pagination support.
- * <p>- {@code isCommentExist}: Checks whether a comment with a specific ID exists.
- *
  * @see CommentRequestDto
  * @see CommentResponseDto
  */

@@ -29,10 +29,6 @@ import java.util.List;
  * The {@code News} class is a JPA entity that represents news articles. It provides information about
  * the news article's title, content, creation timestamp, and associated comments.
  *
- * <p>Usage:</p>
- * <p>- Use this class to model and persist news articles in a database. It allows tracking the creation
- *   timestamp of news articles and managing associated comments.</p>
- *
  * <p>Fields:</p>
  * <p>- {@code id}: The unique identifier of the news article.</p>
  * <p>- {@code time}: The timestamp representing the news article's creation time.</p>
@@ -65,6 +61,9 @@ public class News implements Serializable {
 
     @Column(nullable = false)
     private String text;
+
+    @Column(nullable = false, length = 40)
+    private String username;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

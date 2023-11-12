@@ -25,9 +25,6 @@ import java.util.Date;
  * The {@code Comment} class is a JPA entity that represents a comment associated with news articles.
  * It provides information about the comment's content, author, creation timestamp, and the associated news article.
  *
- * <p>Usage:</p>
- * <p>- Use this class to model and persist comments in a database for news articles.</p>
- *
  * <p>Fields:</p>
  * <p>- {@code id}: The unique identifier of the comment.</p>
  * <p>- {@code text}: The content of the comment.</p>
@@ -52,7 +49,7 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private String text;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String username;
 
     @CreationTimestamp

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="insert-users" author="natalapetracenko@gmail.com">
+        <insert schemaName="app-user-service-db" tableName="app_users">
+            <!-- ADMIN -->
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$12$du6QLZsOMNBBDteBcSaaKevtZBfDPwh35gdZ.Mq/68S8QsqmFEeM."/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+
+        <insert schemaName="app-user-service-db" tableName="app_users">
+            <!-- JOURNALIST -->
+            <column name="username" value="journalist"/>
+            <column name="password" value="$2a$12$NaAuUYadSqPoJQJUvk18kOWSlOeAWqt5wrjiVRA6TocIH.H/ITT8u"/>
+            <column name="role" value="JOURNALIST"/>
+        </insert>
+
+        <insert schemaName="app-user-service-db" tableName="app_users">
+            <!-- SUBSCRIBER -->
+            <column name="username" value="subscriber"/>
+            <column name="password" value="$2a$12$3UUBsJtjjLzv6aoJRXGgS.slW0MUpEVyWMrC69.DsOUTNAKEuxN7m"/>
+            <column name="role" value="SUBSCRIBER"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

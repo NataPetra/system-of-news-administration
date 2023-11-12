@@ -35,6 +35,7 @@ class NewsMapperTest {
         assertNull(news.getComments());
         assertEquals(requestDto.title(), news.getTitle());
         assertEquals(requestDto.text(), news.getText());
+        assertEquals(requestDto.username(), news.getUsername());
     }
 
     @Test
@@ -53,5 +54,6 @@ class NewsMapperTest {
         assertEquals(formatDate(news.getTime()), responseDto.time());
         assertEquals(news.getTitle(), responseDto.title());
         assertEquals(news.getText(), responseDto.text());
+        assertEquals(news.getUsername(), responseDto.username());
     }
 }

@@ -1,8 +1,5 @@
 package by.nata.newscommentsservice.service.impl;
 
-import by.nata.newscommentsservice.cache.annotation.CacheableMethodDelete;
-import by.nata.newscommentsservice.cache.annotation.CacheableMethodGet;
-import by.nata.newscommentsservice.cache.annotation.CacheableMethodPut;
 import by.nata.newscommentsservice.database.model.News;
 import by.nata.newscommentsservice.database.repository.NewsRepository;
 import by.nata.newscommentsservice.database.util.NewsSpecification;
@@ -37,19 +34,6 @@ import java.util.Optional;
 /**
  * The {@code NewsServiceImpl} class provides the service implementation for managing news articles in the application.
  *
- * <p>Usage:</p>
- * <p>- Use this service to perform various operations on news articles, such as creating, updating, retrieving, and deleting news articles, as well as retrieving news articles with their associated comments.</p>
- *
- * <p>Methods:</p>
- * <p>- {@code save}: Creates a new news article based on the provided {@link NewsRequestDto} and saves it to the database. Returns a {@link NewsResponseDto} representing the saved news article.
- * <p>- {@code update}: Updates an existing news article with the specified ID based on the provided {@link NewsRequestDto}. Returns a {@link NewsResponseDto} representing the updated news article.
- * <p>- {@code getNewsById}: Retrieves a news article by its unique identifier and returns a {@link NewsResponseDto} representing the news article.
- * <p>- {@code getAllNews}: Retrieves a list of all news articles. Supports pagination.
- * <p>- {@code getNewsWithComments}: Retrieves a news article along with its associated comments. Supports pagination.
- * <p>- {@code delete}: Deletes a news article with the specified ID.
- * <p>- {@code searchNews}: Searches for news articles based on keyword and date criteria, returning a list of matching news articles. Supports pagination.
- * <p>- {@code isNewsExist}: Checks if a news article with a specific ID exists in the database.
- *
  * @see INewsService
  * @see NewsRequestDto
  * @see NewsResponseDto
@@ -69,7 +53,6 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional
-    @CacheableMethodPut
     @CachePut(key = "#result.id")
     public NewsResponseDto save(NewsRequestDto news) {
         log.info("Call methot save() from NewsService with NewsRequestDto: {}", news);
@@ -82,7 +65,6 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional
-    @CacheableMethodPut
     @CachePut(key = "#result.id")
     public NewsResponseDto update(Long id, NewsRequestDto news) {
         log.info("Call methot update() from NewsService with id: {} and NewsRequestDto: {}", id, news);
@@ -97,7 +79,6 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional(readOnly = true)
-    @CacheableMethodGet
     @Cacheable(key = "#id")
     public NewsResponseDto getNewsById(Long id) {
         log.info("Call methot getNewsById() from NewsService with id: {}", id);
@@ -139,7 +120,6 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional
-    @CacheableMethodDelete
     @CacheEvict(key = "#id")
     public void delete(Long id) {
         log.info("Call methot delete() from NewsService with id: {}", id);

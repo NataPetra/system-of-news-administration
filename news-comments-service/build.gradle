@@ -24,6 +24,7 @@ repositories {
 
 ext {
 	mapstructVersion = "1.5.5.Final"
+	wiremockVersion = "3.3.1"
 }
 
 dependencies {
@@ -31,10 +32,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config:4.0.4'
 	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap:4.0.4'
 	implementation 'by.nata:application-logging-starter:2.1'
-	implementation 'by.nata:exception-handling-starter:1.1'
+	implementation 'by.nata:exception-handling-starter:1.2'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	implementation 'org.liquibase:liquibase-core'
 	compileOnly 'org.projectlombok:lombok'
@@ -46,6 +49,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:postgresql'
+	testImplementation "org.wiremock:wiremock:$wiremockVersion"
 }
 
 tasks.named('test') {

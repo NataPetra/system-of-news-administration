@@ -14,15 +14,6 @@ import java.util.Objects;
  * The {@code NewsSpecification} utility class provides a static method for creating a JPA Specification
  * to search for news articles that match specified criteria, including a keyword and a specific date range.
  * It is used for defining dynamic queries for the JPA repository.
- *
- * <p>Usage:</p>
- * <p>- Use the {@code search} method to create a JPA Specification that searches for news articles based on
- *   the provided keyword and date range.</p>
- *
- * <p>Methods:</p>
- * <p>- {@code search}: Creates a JPA Specification for searching news articles using a keyword and a date range.
- *   It performs case-insensitive searches in both the news article's title and content. Additionally, it allows
- *   filtering by a specific date range.</p>
  */
 @UtilityClass
 public class NewsSpecification {

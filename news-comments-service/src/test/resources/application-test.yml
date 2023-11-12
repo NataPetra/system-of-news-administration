@@ -3,5 +3,14 @@ spring:
     url: jdbc:tc:postgresql:15-alpine:///
   liquibase:
     change-log: db.changelog/changelog-test.xml
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  settings:
+    user-service:
+      uri: http://localhost:8180/api/v1/app/users
 logging:
   config: ""
+exception:
+  handling:
+    include: true

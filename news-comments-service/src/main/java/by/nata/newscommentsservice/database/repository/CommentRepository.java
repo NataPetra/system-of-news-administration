@@ -16,11 +16,6 @@ import java.util.List;
  * <p>Usage:</p>
  * <p>- Use this repository to perform database operations on {@link Comment} entities, such as saving,
  *   retrieving, updating, or deleting comments.</p>
- *
- * <p>Methods:</p>
- * <p>- {@code findByNewsIdOrderByTimeDesc}: Retrieves a page of comments for a specific news article,
- *   ordered by creation time in descending order.
- * <p>- {@code findAllByNewsId}: Retrieves a list of comments for a specific news article.
  */
 public interface CommentRepository extends JpaRepository<Comment, Long>, JpaSpecificationExecutor<Comment> {
 

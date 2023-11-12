@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,6 +38,7 @@ public class NewsController {
 
     @MethodLog
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST')")
     public ResponseEntity<NewsResponseDto> saveNews(@RequestBody @Valid NewsRequestDto request) {
         log.debug("Input data for saving news: {}", request);
         NewsResponseDto response = newsService.save(request);
@@ -45,6 +47,7 @@ public class NewsController {
 
     @MethodLog
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
     public NewsResponseDto updateNews(@PathVariable Long id, @RequestBody @Valid NewsRequestDto request) {
         log.debug("Input data for updating news: {}", request);
         return newsService.update(id, request);
@@ -88,6 +91,7 @@ public class NewsController {
 
     @MethodLog
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
     public ResponseEntity<Void> deleteNews(@PathVariable @NewsValidation Long id) {
         newsService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

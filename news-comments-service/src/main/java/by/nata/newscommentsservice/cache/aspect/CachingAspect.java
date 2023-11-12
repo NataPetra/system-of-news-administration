@@ -18,26 +18,14 @@ import java.lang.reflect.Field;
  * marked with custom cache-related annotations. It allows caching of method results, retrieval
  * of cached data, and deletion of cached data based on annotations.
  *
- * <p>Usage:</p>
- * <p>- Include this class in your Spring application to enable caching for methods marked with
- *   custom cache annotations like {@code @CacheableMethodGet}, {@code @CacheableMethodPut}, and
- *   {@code @CacheableMethodDelete}.</p>
- *
  * <p>Dependencies:</p>
  * <p>- {@link Cache}: An interface that defines the caching behavior, including methods for
  *   getting, putting, and deleting cached data.</p>
- *
- * <p>Custom Annotations:</p>
- * <p>- {@link by.nata.newscommentsservice.cache.annotation.CacheableMethodGet}: Marks methods that
- *   retrieve data and can be cached.</p>
- * <p>- {@link by.nata.newscommentsservice.cache.annotation.CacheableMethodPut}: Marks methods that
- *   update or insert data into the cache.</p>
- * <p>- {@link by.nata.newscommentsservice.cache.annotation.CacheableMethodDelete}: Marks methods
- *   that delete data from the cache.</p>
  */
 @Aspect
 @Component
 @Profile({"dev", "aspect"})
+@SuppressWarnings("unchecked")
 public class CachingAspect {
 
     private final Cache<String, Object> cache;
@@ -53,13 +41,13 @@ public class CachingAspect {
     }
 
     /**
-     * Caches the result of methods marked with {@code @CacheableMethodGet}.
+     * Caches the result of methods marked with {@code @Cacheable}.
      *
      * @param joinPoint The method being executed and its arguments.
      * @return The cached result or the method's result if not cached.
      * @throws Throwable If an error occurs during method execution.
      */
-    @Around(value = "@annotation(by.nata.newscommentsservice.cache.annotation.CacheableMethodGet)")
+    @Around(value = "@annotation(org.springframework.cache.annotation.Cacheable)")
     public Object cacheMethodGetResult(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         String key = getPrefix(joinPoint) + args[0];
@@ -73,13 +61,13 @@ public class CachingAspect {
     }
 
     /**
-     * Caches the result of methods marked with {@code @CacheableMethodPut}.
+     * Caches the result of methods marked with {@code @CachePut}.
      *
      * @param joinPoint The method being executed and its arguments.
      * @return The cached result.
      * @throws Throwable If an error occurs during method execution.
      */
-    @Around(value = "@annotation(by.nata.newscommentsservice.cache.annotation.CacheableMethodPut)")
+    @Around(value = "@annotation(org.springframework.cache.annotation.CachePut)")
     public Object cacheMethodPutResult(ProceedingJoinPoint joinPoint) throws Throwable {
         Object methodResult = joinPoint.proceed();
 
@@ -93,12 +81,12 @@ public class CachingAspect {
     }
 
     /**
-     * Deletes cached data related to methods marked with {@code @CacheableMethodDelete}.
+     * Deletes cached data related to methods marked with {@code @CacheEvict}.
      *
      * @param joinPoint The method being executed and its arguments.
      * @throws Throwable If an error occurs during method execution.
      */
-    @Around(value = "@annotation(by.nata.newscommentsservice.cache.annotation.CacheableMethodDelete)")
+    @Around(value = "@annotation(org.springframework.cache.annotation.CacheEvict)")
     public void cacheMethodDeleteResult(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
 

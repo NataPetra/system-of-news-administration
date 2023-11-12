@@ -41,6 +41,41 @@ services:
     volumes:
       - postgres-db:/var/lib/postgres
 
+  user-service:
+    image: user-service-1.0.0
+    build:
+      context: ./
+      dockerfile: ./user-service/Dockerfile
+    restart: always
+    depends_on:
+      database-user-service:
+        condition: service_healthy
+    environment:
+      ACTIVE_PROF: prod
+    ports:
+      - "8082:8080"
+    networks:
+      - news_application_ntwrk
+
+  database-user-service:
+    image: postgres:15.2-alpine
+    environment:
+      POSTGRES_DB: app-user-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+    healthcheck:
+      test: pg_isready -U postgres -d app-user-service-db
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "5431:5432"
+    networks:
+      - news_application_ntwrk
+    volumes:
+      - postgres-db:/var/lib/postgres
+
   redis:
     image: redis
     restart: always
@@ -79,10 +114,10 @@ services:
     build: config-server
     restart: always
     healthcheck:
-      test: curl http://localhost:8888/app/config-server || exit 0
-      interval: 2s
-      timeout: 10s
-      retries: 10
+      test: wget -qO- http://localhost:8888/config-server/dev
+      interval: 3s
+      timeout: 5s
+      retries: 5
     networks:
       - news_application_ntwrk
     ports:

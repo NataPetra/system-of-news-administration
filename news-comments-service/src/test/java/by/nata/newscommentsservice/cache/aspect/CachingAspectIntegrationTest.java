@@ -1,10 +1,11 @@
 package by.nata.newscommentsservice.cache.aspect;
 
-import by.nata.newscommentsservice.service.api.ICommentService;
-import by.nata.newscommentsservice.service.api.INewsService;
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
+import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
+import by.nata.newscommentsservice.service.impl.CommentServiceImpl;
+import by.nata.newscommentsservice.service.impl.NewsServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -32,17 +33,18 @@ import static org.mockito.Mockito.verify;
 class CachingAspectIntegrationTest {
 
     @SpyBean
-    private ICommentService commentService;
+    private CommentServiceImpl commentService;
 
     @SpyBean
-    private INewsService newsService;
+    private NewsServiceImpl newsService;
 
+    //TODO: написать комментрай по order
     @Test
     @Order(1)
     @SqlGroup({
             @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
-    void saveWithCache() {
+    void saveCommentWithCache() {
         CommentResponseDto comment = commentService.save(createCommentRequestDtoIntegr());
         assertNotNull(comment);
 
@@ -75,7 +77,7 @@ class CachingAspectIntegrationTest {
     @SqlGroup({
             @Sql(scripts = "classpath:testdata/add_news_with_comments_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
-    void updateWithCache() {
+    void updateCommentWithCache() {
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .withText("Updated Comment")
                 .withUsername("User3")
@@ -93,7 +95,7 @@ class CachingAspectIntegrationTest {
     @SqlGroup({
             @Sql(scripts = "classpath:testdata/add_news_with_comments_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
-    void deleteWithCache() {
+    void deleteCommentWithCache() {
         commentService.delete(4L);
 
         assertThrows(EntityNotFoundException.class, () -> commentService.getCommentById(4L));
@@ -129,5 +131,33 @@ class CachingAspectIntegrationTest {
 
         verify(newsService, times(1)).getNewsById(2L);
         verify(newsService, times(0)).getNewsById(1L);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
+    void updateNewsWithCache() {
+        NewsRequestDto newsRequestDto = NewsRequestDto.builder()
+                .withTitle("New News")
+                .withText("This is a new test news")
+                .build();
+
+        NewsResponseDto news = newsService.update(1L, newsRequestDto);
+        assertNotNull(news);
+
+        NewsResponseDto cachedNews = newsService.getNewsById((news.id()));
+        assertNotNull(cachedNews);
+        assertSame(news, cachedNews);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
+    void deleteNewsWithCache() {
+        newsService.delete(1L);
+
+        assertThrows(EntityNotFoundException.class, () -> newsService.getNewsById((4L)));
     }
 }

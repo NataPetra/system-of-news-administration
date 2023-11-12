@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,6 +38,7 @@ public class CommentController {
 
     @MethodLog
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER')")
     public ResponseEntity<CommentResponseDto> saveComment(@RequestBody @Valid CommentRequestDto request) {
         log.debug("Input data for saving comment: {}", request);
         CommentResponseDto response = commentService.save(request);
@@ -45,6 +47,7 @@ public class CommentController {
 
     @MethodLog
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
     public CommentResponseDto updateComment(
             @PathVariable @CommentValidation Long id,
             @RequestBody @Valid CommentRequestDto request
@@ -81,6 +84,7 @@ public class CommentController {
 
     @MethodLog
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
     public ResponseEntity<Void> deleteNews(@PathVariable @CommentValidation Long id) {
         commentService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

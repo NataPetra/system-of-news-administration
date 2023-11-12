@@ -20,13 +20,6 @@ import java.util.Date;
  * <p>Usage:</p>
  * <p>- Use this mapper to convert CommentRequestDto objects to Comment entities and vice versa, as well as to convert Comment entities to CommentResponseDto objects.</p>
  *
- * <p>Mapping Methods:</p>
- * <p>- {@code dtoToEntity}: Converts a CommentRequestDto object to a Comment entity, setting relevant properties. Ignores 'id' and 'time' properties and sets the 'news' property based on the 'newsId' from the CommentRequestDto.
- * <p>- {@code entityToDto}: Converts a Comment entity to a CommentResponseDto, mapping 'newsId' from the associated News entity and formatting the 'time' property to a string.
- *
- * <p>Utility Methods:</p>
- * <p>- {@code getNewsById}: Retrieves a News entity by its unique identifier. Returns null if not found.
- * <p>- {@code formatDate}: Formats a Date object to a string with the pattern "yyyy-MM-dd HH:mm:ss".
  */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         builder = @Builder(disableBuilder = true))

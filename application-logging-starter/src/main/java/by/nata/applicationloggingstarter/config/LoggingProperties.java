@@ -15,14 +15,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *   application properties.
  * - Use the `starter.logger.include` property to control whether the `ControllersLogging`
  *   aspect should be enabled (default is "true").
- * <p>
- * Configuration Properties:
- * - `include`: A boolean property that controls whether the logging aspect should be
- *   enabled (default is "true").
- * <p>
- * Dependencies:
- * - org.springframework.boot.context.properties.ConfigurationProperties: Annotation for
- *   binding properties to this class.
  */
 @Getter
 @Setter

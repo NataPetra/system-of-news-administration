@@ -16,6 +16,9 @@
             <column name="text" type="TEXT">
                 <constraints nullable="false" />
             </column>
+            <column name="username" type="VARCHAR(40)">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
 

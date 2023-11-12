@@ -7,9 +7,6 @@ import java.util.List;
 /**
  * The {@code NewsWithCommentsResponseDto} record represents a data transfer object for retrieving news articles with associated comments.
  *
- * <p>Usage:</p>
- * <p>- Use this data transfer object to retrieve news article details, including the article's unique identifier, creation time, title, text content, and a list of associated comments.</p>
- *
  * <p>Properties:</p>
  * <p>- {@code id}: The unique identifier of the news article.
  * <p>- {@code time}: The creation time of the news article.

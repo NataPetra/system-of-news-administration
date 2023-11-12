@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5431/app-user-service-db
+    username: postgres
+    password: postgres
+  security:
+    jwt:
+      secret: mySecretKeymySecretKeymySecretKeymySecretKeymySecretKeymySecretKeymySecretKey

@@ -2,12 +2,10 @@ package by.nata.newscommentsservice.service.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * The {@code NewsRequestDto} record represents a data transfer object for creating news articles.
- *
- * <p>Usage:</p>
- * <p>- Use this data transfer object to send news article-related information when creating news articles.</p>
  *
  * <p>Properties:</p>
  * <p>- {@code title}: The title of the news article. It must not be null or empty.
@@ -18,6 +16,9 @@ public record NewsRequestDto(
         @NotBlank(message = "Title must not be null or empty")
         String title,
         @NotBlank(message = "Text must not be null or empty")
-        String text
+        String text,
+        @NotBlank(message = "Text must not be null or empty")
+        @Length(max = 40, message = "Username should be no longer than {max} characters")
+        String username
 ) {
 }
