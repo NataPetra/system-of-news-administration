@@ -13,7 +13,6 @@ import java.io.Serializable;
  *
  * <p>Properties:</p>
  * <p>- {@code text}: The text content of the comment. It must not be null or empty.
- * <p>- {@code username}: The username of the comment author. It must not be null or empty.
  * <p>- {@code newsId}: The unique identifier of the associated news article. It must not be null and should be validated using the {@link NewsValidation} constraint.
  *
  * @see NewsValidation

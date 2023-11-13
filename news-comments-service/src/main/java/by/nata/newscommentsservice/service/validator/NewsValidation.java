@@ -12,7 +12,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
- * A custom validation annotation to ensure that a news with the specified ID exists in the system.
+ * A custom validation annotation to ensure that news with the specified ID exists in the system.
  */
 @Target({FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

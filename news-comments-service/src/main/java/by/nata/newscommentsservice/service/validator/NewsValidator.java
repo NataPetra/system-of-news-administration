@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * A custom validator for the {@link NewsValidation} annotation.
- * This validator checks if a news with the specified ID exists in the system.
+ * This validator checks if news with the specified ID exists in the system.
  */
 @RequiredArgsConstructor
 public class NewsValidator implements ConstraintValidator<NewsValidation, Long> {
@@ -15,7 +15,7 @@ public class NewsValidator implements ConstraintValidator<NewsValidation, Long> 
     private final INewsService newsService;
 
     /**
-     * Validates if a news with the provided ID exists.
+     * Validates if news with the provided ID exists.
      *
      * @param value    The news ID to be validated.
      * @param context  The validation context.

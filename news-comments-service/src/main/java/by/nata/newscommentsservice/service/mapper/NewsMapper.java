@@ -52,6 +52,11 @@ public interface NewsMapper {
         return sdf.format(date);
     }
 
+    /**
+     * Retrieves the username from the SecurityContext.
+     *
+     * @return The username of the authenticated user or null if not authenticated.
+     */
     default String getUsernameFromSecurityContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null ? authentication.getName() : null;

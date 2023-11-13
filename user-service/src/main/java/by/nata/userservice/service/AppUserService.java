@@ -11,12 +11,22 @@ import org.springframework.stereotype.Service;
 
 import static org.springframework.security.core.userdetails.User.withUsername;
 
+/**
+ * The {@code AppUserService} class is a service responsible for loading user details during the authentication process.
+ */
 @Service
 @RequiredArgsConstructor
 public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
 
+    /**
+     * Loads user details by the given username during the authentication process.
+     *
+     * @param username The username of the user to load.
+     * @return UserDetails object containing user details.
+     * @throws UsernameNotFoundException if the user with the specified username is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser user = appUserRepository.findByUsername(username).orElseThrow(

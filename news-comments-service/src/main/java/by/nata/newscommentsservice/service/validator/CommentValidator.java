@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * A custom constraint validator for the {@link CommentValidation} annotation.
- * It checks if a comment with the provided ID exists in the system.
+ * It checks if comment with the provided ID exists in the system.
  */
 @RequiredArgsConstructor
 public class CommentValidator implements ConstraintValidator<CommentValidation, Long> {
@@ -19,7 +19,7 @@ public class CommentValidator implements ConstraintValidator<CommentValidation, 
      *
      * @param value    The comment ID to be validated.
      * @param context  The validation context.
-     * @return true if the comment with the given ID exists, false otherwise.
+     * @return true if comment with the given ID exists, false otherwise.
      */
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {

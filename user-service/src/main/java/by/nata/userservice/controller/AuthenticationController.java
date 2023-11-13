@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The {@code AuthenticationController} class provides endpoints for user authentication.
+ */
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor

@@ -9,8 +9,7 @@ import java.time.ZonedDateTime;
  * <p>Attributes:</p>
  * <p>- {@code statusCode}: The HTTP status code associated with the error.</p>
  * <p>- {@code message}: A descriptive error message explaining the exception.</p>
- * <p>- {@code timeStamp}: The timestamp when the exception occurred, represented as
- * a {@code ZonedDateTime} object.</p>
+ * <p>- {@code timeStamp}: The timestamp when the exception occurred.</p>
  */
 public record ExceptionMessage(int statusCode, String message, ZonedDateTime timeStamp) {
 }

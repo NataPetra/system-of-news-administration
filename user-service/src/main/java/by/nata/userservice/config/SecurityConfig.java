@@ -21,6 +21,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * The {@code SecurityConfig} class configures security settings for the application.
+ * <p>
+ * Beans:
+ * <p>- SecurityFilterChain: Configures the security filter chain.
+ * <p>- PasswordEncoder: Provides BCrypt password encoding.
+ * <p>- AuthenticationProvider: Configures a custom authentication provider.
+ * <p>- AuthenticationManager: Configures the authentication manager.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -31,6 +40,13 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final SecurityExceptionHandler securityExceptionHandler;
 
+    /**
+     * Configures the security filter chain.
+     *
+     * @param http HttpSecurity object for configuring security settings.
+     * @return SecurityFilterChain object.
+     * @throws Exception if an exception occurs while configuring security.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -49,11 +65,21 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Provides BCrypt password encoding.
+     *
+     * @return PasswordEncoder bean.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configures a custom authentication provider.
+     *
+     * @return AuthenticationProvider bean.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -62,6 +88,12 @@ public class SecurityConfig {
         return provider;
     }
 
+    /**
+     * Configures the authentication manager.
+     *
+     * @param config AuthenticationConfiguration object.
+     * @return AuthenticationManager bean.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

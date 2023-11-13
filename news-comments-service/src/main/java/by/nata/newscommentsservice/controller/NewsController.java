@@ -31,15 +31,6 @@ import java.util.List;
  * The {@code NewsController} class is a Spring REST controller providing API endpoints
  * for managing news. It implements the {@code NewsDocOpenApi} interface.
  * <p>
- * Endpoints:
- * 1. Save News: POST ("/")
- * 2. Update News: PUT ("/{id}")
- * 3. Get News by ID: GET ("/{id}")
- * 4. Get All News: GET ("/")
- * 5. Get News with Comments: GET ("/{newsId}/comments")
- * 6. Search News: GET ("/search")
- * 7. Delete News: DELETE ("/{id}")
- * <p>
  * Logging:
  * - @MethodLog: Custom annotation for logging method input data.
  */
@@ -53,12 +44,6 @@ public class NewsController implements NewsDocOpenApi {
 
     private final INewsService newsService;
 
-    /**
-     * Saves a new news section.
-     *
-     * @param request The request body for creating a new news section.
-     * @return ResponseEntity<NewsResponseDto> with the created news section and HTTP status 201 (CREATED).
-     */
     @MethodLog
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST')")
@@ -67,14 +52,6 @@ public class NewsController implements NewsDocOpenApi {
         NewsResponseDto response = newsService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-    /**
-     * Updates an existing news section.
-     *
-     * @param id      The ID of the news section to be updated.
-     * @param request The request body for updating an existing news section.
-     * @return NewsResponseDto with the updated news section details.
-     */
 
     @MethodLog
     @PutMapping("/{id}")
@@ -86,12 +63,6 @@ public class NewsController implements NewsDocOpenApi {
         return newsService.update(id, request);
     }
 
-    /**
-     * Retrieves a news section by its ID.
-     *
-     * @param id The ID of the news section to be retrieved.
-     * @return NewsResponseDto with the details of the retrieved news section.
-     */
     @MethodLog
     @GetMapping("/{id}")
     public NewsResponseDto getNews(@PathVariable @NewsValidation Long id) {
@@ -100,13 +71,6 @@ public class NewsController implements NewsDocOpenApi {
         return response;
     }
 
-    /**
-     * Retrieves all news sections.
-     *
-     * @param pageNumber The page number for paginated results.
-     * @param pageSize   The page size for paginated results.
-     * @return List<NewsResponseDto> containing all news sections.
-     */
     @MethodLog
     @GetMapping
     public List<NewsResponseDto> getAllNews(@RequestParam int pageNumber,
@@ -116,14 +80,6 @@ public class NewsController implements NewsDocOpenApi {
         return response;
     }
 
-    /**
-     * Retrieves a news section with its associated comments by news ID.
-     *
-     * @param newsId     The ID of the news section for which comments are to be retrieved.
-     * @param pageNumber The page number for paginated results.
-     * @param pageSize   The page size for paginated results.
-     * @return NewsWithCommentsResponseDto containing the news section and its associated comments.
-     */
     @MethodLog
     @GetMapping("/{newsId}/comments")
     public NewsWithCommentsResponseDto getNewsWithComments(@PathVariable @NewsValidation Long newsId,
@@ -134,15 +90,6 @@ public class NewsController implements NewsDocOpenApi {
         return response;
     }
 
-    /**
-     * Searches for news sections based on a keyword and optional date filter.
-     *
-     * @param keyword    The keyword for searching news sections.
-     * @param dateString The optional date filter for searching news sections.
-     * @param pageNumber The page number for paginated results.
-     * @param pageSize   The page size for paginated results.
-     * @return List<NewsResponseDto> containing news sections matching the search criteria.
-     */
     @MethodLog
     @GetMapping("/search")
     public List<NewsResponseDto> searchNews(@RequestParam(required = false) String keyword,
@@ -152,12 +99,6 @@ public class NewsController implements NewsDocOpenApi {
         return newsService.searchNews(keyword, dateString, pageNumber, pageSize);
     }
 
-    /**
-     * Deletes a news section by its ID.
-     *
-     * @param id The ID of the news section to be deleted.
-     * @return ResponseEntity<Void> with HTTP status 204 (NO CONTENT) indicating successful deletion.
-     */
     @MethodLog
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")

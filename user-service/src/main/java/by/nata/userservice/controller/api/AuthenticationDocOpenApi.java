@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+/**
+ * API for user authentication.
+ * - Tags: Authentication Controller
+ */
 @Tag(name = "Authentication Controller", description = "API for user authentication")
 public interface AuthenticationDocOpenApi {
 
@@ -24,6 +28,12 @@ public interface AuthenticationDocOpenApi {
     String UNAUTHORIZED = "UNAUTHORIZED";
     String OK = "OK";
 
+    /**
+     * Authenticate user and generate access token.
+     *
+     * @param request User credentials.
+     * @return ResponseEntity with the generated access token and status code.
+     */
     @Operation(
             summary = "Authenticate user",
             description = "Authenticates a user and returns an access token.",
@@ -42,6 +52,12 @@ public interface AuthenticationDocOpenApi {
             @Parameter(description = "User credentials", required = true)
             @RequestBody @Valid AppUserRequestDto request);
 
+    /**
+     * Validate access token and get user details.
+     *
+     * @param authHeader Bearer token in the request header.
+     * @return User details retrieved from the access token.
+     */
     @Operation(
             summary = "Validate access token",
             description = "Validates the provided access token and returns user details.",

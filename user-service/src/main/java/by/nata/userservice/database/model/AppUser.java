@@ -18,6 +18,16 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
+/**
+ * The {@code AppUser} class represents a user in the application.
+ * <p>
+ * - Attributes:
+ *   - {@code id}: The unique identifier for the user.
+ *   - {@code username}: The unique username for the user.
+ *   - {@code password}: The hashed password for the user.
+ *   - {@code unblocked}: Indicates whether the user is unblocked or not.
+ *   - {@code role}: The role assigned to the user (ADMIN, JOURNALIST, SUBSCRIBER).
+ */
 @Builder(setterPrefix = "with")
 @Entity
 @Data

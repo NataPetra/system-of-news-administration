@@ -36,6 +36,12 @@ public interface CommentDocOpenApi {
     String NO_CONTENT = "NO CONTENT";
     String OK = "OK";
 
+    /**
+     * Saves a new comment.
+     *
+     * @param request The request body for creating a new comment.
+     * @return ResponseEntity<CommentResponseDto> with the created comment and HTTP status 201 (CREATED).
+     */
     @Operation(
             summary = "Save comment",
             description = "Creates and saves a new comment.",
@@ -58,6 +64,13 @@ public interface CommentDocOpenApi {
                             schema = @Schema(implementation = CommentRequestDto.class)))
             @RequestBody @Valid CommentRequestDto request);
 
+    /**
+     * Updates an existing comment.
+     *
+     * @param id      The ID of the comment to be updated.
+     * @param request The request body for updating an existing comment.
+     * @return CommentResponseDto with the updated comment details.
+     */
     @Operation(
             summary = "Update comment",
             description = "Updates an existing comment.",
@@ -82,6 +95,12 @@ public interface CommentDocOpenApi {
                             schema = @Schema(implementation = CommentRequestDto.class)))
             @RequestBody @Valid CommentRequestDto request);
 
+    /**
+     * Retrieves a comment by its ID.
+     *
+     * @param id The ID of the comment to be retrieved.
+     * @return CommentResponseDto with the details of the retrieved comment.
+     */
     @Operation(
             summary = "Get comment by ID",
             description = "Retrieves a comment by its ID.",
@@ -96,6 +115,12 @@ public interface CommentDocOpenApi {
             @Parameter(description = "The ID of the comment to be get")
             @PathVariable @CommentValidation Long id);
 
+    /**
+     * Retrieves all comments for a given news ID.
+     *
+     * @param newsId The ID of the news for which comments are to be retrieved.
+     * @return List<CommentResponseDto> containing comments for the specified news.
+     */
     @Operation(
             summary = "Get comments by news ID",
             description = "Retrieves all comments for a given news ID.",
@@ -109,6 +134,14 @@ public interface CommentDocOpenApi {
             @Parameter(description = "The ID of the news to be get with comments")
             @PathVariable @NewsValidation Long newsId);
 
+    /**
+     * Searches for comments based on a keyword.
+     *
+     * @param keyword    The keyword for searching comments.
+     * @param pageNumber The page number for paginated results.
+     * @param pageSize   The page size for paginated results.
+     * @return List<CommentResponseDto> containing comments matching the search criteria.
+     */
     @Operation(
             summary = "Search comments",
             description = "Searches for comments based on a keyword.",
@@ -126,6 +159,12 @@ public interface CommentDocOpenApi {
             @Parameter(description = "The page size for paginated results")
             @RequestParam int pageSize);
 
+    /**
+     * Deletes a comment by its ID.
+     *
+     * @param id The ID of the comment to be deleted.
+     * @return ResponseEntity<Void> with HTTP status 204 (NO CONTENT) indicating successful deletion.
+     */
     @Operation(
             summary = "Delete comment by ID",
             description = "Deletes a comment by its ID.",

@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The {@code RegistrationController} class provides endpoints for user registration with different roles.
+ */
 @RestController
 @RequiredArgsConstructor
 @Validated

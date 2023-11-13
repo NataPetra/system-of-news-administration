@@ -14,12 +14,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+/**
+ * API for user registration.
+ * - Tags: Registration Controller
+ */
 @Tag(name = "Registration Controller", description = "API for user registration")
 public interface RegistrationDocOpenApi {
 
     String CREATED = "CREATED";
     String BAD_REQUEST = "BAD REQUEST";
 
+    /**
+     * Register a user with the "ADMIN" role.
+     *
+     * @param request User details for registration.
+     * @return ResponseEntity with the registered username and HTTP 201 status.
+     */
     @Operation(
             summary = "Register administrator",
             description = "Registers a new administrator.",
@@ -35,6 +45,12 @@ public interface RegistrationDocOpenApi {
             @Parameter(name = "request", description = "The user registration request", required = true)
             @RequestBody @Valid AppUserRequestDto request);
 
+    /**
+     * Register a user with the "JOURNALIST" role.
+     *
+     * @param request User details for registration.
+     * @return ResponseEntity with the registered username and HTTP 201 status.
+     */
     @Operation(
             summary = "Register journalist",
             description = "Registers a new journalist.",
@@ -50,6 +66,12 @@ public interface RegistrationDocOpenApi {
             @Parameter(name = "request", description = "The user registration request", required = true)
             @RequestBody @Valid AppUserRequestDto request);
 
+    /**
+     * Register a user with the "SUBSCRIBER" role.
+     *
+     * @param request User details for registration.
+     * @return ResponseEntity with the registered username and HTTP 201 status.
+     */
     @Operation(
             summary = "Register subscriber",
             description = "Registers a new subscriber.",

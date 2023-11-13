@@ -5,6 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import org.hibernate.validator.constraints.Length;
 
+/**
+ * The {@code AppUserRequestDto} record represents the data transfer object (DTO) for creating or updating an application user.
+ * <p>
+ * - Record Fields:
+ *   - {@code username}: The username of the user.
+ *   - {@code password}: The password of the user.
+ */
 @Builder(setterPrefix = "with")
 public record AppUserRequestDto(
         @NotBlank(message = "Username should be empty")

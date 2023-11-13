@@ -21,12 +21,21 @@ import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+/**
+ * The {@code AuthenticationJwtFilter} class is a Spring component implementing a custom filter for handling JWT authentication.
+ * <p>
+ * Dependencies:
+ * - UserClient: Feign client for interacting with the User Service to validate and retrieve user details.
+ */
 @Component
 @RequiredArgsConstructor
 public class AuthenticationJwtFilter extends OncePerRequestFilter {
 
     private final UserClient userClient;
 
+    /**
+     * Filters the incoming HTTP requests to handle JWT authentication.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain
     ) throws ServletException, IOException {

@@ -74,6 +74,11 @@ public abstract class CommentMapper {
         return sdf.format(date);
     }
 
+    /**
+     * Retrieves the username from the SecurityContext.
+     *
+     * @return The username of the authenticated user or null if not authenticated.
+     */
     public String getUsernameFromSecurityContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null ? authentication.getName() : null;

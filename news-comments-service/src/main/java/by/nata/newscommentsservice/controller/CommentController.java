@@ -31,14 +31,6 @@ import java.util.List;
  * The {@code CommentController} class is a Spring REST controller providing API endpoints
  * for managing comments. It implements the {@code CommentDocOpenApi} interface.
  * <p>
- * Endpoints:
- * 1. Save Comment: POST ("/")
- * 2. Update Comment: PUT ("/{id}")
- * 3. Get Comment by ID: GET ("/{id}")
- * 4. Get Comments by News ID: GET ("/news/{newsId}")
- * 5. Search Comments: GET ("/search")
- * 6. Delete Comment by ID: DELETE ("/{id}")
- * <p>
  * Logging:
  * - @MethodLog: Custom annotation for logging method input data.
  */
@@ -52,12 +44,6 @@ public class CommentController implements CommentDocOpenApi {
 
     private final ICommentService commentService;
 
-    /**
-     * Saves a new comment.
-     *
-     * @param request The request body for creating a new comment.
-     * @return ResponseEntity<CommentResponseDto> with the created comment and HTTP status 201 (CREATED).
-     */
     @MethodLog
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER')")
@@ -67,13 +53,6 @@ public class CommentController implements CommentDocOpenApi {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    /**
-     * Updates an existing comment.
-     *
-     * @param id      The ID of the comment to be updated.
-     * @param request The request body for updating an existing comment.
-     * @return CommentResponseDto with the updated comment details.
-     */
     @MethodLog
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
@@ -85,12 +64,6 @@ public class CommentController implements CommentDocOpenApi {
         return commentService.update(id, request);
     }
 
-    /**
-     * Retrieves a comment by its ID.
-     *
-     * @param id The ID of the comment to be retrieved.
-     * @return CommentResponseDto with the details of the retrieved comment.
-     */
     @MethodLog
     @GetMapping("/{id}")
     public CommentResponseDto getComment(@PathVariable @CommentValidation Long id) {
@@ -99,12 +72,6 @@ public class CommentController implements CommentDocOpenApi {
         return response;
     }
 
-    /**
-     * Retrieves all comments for a given news ID.
-     *
-     * @param newsId The ID of the news for which comments are to be retrieved.
-     * @return List<CommentResponseDto> containing comments for the specified news.
-     */
     @MethodLog
     @GetMapping("/news/{newsId}")
     public List<CommentResponseDto> getCommentsByNewsId(@PathVariable @NewsValidation Long newsId) {
@@ -113,14 +80,6 @@ public class CommentController implements CommentDocOpenApi {
         return response;
     }
 
-    /**
-     * Searches for comments based on a keyword.
-     *
-     * @param keyword    The keyword for searching comments.
-     * @param pageNumber The page number for paginated results.
-     * @param pageSize   The page size for paginated results.
-     * @return List<CommentResponseDto> containing comments matching the search criteria.
-     */
     @MethodLog
     @GetMapping("/search")
     public List<CommentResponseDto> searchComments(
@@ -131,12 +90,6 @@ public class CommentController implements CommentDocOpenApi {
         return commentService.searchComment(keyword, pageNumber, pageSize);
     }
 
-    /**
-     * Deletes a comment by its ID.
-     *
-     * @param id The ID of the comment to be deleted.
-     * @return ResponseEntity<Void> with HTTP status 204 (NO CONTENT) indicating successful deletion.
-     */
     @MethodLog
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")

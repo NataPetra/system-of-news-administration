@@ -6,7 +6,6 @@ import by.nata.newscommentsservice.service.dto.NewsResponseDto;
 import by.nata.newscommentsservice.service.dto.NewsWithCommentsResponseDto;
 import by.nata.newscommentsservice.service.validator.NewsValidation;
 import io.swagger.v3.oas.annotations.Operation;
-
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,6 +36,12 @@ public interface NewsDocOpenApi {
     String NO_CONTENT = "NO CONTENT";
     String OK = "OK";
 
+    /**
+     * Saves a new news section.
+     *
+     * @param request The request body for creating a new news section.
+     * @return ResponseEntity<NewsResponseDto> with the created news section and HTTP status 201 (CREATED).
+     */
     @Operation(
             summary = "Save news",
             description = "Creates and saves a new news section.",
@@ -59,6 +64,13 @@ public interface NewsDocOpenApi {
                             schema = @Schema(implementation = NewsRequestDto.class)))
             @RequestBody @Valid NewsRequestDto request);
 
+    /**
+     * Updates an existing news section.
+     *
+     * @param id      The ID of the news section to be updated.
+     * @param request The request body for updating an existing news section.
+     * @return NewsResponseDto with the updated news section details.
+     */
     @Operation(
             summary = "Update news",
             description = "Updates an existing news section.",
@@ -83,6 +95,12 @@ public interface NewsDocOpenApi {
                             schema = @Schema(implementation = NewsRequestDto.class)))
             @RequestBody @Valid NewsRequestDto request);
 
+    /**
+     * Retrieves a news section by its ID.
+     *
+     * @param id The ID of the news section to be retrieved.
+     * @return NewsResponseDto with the details of the retrieved news section.
+     */
     @Operation(
             summary = "Get news by ID",
             description = "Retrieves a news section by its ID.",
@@ -97,6 +115,13 @@ public interface NewsDocOpenApi {
             @Parameter(description = "ID of the news article to be retrieved")
             @PathVariable @NewsValidation Long id);
 
+    /**
+     * Retrieves all news sections.
+     *
+     * @param pageNumber The page number for paginated results.
+     * @param pageSize   The page size for paginated results.
+     * @return List<NewsResponseDto> containing all news sections.
+     */
     @Operation(
             summary = "Get all news",
             description = "Retrieves all news sections.",
@@ -112,6 +137,14 @@ public interface NewsDocOpenApi {
             @Parameter(description = "Number of items per page", example = "10")
             @RequestParam int pageSize);
 
+    /**
+     * Retrieves a news section with its associated comments by news ID.
+     *
+     * @param newsId     The ID of the news section for which comments are to be retrieved.
+     * @param pageNumber The page number for paginated results.
+     * @param pageSize   The page size for paginated results.
+     * @return NewsWithCommentsResponseDto containing the news section and its associated comments.
+     */
     @Operation(
             summary = "Get news with comments",
             description = "Retrieves a news section with its comments.",
@@ -130,6 +163,15 @@ public interface NewsDocOpenApi {
             @Parameter(description = "Number of items per page", example = "10")
             @RequestParam int pageSize);
 
+    /**
+     * Searches for news sections based on a keyword and optional date filter.
+     *
+     * @param keyword    The keyword for searching news sections.
+     * @param dateString The optional date filter for searching news sections.
+     * @param pageNumber The page number for paginated results.
+     * @param pageSize   The page size for paginated results.
+     * @return List<NewsResponseDto> containing news sections matching the search criteria.
+     */
     @Operation(
             summary = "Search news",
             description = "Searches for news based on a keyword and/or date.",
@@ -149,6 +191,12 @@ public interface NewsDocOpenApi {
             @Parameter(description = "Number of items per page", example = "10")
             @RequestParam int pageSize);
 
+    /**
+     * Deletes a news section by its ID.
+     *
+     * @param id The ID of the news section to be deleted.
+     * @return ResponseEntity<Void> with HTTP status 204 (NO CONTENT) indicating successful deletion.
+     */
     @Operation(
             summary = "Delete news by ID",
             description = "Deletes a news section by its ID.",
