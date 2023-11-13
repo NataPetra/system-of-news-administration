@@ -13,12 +13,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
+import java.util.List;
+
+import static by.nata.newscommentsservice.util.CommentTestData.ROLE_SUBSCRIBER;
+import static by.nata.newscommentsservice.util.CommentTestData.SUBSCRIBER;
 import static by.nata.newscommentsservice.util.CommentTestData.createCommentRequestDtoIntegr;
+import static by.nata.newscommentsservice.util.NewsTestData.JOURNALIST;
+import static by.nata.newscommentsservice.util.NewsTestData.ROLE_JOURNALIST;
 import static by.nata.newscommentsservice.util.NewsTestData.createNewsRequestDtoIntegr;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -45,6 +55,8 @@ class CachingAspectIntegrationTest {
             @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void saveCommentWithCache() {
+        setUserInContext(ROLE_SUBSCRIBER, SUBSCRIBER);
+
         CommentResponseDto comment = commentService.save(createCommentRequestDtoIntegr());
         assertNotNull(comment);
 
@@ -78,9 +90,9 @@ class CachingAspectIntegrationTest {
             @Sql(scripts = "classpath:testdata/add_news_with_comments_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void updateCommentWithCache() {
+        setUserInContext("ROLE_SUBSCRIBER", "subscriber");
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .withText("Updated Comment")
-                .withUsername("User3")
                 .withNewsId(2L)
                 .build();
         CommentResponseDto comment = commentService.update(3L, commentRequestDto);
@@ -96,6 +108,7 @@ class CachingAspectIntegrationTest {
             @Sql(scripts = "classpath:testdata/add_news_with_comments_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void deleteCommentWithCache() {
+        setUserInContext("ROLE_SUBSCRIBER", "subscriber");
         commentService.delete(4L);
 
         assertThrows(EntityNotFoundException.class, () -> commentService.getCommentById(4L));
@@ -105,6 +118,9 @@ class CachingAspectIntegrationTest {
     @Order(3)
     @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void saveNewsWithCache() {
+
+        setUserInContext("ROLE_JOURNALIST", "journalist");
+
         NewsResponseDto news = newsService.save(createNewsRequestDtoIntegr());
         assertNotNull(news);
 
@@ -119,6 +135,7 @@ class CachingAspectIntegrationTest {
             @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void getNewsByIdWithCache() {
+
         NewsResponseDto newsById = newsService.getNewsById(2L);
         assertNotNull(newsById);
 
@@ -138,6 +155,8 @@ class CachingAspectIntegrationTest {
             @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void updateNewsWithCache() {
+
+        setUserInContext("ROLE_JOURNALIST", "journalist");
         NewsRequestDto newsRequestDto = NewsRequestDto.builder()
                 .withTitle("New News")
                 .withText("This is a new test news")
@@ -156,8 +175,24 @@ class CachingAspectIntegrationTest {
             @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
     void deleteNewsWithCache() {
+        setUserInContext(ROLE_JOURNALIST, JOURNALIST);
         newsService.delete(1L);
 
         assertThrows(EntityNotFoundException.class, () -> newsService.getNewsById((4L)));
+    }
+
+    private static void setUserInContext(String role, String username) {
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+        User userDetails = new User(
+                username,
+                " ",
+                authorities);
+        userDetails.eraseCredentials();
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null,
+                userDetails.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

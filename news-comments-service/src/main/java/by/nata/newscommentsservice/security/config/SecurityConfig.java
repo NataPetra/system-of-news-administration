@@ -14,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * The {@code SecurityConfig} class configures security settings for the application.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -26,6 +29,13 @@ public class SecurityConfig {
     public static final String ADMIN = "ADMIN";
     public static final String JOURNALIST = "JOURNALIST";
 
+    /**
+     * Configures the security filter chain for HTTP security settings.
+     *
+     * @param http The HttpSecurity instance to be configured.
+     * @return SecurityFilterChain with the configured settings.
+     * @throws Exception if an error occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http

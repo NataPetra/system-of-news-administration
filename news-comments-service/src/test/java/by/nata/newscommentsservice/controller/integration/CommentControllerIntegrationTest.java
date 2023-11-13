@@ -204,7 +204,7 @@ class CommentControllerIntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .withText("Updated Comment")
-                .withUsername("subscriber2")
+                //.withUsername("subscriber2")
                 .withNewsId(1L)
                 .build();
 

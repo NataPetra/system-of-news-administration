@@ -1,6 +1,7 @@
 package by.nata.userservice.controller;
 
 import by.nata.applicationloggingstarter.annotation.MethodLog;
+import by.nata.userservice.controller.api.RegistrationDocOpenApi;
 import by.nata.userservice.service.RegistrationService;
 import by.nata.userservice.service.dto.AppUserRequestDto;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/api/v1/app/users/register")
-public class RegistrationController {
+public class RegistrationController implements RegistrationDocOpenApi {
 
     private final RegistrationService registrationService;
 

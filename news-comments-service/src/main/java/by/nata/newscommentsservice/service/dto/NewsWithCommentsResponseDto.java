@@ -2,6 +2,7 @@ package by.nata.newscommentsservice.service.dto;
 
 import lombok.Builder;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -19,5 +20,6 @@ import java.util.List;
 @Builder(setterPrefix = "with")
 public record NewsWithCommentsResponseDto(Long id, String time,
                                           String title, String text,
-                                          List<CommentResponseDto> commentsList) {
+                                          List<CommentResponseDto> commentsList
+) implements Serializable {
 }

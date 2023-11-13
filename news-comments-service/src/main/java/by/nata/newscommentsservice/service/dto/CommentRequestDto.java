@@ -1,10 +1,12 @@
 package by.nata.newscommentsservice.service.dto;
 
 import by.nata.newscommentsservice.service.validator.NewsValidation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import org.hibernate.validator.constraints.Length;
+
+import java.io.Serializable;
 
 /**
  * The {@code CommentRequestDto} record represents the data transfer object for creating or updating comments.
@@ -19,11 +21,11 @@ import org.hibernate.validator.constraints.Length;
 @Builder(setterPrefix = "with")
 public record CommentRequestDto(
         @NotBlank(message = "Text must not be null or empty")
+        @Schema(description = "Text of the comment", defaultValue = "Default text")
         String text,
-        @NotBlank(message = "Username must not be null or empty")
-        @Length(max = 40, message = "Username should be no longer than {max} characters")
-        String username,
         @NotNull(message = "News id must not be null")
         @NewsValidation
-        Long newsId) {
+        @Schema(description = "ID of the associated news", defaultValue = "1")
+        Long newsId
+) implements Serializable {
 }

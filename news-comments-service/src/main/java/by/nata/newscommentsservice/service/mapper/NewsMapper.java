@@ -7,6 +7,8 @@ import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +29,7 @@ public interface NewsMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "time", ignore = true)
     @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "username", expression = "java(getUsernameFromSecurityContext())")
     News dtoToEntity(NewsRequestDto newsRequestDto);
 
     /**
@@ -47,5 +50,10 @@ public interface NewsMapper {
     default String formatDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
+    }
+
+    default String getUsernameFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null ? authentication.getName() : null;
     }
 }

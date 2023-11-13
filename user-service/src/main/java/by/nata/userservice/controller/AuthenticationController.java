@@ -2,6 +2,7 @@ package by.nata.userservice.controller;
 
 import by.nata.applicationloggingstarter.annotation.MethodLog;
 import by.nata.exceptionhandlingstarter.exception.BadRequestException;
+import by.nata.userservice.controller.api.AuthenticationDocOpenApi;
 import by.nata.userservice.service.JwtService;
 import by.nata.userservice.service.dto.AppUserRequestDto;
 import by.nata.userservice.service.dto.AppUserResponseDto;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/api/v1/app/users")
-public class AuthenticationController {
+public class AuthenticationController implements AuthenticationDocOpenApi {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -50,7 +51,6 @@ public class AuthenticationController {
         }
     }
 
-    // TODO: correct
     @MethodLog
     @GetMapping("/validate")
     public AppUserResponseDto validate(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String authHeader) {

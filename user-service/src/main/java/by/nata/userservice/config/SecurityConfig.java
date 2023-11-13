@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/app/users/login").anonymous()
                         .requestMatchers(HttpMethod.GET, "/api/v1/app/users/validate").permitAll()
                         .requestMatchers("/api/v1/app/users/register/**").permitAll()
+                        .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
