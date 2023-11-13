@@ -35,8 +35,7 @@ public final class NewsTestData {
     public static NewsRequestDto.NewsRequestDtoBuilder createNewsRequestDto() {
         return NewsRequestDto.builder()
                 .withTitle("ABC")
-                .withText("Very interesting news")
-                .withUsername("journalist");
+                .withText("Very interesting news");
     }
 
     public static NewsResponseDto.NewsResponseDtoBuilder createNewsResponseDto() {
@@ -44,8 +43,7 @@ public final class NewsTestData {
                 .withId(1L)
                 .withTime("2023-11-03 18:56:11")
                 .withTitle("ABC")
-                .withText("Very interesting news")
-                .withUsername("journalist");
+                .withText("Very interesting news");
     }
 
     public static List<News> createNewsList() {
@@ -55,21 +53,18 @@ public final class NewsTestData {
                 .withTime(new Date())
                 .withTitle("Title1")
                 .withText("Text1")
-                .withUsername("journalist")
                 .build());
         newsList.add(News.builder()
                 .withId(2L)
                 .withTime(new Date())
                 .withTitle("Title2")
                 .withText("Text2")
-                .withUsername("journalist")
                 .build());
         newsList.add(News.builder()
                 .withId(3L)
                 .withTime(new Date())
                 .withTitle("Title3")
                 .withText("Text4")
-                .withUsername("journalist")
                 .build());
         return newsList;
     }
@@ -104,7 +99,6 @@ public final class NewsTestData {
         return NewsRequestDto.builder()
                 .withTitle("New News")
                 .withText("This is a new test news")
-                .withUsername("journalist")
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package by.nata.newscommentsservice.controller;
 
 import by.nata.applicationloggingstarter.annotation.MethodLog;
+import by.nata.newscommentsservice.controller.api.NewsDocOpenApi;
 import by.nata.newscommentsservice.service.api.INewsService;
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
@@ -26,13 +27,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The {@code NewsController} class is a Spring REST controller providing API endpoints
+ * for managing news. It implements the {@code NewsDocOpenApi} interface.
+ * <p>
+ * Logging:
+ * - @MethodLog: Custom annotation for logging method input data.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/app/news/")
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class NewsController {
+public class NewsController implements NewsDocOpenApi {
 
     private final INewsService newsService;
 
@@ -47,8 +55,10 @@ public class NewsController {
 
     @MethodLog
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
-    public NewsResponseDto updateNews(@PathVariable Long id, @RequestBody @Valid NewsRequestDto request) {
+    @PreAuthorize("hasRole('ADMIN') || hasRole('JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
+    public NewsResponseDto updateNews(
+            @PathVariable @NewsValidation Long id,
+            @RequestBody @Valid NewsRequestDto request) {
         log.debug("Input data for updating news: {}", request);
         return newsService.update(id, request);
     }
@@ -91,7 +101,7 @@ public class NewsController {
 
     @MethodLog
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
     public ResponseEntity<Void> deleteNews(@PathVariable @NewsValidation Long id) {
         newsService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -1,6 +1,7 @@
 package by.nata.newscommentsservice.controller;
 
 import by.nata.applicationloggingstarter.annotation.MethodLog;
+import by.nata.newscommentsservice.controller.api.CommentDocOpenApi;
 import by.nata.newscommentsservice.service.api.ICommentService;
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
@@ -26,13 +27,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The {@code CommentController} class is a Spring REST controller providing API endpoints
+ * for managing comments. It implements the {@code CommentDocOpenApi} interface.
+ * <p>
+ * Logging:
+ * - @MethodLog: Custom annotation for logging method input data.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/app/comments/")
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class CommentController {
+public class CommentController implements CommentDocOpenApi {
 
     private final ICommentService commentService;
 
@@ -47,7 +55,7 @@ public class CommentController {
 
     @MethodLog
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
     public CommentResponseDto updateComment(
             @PathVariable @CommentValidation Long id,
             @RequestBody @Valid CommentRequestDto request
@@ -84,8 +92,8 @@ public class CommentController {
 
     @MethodLog
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
-    public ResponseEntity<Void> deleteNews(@PathVariable @CommentValidation Long id) {
+    @PreAuthorize("hasRole('ADMIN') || hasRole('SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
+    public ResponseEntity<Void> deleteComment(@PathVariable @CommentValidation Long id) {
         commentService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

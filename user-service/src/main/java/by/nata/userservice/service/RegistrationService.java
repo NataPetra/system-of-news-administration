@@ -10,6 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * The {@code RegistrationService} class provides methods for registering users with different roles (ADMIN, JOURNALIST, SUBSCRIBER).
+ */
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
@@ -17,21 +20,50 @@ public class RegistrationService {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Registers an administrator user with the provided credentials.
+     *
+     * @param credentials User credentials for registration.
+     * @return Registered username.
+     * @throws AppUserNameExistsException if the username already exists.
+     */
     @Transactional
     public String registerAdmin(AppUserRequestDto credentials) {
         return register(credentials, AppUserRole.ADMIN);
     }
 
+    /**
+     * Registers a journalist user with the provided credentials.
+     *
+     * @param credentials User credentials for registration.
+     * @return Registered username.
+     * @throws AppUserNameExistsException if the username already exists.
+     */
     @Transactional
     public String registerJournalist(AppUserRequestDto credentials) {
         return register(credentials, AppUserRole.JOURNALIST);
     }
 
+    /**
+     * Registers a subscriber user with the provided credentials.
+     *
+     * @param credentials User credentials for registration.
+     * @return Registered username.
+     * @throws AppUserNameExistsException if the username already exists.
+     */
     @Transactional
     public String registerSubscriber(AppUserRequestDto credentials) {
         return register(credentials, AppUserRole.SUBSCRIBER);
     }
 
+    /**
+     * Generic method for registering a user with the specified role.
+     *
+     * @param credentials User credentials for registration.
+     * @param role        Role of the user being registered.
+     * @return Registered username.
+     * @throws AppUserNameExistsException if the username already exists.
+     */
     private String register(AppUserRequestDto credentials, AppUserRole role) {
         String username = credentials.username();
         if (appUserRepository.findByUsername(username).isPresent()) {

@@ -34,6 +34,7 @@ import java.util.List;
  * <p>- {@code time}: The timestamp representing the news article's creation time.</p>
  * <p>- {@code title}: The title of the news article.</p>
  * <p>- {@code text}: The content of the news article.</p>
+ * <p>- {@code username}: The author's username who posted the news.</p>
  * <p>- {@code comments}: A list of associated comments for the news article.</p>
  */
 @Builder(setterPrefix = "with")

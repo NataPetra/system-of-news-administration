@@ -12,9 +12,11 @@ import java.io.Serializable;
  * <p>- {@code time}: The creation time of the news article.
  * <p>- {@code title}: The title of the news article.
  * <p>- {@code text}: The text content of the news article.
+ * <p>- {@code username}: The author of the news article.
  */
 @Builder(setterPrefix = "with")
 public record NewsResponseDto(Long id, String time,
                               String title, String text,
-                              String username) implements Serializable {
+                              String username
+) implements Serializable {
 }

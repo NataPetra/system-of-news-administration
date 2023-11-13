@@ -18,6 +18,10 @@ import java.io.IOException;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+/**
+ * The {@code AuthenticationJwtFilter} class is a filter that intercepts incoming requests,
+ * validates the JWT token, and sets up the authentication context if the token is valid.
+ */
 @Component
 @RequiredArgsConstructor
 public class AuthenticationJwtFilter extends OncePerRequestFilter {
