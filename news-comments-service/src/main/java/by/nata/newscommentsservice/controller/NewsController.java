@@ -55,7 +55,7 @@ public class NewsController implements NewsDocOpenApi {
 
     @MethodLog
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
     public NewsResponseDto updateNews(
             @PathVariable @NewsValidation Long id,
             @RequestBody @Valid NewsRequestDto request) {
@@ -101,7 +101,7 @@ public class NewsController implements NewsDocOpenApi {
 
     @MethodLog
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('JOURNALIST') && @newsServiceImpl.getNewsById(#id).username().equals(principal.username)")
     public ResponseEntity<Void> deleteNews(@PathVariable @NewsValidation Long id) {
         newsService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

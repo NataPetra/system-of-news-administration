@@ -55,7 +55,7 @@ public class CommentController implements CommentDocOpenApi {
 
     @MethodLog
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
     public CommentResponseDto updateComment(
             @PathVariable @CommentValidation Long id,
             @RequestBody @Valid CommentRequestDto request
@@ -92,7 +92,7 @@ public class CommentController implements CommentDocOpenApi {
 
     @MethodLog
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('SUBSCRIBER') && @commentServiceImpl.getCommentById(#id).username().equals(principal.username)")
     public ResponseEntity<Void> deleteComment(@PathVariable @CommentValidation Long id) {
         commentService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
