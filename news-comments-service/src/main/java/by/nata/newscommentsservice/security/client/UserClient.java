@@ -8,17 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
- * The {@code UserClient} interface is a Feign client for interacting with the "user-service" API.
+ * Feign client interface for user-related operations in non-production profiles.
+ * Implements the {@link UserClientProvider} interface and extends its functionality
+ * by specifying the Feign client details.
  */
 @Profile("!prod")
 @FeignClient(value = "user-service", url = "${spring.settings.user-service.uri}")
-public interface UserClient extends UserClienProvider {
+public interface UserClient extends UserClientProvider {
 
     /**
-     * Retrieves user details by validating the provided authorization header.
+     * Retrieves user information by validating the provided authorization header.
      *
      * @param authHeader The Authorization header containing user authentication information.
-     * @return AppUserResponseDto representing the user details.
+     * @return An {@link AppUserResponseDto} object representing user details.
      */
     @GetMapping("/validate")
     AppUserResponseDto getUser(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String authHeader);

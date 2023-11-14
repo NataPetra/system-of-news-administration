@@ -1,6 +1,6 @@
 package by.nata.newscommentsservice.security.filter;
 
-import by.nata.newscommentsservice.security.client.UserClienProvider;
+import by.nata.newscommentsservice.security.client.UserClientProvider;
 import by.nata.newscommentsservice.security.dto.AppUserResponseDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,7 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @RequiredArgsConstructor
 public class AuthenticationJwtFilter extends OncePerRequestFilter {
 
-    private final UserClienProvider userClienProvider;
+    private final UserClientProvider userClientProvider;
 
     /**
      * Filters the incoming HTTP requests to handle JWT authentication.
@@ -48,7 +48,7 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        AppUserResponseDto userFromUserService = userClienProvider.getUser(header);
+        AppUserResponseDto userFromUserService = userClientProvider.getUser(header);
 
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userFromUserService.role()));
         User userDetails = new User(
