@@ -5,4 +5,6 @@ spring:
     active: prod
   cloud:
     config:
-      uri: http://config-server:8888
+      discovery:
+        service-id: config-server
+        enabled: true

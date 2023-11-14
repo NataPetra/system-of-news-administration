@@ -10,6 +10,8 @@ import by.nata.newscommentsservice.service.validator.NewsValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -94,9 +96,8 @@ public class NewsController implements NewsDocOpenApi {
     @GetMapping("/search")
     public List<NewsResponseDto> searchNews(@RequestParam(required = false) String keyword,
                                             @RequestParam(required = false) String dateString,
-                                            @RequestParam int pageNumber,
-                                            @RequestParam int pageSize) {
-        return newsService.searchNews(keyword, dateString, pageNumber, pageSize);
+                                            @PageableDefault Pageable pageable) {
+        return newsService.searchNews(keyword, dateString, pageable);
     }
 
     @MethodLog

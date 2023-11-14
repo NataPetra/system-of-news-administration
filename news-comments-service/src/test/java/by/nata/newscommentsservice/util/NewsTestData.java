@@ -24,6 +24,7 @@ public final class NewsTestData {
     public static final int PAGE_SIZE = 10;
     public static final String JOURNALIST = "journalist";
     public static final String ROLE_JOURNALIST = "ROLE_JOURNALIST";
+    public static final String R_JOURNALIST = "JOURNALIST";
 
     private NewsTestData() {
     }

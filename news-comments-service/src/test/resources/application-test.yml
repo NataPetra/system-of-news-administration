@@ -14,3 +14,6 @@ logging:
 exception:
   handling:
     include: true
+eureka:
+  client:
+    enabled: false

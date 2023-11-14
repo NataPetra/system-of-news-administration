@@ -130,11 +130,11 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NewsResponseDto> searchNews(String keyword, String dateString, int pageNumber, int pageSize) {
-        log.info("Call methot searchNews() from NewsService with keyword: {}, dateString: {}, pageNumber: {}, pageSize: {}", keyword, dateString, pageNumber, pageSize);
+    public List<NewsResponseDto> searchNews(String keyword, String dateString, Pageable pageable) {
+        log.info("Call methot searchNews() from NewsService with keyword: {}, dateString: {}, pageNumber: {}, pageSize: {}", keyword, dateString, pageable.getPageNumber(), pageable.getPageSize());
         Specification<News> spec = NewsSpecification.search(keyword, convertStringToDate(dateString));
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("time").descending());
-        Page<News> newsPage = newsRepository.findAll(spec, pageable);
+        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("time").descending());
+        Page<News> newsPage = newsRepository.findAll(spec, pageable1);
         return newsPage.getContent().stream()
                 .map(newsMapper::entityToDto)
                 .toList();

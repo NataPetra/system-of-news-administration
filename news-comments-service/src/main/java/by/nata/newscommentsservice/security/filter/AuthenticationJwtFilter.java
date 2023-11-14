@@ -1,12 +1,13 @@
 package by.nata.newscommentsservice.security.filter;
 
-import by.nata.newscommentsservice.security.client.UserClient;
+import by.nata.newscommentsservice.security.client.UserClienProvider;
 import by.nata.newscommentsservice.security.dto.AppUserResponseDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,11 +28,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * Dependencies:
  * - UserClient: Feign client for interacting with the User Service to validate and retrieve user details.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthenticationJwtFilter extends OncePerRequestFilter {
 
-    private final UserClient userClient;
+    private final UserClienProvider userClienProvider;
 
     /**
      * Filters the incoming HTTP requests to handle JWT authentication.
@@ -46,7 +48,7 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        AppUserResponseDto userFromUserService = userClient.getUser(header);
+        AppUserResponseDto userFromUserService = userClienProvider.getUser(header);
 
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userFromUserService.role()));
         User userDetails = new User(

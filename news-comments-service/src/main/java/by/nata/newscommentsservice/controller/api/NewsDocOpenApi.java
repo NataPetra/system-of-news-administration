@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -168,8 +169,7 @@ public interface NewsDocOpenApi {
      *
      * @param keyword    The keyword for searching news sections.
      * @param dateString The optional date filter for searching news sections.
-     * @param pageNumber The page number for paginated results.
-     * @param pageSize   The page size for paginated results.
+     * @param pageable The page number and size for paginated results.
      * @return List<NewsResponseDto> containing news sections matching the search criteria.
      */
     @Operation(
@@ -186,10 +186,8 @@ public interface NewsDocOpenApi {
             @RequestParam(required = false) String keyword,
             @Parameter(description = "Date string for filtering news articles", example = "2023-01-01")
             @RequestParam(required = false) String dateString,
-            @Parameter(description = "Page number for pagination", example = "0")
-            @RequestParam int pageNumber,
-            @Parameter(description = "Number of items per page", example = "10")
-            @RequestParam int pageSize);
+            @Parameter(description = "Page number and size for pagination")
+            Pageable pageable);
 
     /**
      * Deletes a news section by its ID.

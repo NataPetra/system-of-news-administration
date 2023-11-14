@@ -24,3 +24,8 @@ exception:
 starter:
   logger:
     include: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

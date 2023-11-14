@@ -233,7 +233,7 @@ class NewsServiceImplTest {
                                 .orElse(null);
                     });
 
-            List<NewsResponseDto> result = newsService.searchNews(keyword, null, pageNumber, pageSize);
+            List<NewsResponseDto> result = newsService.searchNews(keyword, null, PageRequest.of(pageNumber, pageSize));
 
             assertNotNull(result);
             assertEquals(3, result.size());

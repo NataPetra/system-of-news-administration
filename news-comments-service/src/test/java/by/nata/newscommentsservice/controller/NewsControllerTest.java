@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -151,7 +152,7 @@ class NewsControllerTest {
         int pageSize = 10;
         List<NewsResponseDto> responseList = createNewsResponseDtoList();
 
-        when(newsService.searchNews(keyword, dateString, pageNumber, pageSize)).thenReturn(responseList);
+        when(newsService.searchNews(keyword, dateString, PageRequest.of(pageNumber, pageSize))).thenReturn(responseList);
 
         mockMvc.perform(get(URL_TEMPLATE_SEARCH, keyword, dateString, pageNumber, pageSize))
                 .andExpect(status().isOk())
