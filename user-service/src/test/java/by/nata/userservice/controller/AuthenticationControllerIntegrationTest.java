@@ -2,6 +2,7 @@ package by.nata.userservice.controller;
 
 import by.nata.userservice.service.JwtService;
 import by.nata.userservice.service.dto.AppUserRequestDto;
+import by.nata.userservice.service.dto.AppUserResponseDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         @Sql(scripts = "classpath:testdata/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD) })
 class AuthenticationControllerIntegrationTest {
 
+    public static final String VALIDATE_URL = "/api/v1/app/users/validate";
     @Autowired
     private JwtService jwtService;
 
@@ -80,5 +83,49 @@ class AuthenticationControllerIntegrationTest {
                 String.class);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    }
+
+    @Test
+    void shouldReturnUserDetailsWhenValidateWithValidToken() {
+        AppUserRequestDto request = AppUserRequestDto.builder()
+                .withUsername("admin")
+                .withPassword("admin")
+                .build();
+        HttpEntity<AppUserRequestDto> loginRequestEntity = new HttpEntity<>(request);
+        ResponseEntity<String> loginResponse = restTemplate.exchange(
+                LOGIN_URL,
+                HttpMethod.POST,
+                loginRequestEntity,
+                String.class);
+
+        String token = loginResponse.getHeaders().getFirst("Authorization");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        HttpEntity<String> validateRequestEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<AppUserResponseDto> validateResponse = restTemplate.exchange(
+                VALIDATE_URL,
+                HttpMethod.GET,
+                validateRequestEntity,
+                AppUserResponseDto.class);
+
+        assertEquals(HttpStatus.OK, validateResponse.getStatusCode());
+        assertNotNull(validateResponse.getBody());
+        assertEquals("admin", validateResponse.getBody().username());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenValidateWithInvalidToken() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer invalid_token");
+        HttpEntity<String> validateRequestEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> validateResponse = restTemplate.exchange(
+                VALIDATE_URL,
+                HttpMethod.GET,
+                validateRequestEntity,
+                String.class);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, validateResponse.getStatusCode());
     }
 }

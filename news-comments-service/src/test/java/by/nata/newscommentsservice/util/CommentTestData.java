@@ -9,15 +9,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static by.nata.newscommentsservice.util.DateFormater.formatDate;
-
 public final class CommentTestData {
 
     public static final String URL_TEMPLATE_SAVE = "/api/v1/app/comments/";
     public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/comments/{id}";
     public static final String URL_TEMPLATE_GET_BY_NEWS_ID = "/api/v1/app/comments/news/{newsId}";
-    public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/comments/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}";
+    public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/comments/search?keyword={keyword}&page={page}&size={size}";
     public static final String ROLE_SUBSCRIBER = "ROLE_SUBSCRIBER";
+    public static final String R_SUBSCRIBER = "SUBSCRIBER";
     public static final String SUBSCRIBER = "subscriber";
     public static final int COMMENT_ID = 1;
     public static final int PAGE_NUMBER = 0;
@@ -96,16 +95,6 @@ public final class CommentTestData {
     public static CommentRequestDto createCommentRequestDtoIntegr() {
         return CommentRequestDto.builder()
                 .withText("New Comment")
-                .withNewsId(1L)
-                .build();
-    }
-
-    public static CommentResponseDto createExpectedCommentResponseDto() {
-        return CommentResponseDto.builder()
-                .withId(1L)
-                .withText("New Comment")
-                .withUsername("User1")
-                .withTime(formatDate(new Date()))
                 .withNewsId(1L)
                 .build();
     }

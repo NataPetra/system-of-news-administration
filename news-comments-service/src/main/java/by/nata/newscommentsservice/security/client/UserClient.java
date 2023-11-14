@@ -2,6 +2,7 @@ package by.nata.newscommentsservice.security.client;
 
 import by.nata.newscommentsservice.security.dto.AppUserResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 /**
  * The {@code UserClient} interface is a Feign client for interacting with the "user-service" API.
  */
+@Profile("!prod")
 @FeignClient(value = "user-service", url = "${spring.settings.user-service.uri}")
-public interface UserClient {
+public interface UserClient extends UserClienProvider {
 
     /**
      * Retrieves user details by validating the provided authorization header.

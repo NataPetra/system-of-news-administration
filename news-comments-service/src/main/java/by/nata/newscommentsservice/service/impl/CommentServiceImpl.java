@@ -15,7 +15,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     @CachePut(key = "#result.id")
     public CommentResponseDto save(CommentRequestDto comment) {
-        log.info("Call methot save() from CommentService with CommentRequestDto: {}", comment);
+        log.info("Call method save() from CommentService with CommentRequestDto: {}", comment);
         return Optional.of(comment)
                 .map(commentMapper::dtoToEntity)
                 .map(commentRepository::save)
@@ -58,7 +57,7 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     @CachePut(key = "#result.id")
     public CommentResponseDto update(Long id, CommentRequestDto comment) {
-        log.info("Call methot update() from CommentService with id: {} and CommentRequestDto: {}", id, comment);
+        log.info("Call method update() from CommentService with id: {} and CommentRequestDto: {}", id, comment);
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         existingComment.setText(comment.text());
@@ -71,7 +70,7 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional(readOnly = true)
     @Cacheable(key = "#id")
     public CommentResponseDto getCommentById(Long id) {
-        log.info("Call methot getCommentById() from CommentService with id: {}", id);
+        log.info("Call method getCommentById() from CommentService with id: {}", id);
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         log.debug("Complet methot getCommentById() from CommentService with id: {}, found entity Comment: {}", id, comment);
@@ -80,9 +79,8 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, int pageNumber, int pageSize) {
-        log.info("Call methot findByNewsIdOrderByTimeDesc() from CommentService with news id: {}, pageNumber: {}, pageSize: {}", newsId, pageNumber, pageSize);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, Pageable pageable) {
+        log.info("Call method findByNewsIdOrderByTimeDesc() from CommentService with news id: {}, pageNumber: {}, pageSize: {}", newsId, pageable.getPageNumber(), pageable.getPageSize());
         Page<Comment> commentPage = commentRepository.findByNewsIdOrderByTimeDesc(newsId, pageable);
         return commentPage.getContent().stream()
                 .map(commentMapper::entityToDto)
@@ -92,7 +90,7 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Transactional(readOnly = true)
     public List<CommentResponseDto> findAllByNewsId(Long newsId) {
-        log.info("Call methot findAllByNewsId() from CommentService with news id: {}", newsId);
+        log.info("Call method findAllByNewsId() from CommentService with news id: {}", newsId);
         List<Comment> comments = commentRepository.findAllByNewsId(newsId);
         return comments.stream()
                 .map(commentMapper::entityToDto)
@@ -103,7 +101,7 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     @CacheEvict(key = "#id")
     public void delete(Long id) {
-        log.info("Call methot delete() from CommentService with id: {}", id);
+        log.info("Call method delete() from CommentService with id: {}", id);
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_COMMENT_NOT_FOUND, id)));
         commentRepository.delete(comment);
@@ -111,10 +109,9 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize) {
-        log.info("Call methot searchNews() from NewsService with keyword: {}, pageNumber: {}, pageSize: {}", keyword, pageNumber, pageSize);
+    public List<CommentResponseDto> searchComment(String keyword, Pageable pageable) {
+        log.info("Call method searchNews() from NewsService with keyword: {}, pageNumber: {}, pageSize: {}", keyword, pageable.getPageNumber(), pageable.getPageSize());
         Specification<Comment> spec = CommentSpecification.search(keyword);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Comment> commentPage = commentRepository.findAll(spec, pageable);
         return commentPage.getContent().stream()
                 .map(commentMapper::entityToDto)

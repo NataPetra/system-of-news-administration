@@ -12,7 +12,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -138,8 +141,7 @@ public interface CommentDocOpenApi {
      * Searches for comments based on a keyword.
      *
      * @param keyword    The keyword for searching comments.
-     * @param pageNumber The page number for paginated results.
-     * @param pageSize   The page size for paginated results.
+     * @param pageable The page number and size for paginated results.
      * @return List<CommentResponseDto> containing comments matching the search criteria.
      */
     @Operation(
@@ -154,10 +156,9 @@ public interface CommentDocOpenApi {
     List<CommentResponseDto> searchComments(
             @Parameter(description = "The keyword for searching comments")
             @RequestParam(required = false) String keyword,
-            @Parameter(description = "The page number for paginated results")
-            @RequestParam int pageNumber,
-            @Parameter(description = "The page size for paginated results")
-            @RequestParam int pageSize);
+            @Parameter(description = "The page number and size for paginated results")
+            @PageableDefault(size = 5) @Nullable Pageable pageable
+    );
 
     /**
      * Deletes a comment by its ID.

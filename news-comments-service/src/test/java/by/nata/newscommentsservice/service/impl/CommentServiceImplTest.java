@@ -137,7 +137,7 @@ class CommentServiceImplTest {
 
         when(commentRepository.findByNewsIdOrderByTimeDesc(newsId, PageRequest.of(pageNumber, pageSize))).thenReturn(commentPage);
 
-        List<CommentResponseDto> commentResponseDtoList = commentService.findByNewsIdOrderByTimeDesc(newsId, pageNumber, pageSize);
+        List<CommentResponseDto> commentResponseDtoList = commentService.findByNewsIdOrderByTimeDesc(newsId, PageRequest.of(pageNumber, pageSize));
 
         Assertions.assertThat(commentResponseDtoList)
                 .isNotEmpty()
@@ -207,7 +207,7 @@ class CommentServiceImplTest {
                     });
 
 
-            List<CommentResponseDto> result = commentService.searchComment(keyword, pageNumber, pageSize);
+            List<CommentResponseDto> result = commentService.searchComment(keyword, PageRequest.of(pageNumber, pageSize));
 
             assertNotNull(result);
             assertEquals(commentList.size(), result.size());

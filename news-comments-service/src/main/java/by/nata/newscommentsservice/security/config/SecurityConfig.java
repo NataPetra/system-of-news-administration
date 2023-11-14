@@ -23,11 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    public static final String SUBSCRIBER = "SUBSCRIBER";
     private final AuthenticationJwtFilter authJwtFilter;
     private final SecurityExceptionHandler securityExceptionHandler;
-    public static final String ADMIN = "ADMIN";
-    public static final String JOURNALIST = "JOURNALIST";
 
     /**
      * Configures the security filter chain for HTTP security settings.
@@ -45,12 +42,6 @@ public class SecurityConfig {
                         .authenticationEntryPoint(securityExceptionHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.POST, "/api/v1/app/news/").hasAnyRole(JOURNALIST, ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/app/news/{id}").hasAnyRole(JOURNALIST, ADMIN)
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/app/news/{id}").hasAnyRole(JOURNALIST, ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/api/v1/app/comments/").hasAnyRole(SUBSCRIBER, ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/app/comments/{id}").hasAnyRole(SUBSCRIBER, ADMIN)
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/app/comments/{id}").hasAnyRole(SUBSCRIBER, ADMIN)
                         .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)

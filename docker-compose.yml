@@ -1,5 +1,19 @@
 version: '3.8'
 services:
+  discovery-server:
+    image: discovery-server-1.0.0
+    build: discovery-server
+    restart: always
+    healthcheck:
+      test: wget -qO- http://localhost:8761/actuator/health
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    ports:
+      - "8761:8761"
+    networks:
+      - news_application_ntwrk
+
   news-service:
     image: news-comments-service-1.0.0
     build:
@@ -13,8 +27,11 @@ services:
         condition: service_healthy
       database-news-service:
         condition: service_healthy
+      discovery-server:
+        condition: service_healthy
     environment:
       ACTIVE_PROF: prod
+      eureka.client.serviceUrl.defaultZone: http://discovery-server:8761/eureka/
     ports:
       - "8081:8080"
     networks:
@@ -50,8 +67,11 @@ services:
     depends_on:
       database-user-service:
         condition: service_healthy
+      discovery-server:
+        condition: service_healthy
     environment:
       ACTIVE_PROF: prod
+      eureka.client.serviceUrl.defaultZone: http://discovery-server:8761/eureka/
     ports:
       - "8082:8080"
     networks:
@@ -114,10 +134,15 @@ services:
     build: config-server
     restart: always
     healthcheck:
-      test: wget -qO- http://localhost:8888/config-server/dev
+      test: wget -qO- http://localhost:8888/actuator/health
       interval: 3s
       timeout: 5s
       retries: 5
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://discovery-server:8761/eureka/
     networks:
       - news_application_ntwrk
     ports:

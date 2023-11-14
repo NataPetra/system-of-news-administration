@@ -7,9 +7,12 @@ import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
 import by.nata.newscommentsservice.service.dto.NewsWithCommentsResponseDto;
 import by.nata.newscommentsservice.service.validator.NewsValidation;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,9 +76,8 @@ public class NewsController implements NewsDocOpenApi {
 
     @MethodLog
     @GetMapping
-    public List<NewsResponseDto> getAllNews(@RequestParam int pageNumber,
-                                            @RequestParam int pageSize) {
-        List<NewsResponseDto> response = newsService.getAllNews(pageNumber, pageSize);
+    public List<NewsResponseDto> getAllNews(@PageableDefault(size = 5) @Nullable Pageable pageable) {
+        List<NewsResponseDto> response = newsService.getAllNews(pageable);
         log.debug("Getting news from database: {} ", response);
         return response;
     }
@@ -83,9 +85,8 @@ public class NewsController implements NewsDocOpenApi {
     @MethodLog
     @GetMapping("/{newsId}/comments")
     public NewsWithCommentsResponseDto getNewsWithComments(@PathVariable @NewsValidation Long newsId,
-                                                           @RequestParam int pageNumber,
-                                                           @RequestParam int pageSize) {
-        NewsWithCommentsResponseDto response = newsService.getNewsWithComments(newsId, pageNumber, pageSize);
+                                                           @PageableDefault(size = 5) @Nullable Pageable pageable) {
+        NewsWithCommentsResponseDto response = newsService.getNewsWithComments(newsId, pageable);
         log.debug("Getting news with comments section of id {} from database: {} ", newsId, response);
         return response;
     }
@@ -94,9 +95,8 @@ public class NewsController implements NewsDocOpenApi {
     @GetMapping("/search")
     public List<NewsResponseDto> searchNews(@RequestParam(required = false) String keyword,
                                             @RequestParam(required = false) String dateString,
-                                            @RequestParam int pageNumber,
-                                            @RequestParam int pageSize) {
-        return newsService.searchNews(keyword, dateString, pageNumber, pageSize);
+                                            @PageableDefault(size = 5) @Nullable Pageable pageable) {
+        return newsService.searchNews(keyword, dateString, pageable);
     }
 
     @MethodLog

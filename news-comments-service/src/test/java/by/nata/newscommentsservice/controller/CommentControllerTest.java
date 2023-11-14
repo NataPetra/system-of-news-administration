@@ -15,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -129,7 +131,7 @@ class CommentControllerTest {
         int pageSize = 10;
         List<CommentResponseDto> responseList = CommentTestData.createCommentResponseDtoList();
 
-        when(commentService.searchComment(keyword, pageNumber, pageSize)).thenReturn(responseList);
+        when(commentService.searchComment(keyword, PageRequest.of(pageNumber, pageSize, Sort.unsorted()))).thenReturn(responseList);
 
         mockMvc.perform(get(URL_TEMPLATE_SEARCH, keyword, pageNumber, pageSize))
                 .andExpect(status().isOk())

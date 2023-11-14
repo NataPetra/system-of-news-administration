@@ -3,8 +3,15 @@ server:
 spring:
   profiles:
     active: native
+  application:
+    name: config-server
   cloud:
     config:
       server:
         native:
           searchLocations: classpath:/config
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

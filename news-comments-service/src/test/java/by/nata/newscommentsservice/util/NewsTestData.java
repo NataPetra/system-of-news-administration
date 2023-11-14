@@ -16,14 +16,15 @@ public final class NewsTestData {
 
     public static final String URL_TEMPLATE_SAVE = "/api/v1/app/news/";
     public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/news/{id}";
-    public static final String URL_TEMPLATE_GET_ALL = "/api/v1/app/news/?pageNumber={pageNumber}&pageSize={pageSize}";
-    public static final String URL_TEMPLATE_GET_WITH_COMMENT = "/api/v1/app/news/{newsId}/comments?pageNumber={pageNumber}&pageSize={pageSize}";
-    public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/news/search?keyword={keyword}&dateString={dateString}&pageNumber={pageNumber}&pageSize={pageSize}";
+    public static final String URL_TEMPLATE_GET_ALL = "/api/v1/app/news/?page={page}&size={size}";
+    public static final String URL_TEMPLATE_GET_WITH_COMMENT = "/api/v1/app/news/{newsId}/comments?page={page}&size={size}";
+    public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/news/search?keyword={keyword}&dateString={dateString}&page={page}&size={size}";
     public static final Long NEWS_ID = 1L;
     public static final int PAGE_NUMBER = 0;
     public static final int PAGE_SIZE = 10;
     public static final String JOURNALIST = "journalist";
     public static final String ROLE_JOURNALIST = "ROLE_JOURNALIST";
+    public static final String R_JOURNALIST = "JOURNALIST";
 
     private NewsTestData() {
     }

@@ -3,6 +3,7 @@ package by.nata.newscommentsservice.service.api;
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
 import by.nata.newscommentsservice.service.dto.NewsWithCommentsResponseDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -47,21 +48,19 @@ public interface INewsService {
     /**
      * Retrieves a list of all news articles with pagination support.
      *
-     * @param pageNumber The page number for pagination.
-     * @param pageSize   The number of news articles per page.
+     * @param pageable The page number and size for pagination.
      * @return A list of {@link NewsResponseDto} representing news articles.
      */
-    List<NewsResponseDto> getAllNews(int pageNumber, int pageSize);
+    List<NewsResponseDto> getAllNews(Pageable pageable);
 
     /**
      * Retrieves a news article along with its associated comments, with pagination support.
      *
      * @param newsId    The unique identifier of the news article to retrieve.
-     * @param pageNumber The page number for pagination.
-     * @param pageSize   The number of comments per page.
+     * @param pageable The page number and size for pagination.
      * @return A {@link NewsWithCommentsResponseDto} representing the news article and its associated comments.
      */
-    NewsWithCommentsResponseDto getNewsWithComments(Long newsId, int pageNumber, int pageSize);
+    NewsWithCommentsResponseDto getNewsWithComments(Long newsId, Pageable pageable);
 
     /**
      * Deletes a news article with the specified ID.
@@ -75,11 +74,10 @@ public interface INewsService {
      *
      * @param keyword    The keyword to search for in news articles.
      * @param dateString The date string to filter news articles.
-     * @param pageNumber The page number for pagination.
-     * @param pageSize   The number of news articles per page.
+     * @param pageable The page number and size for pagination.
      * @return A list of {@link NewsResponseDto} representing the news articles that match the provided criteria.
      */
-    List<NewsResponseDto> searchNews(String keyword, String dateString, int pageNumber, int pageSize);
+    List<NewsResponseDto> searchNews(String keyword, String dateString, Pageable pageable);
 
     /**
      * Checks whether a news article with a specific ID exists.

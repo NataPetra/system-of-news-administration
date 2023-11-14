@@ -9,6 +9,12 @@ spring:
   settings:
     user-service:
       uri: http://localhost:8180/api/v1/app/users
+  cloud:
+    discovery:
+      enabled: false
+    service-registry:
+      auto-registration:
+        enabled: false
 cache:
   maxSize: 3
   algorithm: LFU
@@ -17,3 +23,6 @@ logging:
 exception:
   handling:
     include: true
+eureka:
+  client:
+    enabled: false

@@ -34,9 +34,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation "org.springframework.cloud:spring-cloud-starter-openfeign:$springCloudVersion"
 	implementation "org.springframework.cloud:spring-cloud-starter-config:$springCloudVersion"
 	implementation "org.springframework.cloud:spring-cloud-starter-bootstrap:$springCloudVersion"
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.3'
 	implementation 'by.nata:application-logging-starter:2.1'
 	implementation 'by.nata:exception-handling-starter:1.2'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -52,6 +54,7 @@ dependencies {
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:postgresql'
 	testImplementation "org.wiremock:wiremock:$wiremockVersion"
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {

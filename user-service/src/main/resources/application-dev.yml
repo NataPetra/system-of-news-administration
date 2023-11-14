@@ -6,3 +6,6 @@ spring:
   security:
     jwt:
       secret: mySecretKeymySecretKeymySecretKeymySecretKeymySecretKeymySecretKeymySecretKey
+eureka:
+  client:
+    enabled: false

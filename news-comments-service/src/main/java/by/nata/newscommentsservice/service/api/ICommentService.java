@@ -2,6 +2,7 @@ package by.nata.newscommentsservice.service.api;
 
 import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -46,11 +47,10 @@ public interface ICommentService {
      * Retrieves a list of comments for a specific news article, ordered by time in descending order.
      *
      * @param newsId    The unique identifier of the news article.
-     * @param pageNumber The page number for pagination.
-     * @param pageSize   The number of comments per page.
+     * @param pageable The page number and size for paginated results.
      * @return A list of {@link CommentResponseDto} representing the comments for the specified news article.
      */
-    List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, int pageNumber, int pageSize);
+    List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, Pageable pageable);
 
     /**
      * Retrieves a list of comments for a specific news article.
@@ -71,11 +71,10 @@ public interface ICommentService {
      * Searches for comments based on a keyword, with pagination support.
      *
      * @param keyword    The keyword to search for in comments.
-     * @param pageNumber The page number for pagination.
-     * @param pageSize   The number of comments per page.
+     * @param pageable The page number and size for paginated results.
      * @return A list of {@link CommentResponseDto} representing the comments that match the provided keyword.
      */
-    List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize);
+    List<CommentResponseDto> searchComment(String keyword, Pageable pageable);
 
     /**
      * Checks whether a comment with a specific ID exists.
