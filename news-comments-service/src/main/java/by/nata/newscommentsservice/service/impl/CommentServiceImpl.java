@@ -15,7 +15,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -80,9 +79,8 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, int pageNumber, int pageSize) {
-        log.info("Call method findByNewsIdOrderByTimeDesc() from CommentService with news id: {}, pageNumber: {}, pageSize: {}", newsId, pageNumber, pageSize);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public List<CommentResponseDto> findByNewsIdOrderByTimeDesc(Long newsId, Pageable pageable) {
+        log.info("Call method findByNewsIdOrderByTimeDesc() from CommentService with news id: {}, pageNumber: {}, pageSize: {}", newsId, pageable.getPageNumber(), pageable.getPageSize());
         Page<Comment> commentPage = commentRepository.findByNewsIdOrderByTimeDesc(newsId, pageable);
         return commentPage.getContent().stream()
                 .map(commentMapper::entityToDto)
@@ -111,10 +109,9 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> searchComment(String keyword, int pageNumber, int pageSize) {
-        log.info("Call method searchNews() from NewsService with keyword: {}, pageNumber: {}, pageSize: {}", keyword, pageNumber, pageSize);
+    public List<CommentResponseDto> searchComment(String keyword, Pageable pageable) {
+        log.info("Call method searchNews() from NewsService with keyword: {}, pageNumber: {}, pageSize: {}", keyword, pageable.getPageNumber(), pageable.getPageSize());
         Specification<Comment> spec = CommentSpecification.search(keyword);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Comment> commentPage = commentRepository.findAll(spec, pageable);
         return commentPage.getContent().stream()
                 .map(commentMapper::entityToDto)

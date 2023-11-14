@@ -157,7 +157,7 @@ class NewsServiceImplTest {
             return null;
         });
 
-        List<NewsResponseDto> foundNews = newsService.getAllNews(pageNumber, pageSize);
+        List<NewsResponseDto> foundNews = newsService.getAllNews(PageRequest.of(pageNumber, pageSize));
 
         assertNotNull(foundNews);
         assertEquals(expectedResponse, foundNews);
@@ -174,7 +174,7 @@ class NewsServiceImplTest {
         CommentResponseDto comment2 = CommentTestData.createCommentResponseDto().build();
 
         when(newsRepository.findById(1L)).thenReturn(Optional.of(news));
-        when(commentService.findByNewsIdOrderByTimeDesc(1L, 0, 10))
+        when(commentService.findByNewsIdOrderByTimeDesc(1L, PageRequest.of(0, 10)))
                 .thenReturn(Arrays.asList(comment1, comment2));
 
         NewsWithCommentsResponseDto expectedResponse = NewsWithCommentsResponseDto.builder()
@@ -185,7 +185,7 @@ class NewsServiceImplTest {
                 .withCommentsList(Arrays.asList(comment1, comment2))
                 .build();
 
-        NewsWithCommentsResponseDto result = newsService.getNewsWithComments(1L, 0, 10);
+        NewsWithCommentsResponseDto result = newsService.getNewsWithComments(1L, PageRequest.of(0, 10));
         assertEquals(expectedResponse, result);
     }
 

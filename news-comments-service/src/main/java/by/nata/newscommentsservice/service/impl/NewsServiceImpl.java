@@ -81,7 +81,7 @@ public class NewsServiceImpl implements INewsService {
     @Transactional(readOnly = true)
     @Cacheable(key = "#id")
     public NewsResponseDto getNewsById(Long id) {
-        log.info("Call methot getNewsById() from NewsService with id: {}", id);
+        log.info("Call method getNewsById() from NewsService with id: {}", id);
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
         log.debug("Complet methot getNewsById() from NewsService with id: {}, found entity News: {}", id, news);
@@ -90,9 +90,8 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NewsResponseDto> getAllNews(int pageNumber, int pageSize) {
-        log.info("Call methot getAllNews() from NewsService with pageNumber: {}, pageSize: {}", pageNumber, pageSize);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public List<NewsResponseDto> getAllNews(Pageable pageable) {
+        log.info("Call method getAllNews() from NewsService with pageNumber: {}, pageSize: {}", pageable.getPageNumber(), pageable.getPageSize());
         Page<News> newsPage = newsRepository.findAll(pageable);
         return newsPage.getContent().stream()
                 .map(newsMapper::entityToDto)
@@ -101,13 +100,13 @@ public class NewsServiceImpl implements INewsService {
 
     @Override
     @Transactional(readOnly = true)
-    public NewsWithCommentsResponseDto getNewsWithComments(Long newsId, int pageNumber, int pageSize) {
-        log.info("Call methot getNewsWithComments() from NewsService with id: {}, pageNumber: {}, pageSize: {}", newsId, pageNumber, pageSize);
+    public NewsWithCommentsResponseDto getNewsWithComments(Long newsId, Pageable pageable) {
+        log.info("Call method getNewsWithComments() from NewsService with id: {}, pageNumber: {}, pageSize: {}", newsId, pageable.getPageNumber(), pageable.getPageSize());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, newsId)));
 
-        List<CommentResponseDto> comments = commentService.findByNewsIdOrderByTimeDesc(newsId, pageNumber, pageSize);
+        List<CommentResponseDto> comments = commentService.findByNewsIdOrderByTimeDesc(newsId, pageable);
 
         return NewsWithCommentsResponseDto.builder()
                 .withId(news.getId())
@@ -122,7 +121,7 @@ public class NewsServiceImpl implements INewsService {
     @Transactional
     @CacheEvict(key = "#id")
     public void delete(Long id) {
-        log.info("Call methot delete() from NewsService with id: {}", id);
+        log.info("Call method delete() from NewsService with id: {}", id);
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(MESSAGE_NEWS_NOT_FOUND, id)));
         newsRepository.delete(news);
@@ -131,7 +130,7 @@ public class NewsServiceImpl implements INewsService {
     @Override
     @Transactional(readOnly = true)
     public List<NewsResponseDto> searchNews(String keyword, String dateString, Pageable pageable) {
-        log.info("Call methot searchNews() from NewsService with keyword: {}, dateString: {}, pageNumber: {}, pageSize: {}", keyword, dateString, pageable.getPageNumber(), pageable.getPageSize());
+        log.info("Call method searchNews() from NewsService with keyword: {}, dateString: {}, pageNumber: {}, pageSize: {}", keyword, dateString, pageable.getPageNumber(), pageable.getPageSize());
         Specification<News> spec = NewsSpecification.search(keyword, convertStringToDate(dateString));
         Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("time").descending());
         Page<News> newsPage = newsRepository.findAll(spec, pageable1);

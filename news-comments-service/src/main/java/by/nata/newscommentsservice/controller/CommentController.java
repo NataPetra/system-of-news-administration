@@ -7,9 +7,12 @@ import by.nata.newscommentsservice.service.dto.CommentRequestDto;
 import by.nata.newscommentsservice.service.dto.CommentResponseDto;
 import by.nata.newscommentsservice.service.validator.CommentValidation;
 import by.nata.newscommentsservice.service.validator.NewsValidation;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -84,10 +87,9 @@ public class CommentController implements CommentDocOpenApi {
     @GetMapping("/search")
     public List<CommentResponseDto> searchComments(
             @RequestParam(required = false) String keyword,
-            @RequestParam int pageNumber,
-            @RequestParam int pageSize
+            @PageableDefault(size = 5) @Nullable Pageable pageable
     ) {
-        return commentService.searchComment(keyword, pageNumber, pageSize);
+        return commentService.searchComment(keyword, pageable);
     }
 
     @MethodLog

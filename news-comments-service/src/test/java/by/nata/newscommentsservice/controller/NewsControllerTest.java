@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -107,9 +108,11 @@ class NewsControllerTest {
         int pageSize = 10;
         List<NewsResponseDto> responseList = createNewsResponseDtoList();
 
-        when(newsService.getAllNews(pageNumber, pageSize)).thenReturn(responseList);
+        when(newsService.getAllNews(PageRequest.of(pageNumber, pageSize))).thenReturn(responseList);
 
-        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE_GET_ALL, pageNumber, pageSize))
+        MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE_GET_ALL, pageNumber, pageSize)
+                        .param("page", String.valueOf(pageNumber))
+                        .param("size", String.valueOf(pageSize)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -137,7 +140,7 @@ class NewsControllerTest {
                 .build();
 
         when(newsService.isNewsExist(newsId)).thenReturn(true);
-        when(newsService.getNewsWithComments(newsId, pageNumber, pageSize)).thenReturn(response);
+        when(newsService.getNewsWithComments(newsId, PageRequest.of(pageNumber, pageSize))).thenReturn(response);
 
         mockMvc.perform(get(URL_TEMPLATE_GET_WITH_COMMENT, newsId, pageNumber, pageSize))
                 .andExpect(status().isOk())
@@ -152,7 +155,7 @@ class NewsControllerTest {
         int pageSize = 10;
         List<NewsResponseDto> responseList = createNewsResponseDtoList();
 
-        when(newsService.searchNews(keyword, dateString, PageRequest.of(pageNumber, pageSize))).thenReturn(responseList);
+        when(newsService.searchNews(keyword, dateString, PageRequest.of(pageNumber, pageSize, Sort.unsorted()))).thenReturn(responseList);
 
         mockMvc.perform(get(URL_TEMPLATE_SEARCH, keyword, dateString, pageNumber, pageSize))
                 .andExpect(status().isOk())
