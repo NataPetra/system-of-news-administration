@@ -15,13 +15,15 @@ class ControllersLoggingTest {
     @SpyBean
     private ControllersLogging controllersLogging;
 
+    public static final String METHOD_NAME = "methodName";
+
     @Test
     void logMethodBefore() {
         JoinPoint joinPoint = Mockito.mock(JoinPoint.class);
 
         MethodSignature signature = Mockito.mock(MethodSignature.class);
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
-        Mockito.when(signature.getName()).thenReturn("methodName");
+        Mockito.when(signature.getName()).thenReturn(METHOD_NAME);
         String[] parameterNames = {"param1", "param2"};
         Object[] arguments = {1, "value"};
         Mockito.when(signature.getParameterNames()).thenReturn(parameterNames);
@@ -39,7 +41,7 @@ class ControllersLoggingTest {
 
         MethodSignature signature = Mockito.mock(MethodSignature.class);
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
-        Mockito.when(signature.getName()).thenReturn("methodName");
+        Mockito.when(signature.getName()).thenReturn(METHOD_NAME);
 
         Object response = "Some Response";
 

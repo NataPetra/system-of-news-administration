@@ -43,9 +43,8 @@ class CachingAspectIntegrationTest {
     @SpyBean
     private NewsServiceImpl newsService;
 
-    //TODO: написать комментрай по order
     @Test
-    @Order(1)
+    @Order(1)    //Here @Order was used to check that after the test with saving the news, in the test with receiving the news, when accessing the previously saved news, the get method was not called
     @SqlGroup({
             @Sql(scripts = "classpath:testdata/add_news_test_data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:testdata/clear_news_test_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
@@ -76,7 +75,7 @@ class CachingAspectIntegrationTest {
         assertNotNull(savedComment);
 
         verify(commentService, times(1)).getCommentById(2L);
-        verify(commentService, times(0)).getCommentById(1L);
+        verify(commentService, times(0)).getCommentById(1L);  //Here we will check that previously saved news is retrieved from the cache
     }
 
     @Test

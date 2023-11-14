@@ -109,14 +109,6 @@ services:
     networks:
       - news_application_ntwrk
 
-  swagger-ui:
-    build: swagger-ui
-    image: news_swagger-ui:1.0.0
-    ports:
-      - "81:8080"
-    networks:
-      - news_application_ntwrk
-
   proxy:
     build: proxy
     image: news_proxy:1.0.0
