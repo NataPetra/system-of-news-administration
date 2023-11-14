@@ -63,6 +63,11 @@ System of News Administration is a microservices-based project designed for mana
 
 To access the news content and perform user-related operations, use the provided APIs. The microservices communicate with each other using Eureka Server and Feign Client.
 
+### Swagger:
+
+* News-service: http://localhost:8081/swagger-ui/index.html#/
+* Users-service: http://localhost:8082/swagger-ui/index.html#/
+
 ```text
 # Example API registers a new subscriber
 curl -X 'POST' \
