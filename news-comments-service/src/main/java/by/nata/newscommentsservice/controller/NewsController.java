@@ -37,7 +37,7 @@ import java.util.List;
  * Logging:
  * - @MethodLog: Custom annotation for logging method input data.
  */
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/app/news")
 @RequiredArgsConstructor

@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: swagger-aggregator
+springdoc:
+  api-docs:
+    groups:
+      enabled: true
+server:
+  servlet:
+    context-path: /swagger-aggregator

@@ -18,6 +18,30 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/v1/app/users/**
+        - id: swagger-aggregator
+          uri: lb://swagger-aggregator
+          predicates:
+            - Path=/swagger-aggregator/**
+        - id: swagger-aggregator-route
+          uri: lb://swagger-aggregator
+          predicates:
+            - Path=/swagger-aggregator/**
+        - id: openapi-n
+          uri: http://localhost:8081
+          predicates:
+            - Path=/v3/api-docs/**
+        - id: openapi-u
+          uri: http://localhost:8082
+          predicates:
+            - Path=/v3/api-docs/**
+        - id: openapi-n2
+          uri: http://news-service:8081
+          predicates:
+            - Path=/v3/api-docs/**
+        - id: openapi-u2
+          uri: http://user-service:8082
+          predicates:
+            - Path=/v3/api-docs/**
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 600

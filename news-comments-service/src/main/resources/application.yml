@@ -18,3 +18,9 @@ management:
     web:
       exposure:
         include: health, info
+springdoc:
+  api-docs:
+    path: /v3/api-docs/news-service
+    groups:
+      enabled: true
+    enabled: true
