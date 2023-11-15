@@ -1,5 +1,4 @@
 spring:
   cloud:
     config:
-      discovery:
-        enabled: false
+      enabled: false

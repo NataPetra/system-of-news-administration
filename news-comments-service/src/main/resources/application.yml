@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${ACTIVE_PROF}
+    active: ${ACTIVE_PROFILE}
   main:
     allow-bean-definition-overriding: true
   datasource:

@@ -39,7 +39,6 @@ class CommentMapperTest {
         Assertions.assertThat(comment).isNotNull();
         Assertions.assertThat(comment.getId()).isNull();
         Assertions.assertThat(comment.getText()).isEqualTo(commentRequestDto.text());
-//        Assertions.assertThat(comment.getUsername()).isEqualTo(commentRequestDto.username());
         Assertions.assertThat(comment.getTime()).isNull();
         Assertions.assertThat(comment.getNews()).isNotNull();
     }

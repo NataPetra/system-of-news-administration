@@ -1,5 +1,7 @@
 package by.nata.newscommentsservice.controller.integration;
 
+import by.nata.exceptionhandlingstarter.exception.ExceptionMessage;
+import by.nata.exceptionhandlingstarter.exception.StructuredExceptionMessage;
 import by.nata.newscommentsservice.security.dto.AppUserResponseDto;
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
 import by.nata.newscommentsservice.service.dto.NewsResponseDto;
@@ -171,6 +173,44 @@ class NewsControllerIntegrationTest {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(expectedResponse, actualResponse);
 
+    }
+
+    @Test
+    void shouldReturn400WhenNewsIsNullAndSaveUnsuccessful() throws JsonProcessingException {
+        AppUserResponseDto user = new AppUserResponseDto(JOURNALIST, ROLE_JOURNALIST);
+        wireMockResponse(user);
+
+        HttpHeaders headers = getHttpHeaders();
+
+        HttpEntity<NewsRequestDto> request = new HttpEntity<>(null, headers);
+
+        ResponseEntity<ExceptionMessage> responseEntity = restTemplate.exchange(
+                URL_TEMPLATE_SAVE,
+                HttpMethod.POST,
+                request,
+                ExceptionMessage.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals("Malformed JSON request", responseEntity.getBody().message());
+    }
+
+    @Test
+    void shouldReturn400WhenSaveNewsUnsuccessful() throws JsonProcessingException {
+        AppUserResponseDto user = new AppUserResponseDto(JOURNALIST, ROLE_JOURNALIST);
+        wireMockResponse(user);
+        NewsRequestDto newsRequestDto = NewsRequestDto.builder().withTitle("ABC").build();
+
+        HttpHeaders headers = getHttpHeaders();
+
+        HttpEntity<NewsRequestDto> request = new HttpEntity<>(newsRequestDto, headers);
+
+        ResponseEntity<StructuredExceptionMessage> responseEntity = restTemplate.exchange(
+                URL_TEMPLATE_SAVE,
+                HttpMethod.POST,
+                request,
+                StructuredExceptionMessage.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
