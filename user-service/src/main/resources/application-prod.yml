@@ -8,3 +8,6 @@ spring:
       secret: kdc.scbhc4vdvkdc.scbhc4vdvkdc.scbhc4vdvkdc.scbhc4vdvkdc.scbhc4vdv.scbhc4vdv
   application:
     name: user-service
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 600

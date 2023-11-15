@@ -14,6 +14,20 @@ services:
     networks:
       - news_application_ntwrk
 
+  api-gateway:
+    image: api-gateway-1.0.0
+    build: api-gateway
+    restart: always
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://discovery-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    networks:
+      - news_application_ntwrk
+
   news-service:
     image: news-comments-service-1.0.0
     build:
@@ -109,17 +123,17 @@ services:
     networks:
       - news_application_ntwrk
 
-  proxy:
-    build: proxy
-    image: news_proxy:1.0.0
-    depends_on:
-      - news-service
-    ports:
-      - "8080:8080"
-    networks:
-      - news_application_ntwrk
-    volumes:
-      - proxy:/var/log/nginx
+#  proxy:
+#    build: proxy
+#    image: news_proxy:1.0.0
+#    depends_on:
+#      - news-service
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - news_application_ntwrk
+#    volumes:
+#      - proxy:/var/log/nginx
 
   config-server:
     image: config-server

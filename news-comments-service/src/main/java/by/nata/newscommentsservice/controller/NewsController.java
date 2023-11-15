@@ -39,7 +39,7 @@ import java.util.List;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/app/news/")
+@RequestMapping("/api/v1/app/news")
 @RequiredArgsConstructor
 @Slf4j
 @Validated

@@ -39,7 +39,7 @@ import java.util.List;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/app/comments/")
+@RequestMapping("/api/v1/app/comments")
 @RequiredArgsConstructor
 @Slf4j
 @Validated
