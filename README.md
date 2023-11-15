@@ -61,7 +61,7 @@ System of News Administration is a microservices-based project designed for mana
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/system-of-news-administration.git
+    git clone https://github.com/NataPetra/system-of-news-administration.git
     ```
 
 2. **Navigate to the project directory:**
