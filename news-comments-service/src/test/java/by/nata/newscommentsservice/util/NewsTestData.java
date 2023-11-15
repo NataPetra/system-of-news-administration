@@ -14,9 +14,9 @@ import static by.nata.newscommentsservice.util.DateFormater.formatDate;
 
 public final class NewsTestData {
 
-    public static final String URL_TEMPLATE_SAVE = "/api/v1/app/news/";
+    public static final String URL_TEMPLATE_SAVE = "/api/v1/app/news";
     public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/news/{id}";
-    public static final String URL_TEMPLATE_GET_ALL = "/api/v1/app/news/?page={page}&size={size}";
+    public static final String URL_TEMPLATE_GET_ALL = "/api/v1/app/news?page={page}&size={size}";
     public static final String URL_TEMPLATE_GET_WITH_COMMENT = "/api/v1/app/news/{newsId}/comments?page={page}&size={size}";
     public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/news/search?keyword={keyword}&dateString={dateString}&page={page}&size={size}";
     public static final Long NEWS_ID = 1L;

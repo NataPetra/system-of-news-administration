@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: news-service
+          uri: lb://news-service
+          predicates:
+            - Path=/api/v1/app/news/**
+        - id: comments-service
+          uri: lb://news-service
+          predicates:
+            - Path=/api/v1/app/comments/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/app/users/**
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 600

@@ -23,3 +23,6 @@ logging:
 exception:
   handling:
     include: true
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 600

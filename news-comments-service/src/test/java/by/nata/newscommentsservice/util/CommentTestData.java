@@ -11,7 +11,7 @@ import java.util.List;
 
 public final class CommentTestData {
 
-    public static final String URL_TEMPLATE_SAVE = "/api/v1/app/comments/";
+    public static final String URL_TEMPLATE_SAVE = "/api/v1/app/comments";
     public static final String URL_TEMPLATE_UPDATE_GET_DELETE = "/api/v1/app/comments/{id}";
     public static final String URL_TEMPLATE_GET_BY_NEWS_ID = "/api/v1/app/comments/news/{newsId}";
     public static final String URL_TEMPLATE_SEARCH = "/api/v1/app/comments/search?keyword={keyword}&page={page}&size={size}";
