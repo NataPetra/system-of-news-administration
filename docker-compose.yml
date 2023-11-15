@@ -137,18 +137,6 @@ services:
     networks:
       - news_application_ntwrk
 
-#  proxy:
-#    build: proxy
-#    image: news_proxy:1.0.0
-#    depends_on:
-#      - news-service
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - news_application_ntwrk
-#    volumes:
-#      - proxy:/var/log/nginx
-
   config-server:
     image: config-server
     build: config-server
