@@ -20,7 +20,6 @@ management:
         include: health, info
 springdoc:
   api-docs:
-    path: /v3/api-docs/news-service
-    groups:
-      enabled: true
-    enabled: true
+    path: /news-service/v3/api-docs
+  swagger-ui:
+    path: /news-service/swagger-ui.html

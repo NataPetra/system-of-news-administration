@@ -30,5 +30,7 @@ management:
       exposure:
         include: health, info
 springdoc:
+  api-docs:
+    path: /user-service/v3/api-docs
   swagger-ui:
-    path: /v3/api-docs/user-service
+    path: /user-service/swagger-ui.html

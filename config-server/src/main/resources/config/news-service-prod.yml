@@ -26,3 +26,5 @@ exception:
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 600
+server:
+  forward-headers-strategy: framework

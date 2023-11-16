@@ -1,55 +1,36 @@
 server:
   port: 8080
+  forward-headers-strategy: framework
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /user-service/v3/api-docs
+        name: User Service
+      - url: /news-service/v3/api-docs
+        name: News Service
+
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: news-service
-          uri: lb://news-service
-          predicates:
-            - Path=/api/v1/app/news/**
-        - id: comments-service
-          uri: lb://news-service
-          predicates:
-            - Path=/api/v1/app/comments/**
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/v1/app/users/**
-        - id: swagger-aggregator
-          uri: lb://swagger-aggregator
-          predicates:
-            - Path=/swagger-aggregator/**
-        - id: swagger-aggregator-route
-          uri: lb://swagger-aggregator
-          predicates:
-            - Path=/swagger-aggregator/**
-        - id: openapi-n
-          uri: http://localhost:8081
-          predicates:
-            - Path=/v3/api-docs/**
-        - id: openapi-u
-          uri: http://localhost:8082
-          predicates:
-            - Path=/v3/api-docs/**
-        - id: openapi-n2
-          uri: http://news-service:8081
-          predicates:
-            - Path=/v3/api-docs/**
-        - id: openapi-u2
-          uri: http://user-service:8082
-          predicates:
-            - Path=/v3/api-docs/**
-        - id: openapi-n3
-          uri: http://news-service
-          predicates:
-            - Path=/v3/api-docs/news-service/**
-        - id: openapi-u3
-          uri: http://user-service
-          predicates:
-            - Path=/v3/api-docs/user-service/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      discovery:
+        locator:
+          enabled: true
+
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 600
