@@ -29,3 +29,8 @@ management:
     web:
       exposure:
         include: health, info
+springdoc:
+  api-docs:
+    path: /user-service/v3/api-docs
+  swagger-ui:
+    path: /user-service/swagger-ui.html

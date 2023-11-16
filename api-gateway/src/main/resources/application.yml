@@ -1,23 +1,36 @@
 server:
   port: 8080
+  forward-headers-strategy: framework
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /user-service/v3/api-docs
+        name: User Service
+      - url: /news-service/v3/api-docs
+        name: News Service
+
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: news-service
-          uri: lb://news-service
-          predicates:
-            - Path=/api/v1/app/news/**
-        - id: comments-service
-          uri: lb://news-service
-          predicates:
-            - Path=/api/v1/app/comments/**
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/v1/app/users/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      discovery:
+        locator:
+          enabled: true
+
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 600
