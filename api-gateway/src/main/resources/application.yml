@@ -42,6 +42,14 @@ spring:
           uri: http://user-service:8082
           predicates:
             - Path=/v3/api-docs/**
+        - id: openapi-n3
+          uri: http://news-service
+          predicates:
+            - Path=/v3/api-docs/news-service/**
+        - id: openapi-u3
+          uri: http://user-service
+          predicates:
+            - Path=/v3/api-docs/user-service/**
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 600
