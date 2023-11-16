@@ -112,14 +112,14 @@ To access the news content and perform user-related operations, use the provided
 3. **Retrieve all news sections:**
     ```bash
     curl -X 'GET' \
-      'http://localhost:8080/api/v1/app/news/' \
+      'http://localhost:8080/api/v1/app/news' \
       -H 'accept: application/json'
     ```
 
 4. **Create and save a new comment:**
     ```bash
     curl -X 'POST' \
-      'http://localhost:8080/api/v1/app/comments/' \
+      'http://localhost:8080/api/v1/app/comments' \
       -H 'accept: application/json' \
       -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
       -H 'Content-Type: application/json' \
@@ -129,14 +129,14 @@ To access the news content and perform user-related operations, use the provided
     }'
     ```
 
-### Authentication API
+#### Authentication API
 
 | Endpoint               | Description                                 | Method  | Request Body                   | Response       |
 |------------------------|---------------------------------------------|---------|--------------------------------|--------------------|
 | `/api/v1/app/users/login` | Authenticate user and generate access token | POST    | JSON: `{ "username": "example_user", "password": "user_password" }` | Bearer token       |
 | `/api/v1/app/users/validate` | Validate user authentication token       | GET     | Header: `Authorization: Bearer user_token` | JSON: `{ "username": "example_user", "role": "user_role" }` |
 
-### User Registration API
+#### User Registration API
 
 | Endpoint                      | Description                          | Method | Request Body                                                                                          | Response Body       |
 |-------------------------------|--------------------------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|
@@ -144,25 +144,25 @@ To access the news content and perform user-related operations, use the provided
 | `/api/v1/app/users/register/journalist` | Register a journalist            | POST   | JSON: `{ "username": "example_journalist", "password": "journalist_password" }` | String: Registered username |
 | `/api/v1/app/users/register/subscriber` | Register a subscriber           | POST   | JSON: `{ "username": "example_subscriber", "password": "subscriber_password" }` | String: Registered username |
 
-### Comment API
+#### Comment API
 
-| Endpoint                           | Description                                     | Method | Request Body                                    | Response Body |
-|------------------------------------|-------------------------------------------------|--------|-------------------------------------------------|---------------|
-| `/api/v1/app/comments`             | Save a comment                                  | POST   | JSON: `{ "text": "Comment text", "newsId": 1 }` | CommentResponseDto |
-| `/api/v1/app/comments/{id}`        | Update a comment by ID                           | PUT    | JSON: `{ "text": "Updated comment text", "newsId": 1 }`     | CommentResponseDto |
-| `/api/v1/app/comments/{id}`        | Get a comment by ID                             | GET    | -                                               | CommentResponseDto |
-| `/api/v1/app/comments/news/{newsId}` | Get comments by news ID                        | GET    | -                                               | List<CommentResponseDto> |
-| `/api/v1/app/comments/search`      | Search comments by keyword                       | GET    | -                                               | List<CommentResponseDto> |
-| `/api/v1/app/comments/{id}`        | Delete a comment by ID                           | DELETE | -                                               | Void          |
+| Endpoint                           | Description                                     | Method | Request Body                                    | Response Body              |
+|------------------------------------|-------------------------------------------------|--------|-------------------------------------------------|----------------------------|
+| `/api/v1/app/comments`             | Save a comment                                  | POST   | JSON: `{ "text": "Comment text", "newsId": 1 }` | CommentResponseDto         |
+| `/api/v1/app/comments/{id}`        | Update a comment by ID                           | PUT    | JSON: `{ "text": "Updated comment text", "newsId": 1 }`     | CommentResponseDto         |
+| `/api/v1/app/comments/{id}`        | Get a comment by ID                             | GET    | -                                               | CommentResponseDto         |
+| `/api/v1/app/comments/news/{newsId}` | Get comments by news ID                        | GET    | -                                               | List of CommentResponseDto |
+| `/api/v1/app/comments/search`      | Search comments by keyword                       | GET    | -                                               | List of CommentResponseDto |
+| `/api/v1/app/comments/{id}`        | Delete a comment by ID                           | DELETE | -                                               | Void                       |
 
-### News API
+#### News API
 
-| Endpoint                           | Description                                     | Method | Request Body                   | Response Body |
-|------------------------------------|-------------------------------------------------|--------|--------------------------------|---------------|
-| `/api/v1/app/news`                 | Save a news section                              | POST   | JSON: `{ "title": "News Title", "text": "News Content" }` | NewsResponseDto |
-| `/api/v1/app/news/{id}`            | Update a news section by ID                       | PUT    | JSON: `{ "title": "Updated Title", "text": "Updated Content" }` | NewsResponseDto |
-| `/api/v1/app/news/{id}`            | Get a news section by ID                         | GET    | -                              | NewsResponseDto |
-| `/api/v1/app/news`                 | Get all news sections                            | GET    | -                              | List<NewsResponseDto> |
+| Endpoint                           | Description                                     | Method | Request Body                   | Response Body              |
+|------------------------------------|-------------------------------------------------|--------|--------------------------------|----------------------------|
+| `/api/v1/app/news`                 | Save a news section                              | POST   | JSON: `{ "title": "News Title", "text": "News Content" }` | NewsResponseDto            |
+| `/api/v1/app/news/{id}`            | Update a news section by ID                       | PUT    | JSON: `{ "title": "Updated Title", "text": "Updated Content" }` | NewsResponseDto            |
+| `/api/v1/app/news/{id}`            | Get a news section by ID                         | GET    | -                              | NewsResponseDto            |
+| `/api/v1/app/news`                 | Get all news sections                            | GET    | -                              | List of NewsResponseDto    |
 | `/api/v1/app/news/{newsId}/comments` | Get news with comments by news ID              | GET    | -                              | NewsWithCommentsResponseDto |
-| `/api/v1/app/news/search`          | Search news sections by keyword and date         | GET    | -                              | List<NewsResponseDto> |
-| `/api/v1/app/news/{id}`            | Delete a news section by ID                       | DELETE | -                              | Void          |
+| `/api/v1/app/news/search`          | Search news sections by keyword and date         | GET    | -                              | List of NewsResponseDto    |
+| `/api/v1/app/news/{id}`            | Delete a news section by ID                       | DELETE | -                              | Void                       |
