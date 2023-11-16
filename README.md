@@ -36,6 +36,7 @@ System of News Administration is a microservices-based project designed for mana
 - Spring Cloud Feign
 - Spring Cloud Netflix Eureka
 - Spring Cloud Config Server
+- Spring Cloud Gateway
 
 #### Database
 - PostgreSQL
@@ -52,6 +53,7 @@ System of News Administration is a microservices-based project designed for mana
 
 #### Logging
 - Logback
+- Spring AOP
 
 #### Containerization
 - Docker
@@ -80,8 +82,7 @@ To access the news content and perform user-related operations, use the provided
 
 ### Swagger:
 
-- [News-service Swagger](http://localhost:8081/swagger-ui/index.html#/)
-- [Users-service Swagger](http://localhost:8082/swagger-ui/index.html#/)
+- [News-service and users-service Swagger](http://localhost:8080/webjars/swagger-ui/index.html)
 
 ### Example API Requests:
 
