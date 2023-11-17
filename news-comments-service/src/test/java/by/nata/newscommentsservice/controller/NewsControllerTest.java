@@ -1,5 +1,6 @@
 package by.nata.newscommentsservice.controller;
 
+import by.nata.exceptionhandlingstarter.handler.GlobalExceptionHandlerAdvice;
 import by.nata.newscommentsservice.security.filter.AuthenticationJwtFilter;
 import by.nata.newscommentsservice.service.api.INewsService;
 import by.nata.newscommentsservice.service.dto.NewsRequestDto;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -39,9 +41,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.containsString;
 
 @ActiveProfiles("test")
 @WebMvcTest(
@@ -50,6 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc(addFilters = false)
+@Import(GlobalExceptionHandlerAdvice.class)
 class NewsControllerTest {
 
     @Autowired
@@ -63,7 +66,7 @@ class NewsControllerTest {
 
 
     @Test
-    void saveNews() throws Exception {
+    void saveNewsIsSuccessful() throws Exception {
         NewsRequestDto request = NewsTestData.createNewsRequestDto().build();
         NewsResponseDto response = NewsTestData.createNewsResponseDto().build();
 
@@ -77,12 +80,34 @@ class NewsControllerTest {
     }
 
     @Test
-    void saveNewsWithNullRequestDto() throws Exception {
+    void saveNewsIsUnsuccessfulWithEmptyFieldText() throws Exception {
+        NewsRequestDto request = NewsRequestDto.builder().withTitle("ABC").build();
+
+        mockMvc.perform(post(URL_TEMPLATE_SAVE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Text must not be null or empty")));
+    }
+
+    @Test
+    void saveNewsIsUnsuccessfulWithEmptyFieldTitle() throws Exception {
+        NewsRequestDto request = NewsRequestDto.builder().withText("Text").build();
+
+        mockMvc.perform(post(URL_TEMPLATE_SAVE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Title must not be null or empty")));
+    }
+
+    @Test
+    void saveNewsIsUnsuccessfulWhenNewsIsNull() throws Exception {
         mockMvc.perform(post(URL_TEMPLATE_SAVE)
                         .content(objectMapper.writeValueAsString(null))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Malformed JSON request")));
     }
 
     @Test
@@ -102,6 +127,49 @@ class NewsControllerTest {
     }
 
     @Test
+    void updateNewsIsUnsuccessfulWhenNewsIsNull() throws Exception {
+        Long newsId = 1L;
+
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
+
+        mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, newsId)
+                        .content(objectMapper.writeValueAsString(null))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Malformed JSON request")));
+    }
+
+    @Test
+    void updateNewsIsUnsuccessfulWithEmptyFieldText() throws Exception {
+        Long newsId = 1L;
+
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
+
+        NewsRequestDto request = NewsRequestDto.builder().withTitle("ABC").build();
+
+        mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, newsId)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Text must not be null or empty")));
+    }
+
+    @Test
+    void updateNewsIsUnsuccessfulWithEmptyFieldTitle() throws Exception {
+        Long newsId = 1L;
+
+        when(newsService.isNewsExist(newsId)).thenReturn(true);
+
+        NewsRequestDto request = NewsRequestDto.builder().withText("Text").build();
+
+        mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, newsId)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Title must not be null or empty")));
+    }
+
+    @Test
     void getNews() throws Exception {
         Long newsId = 1L;
         NewsResponseDto response = NewsTestData.createNewsResponseDto().build();
@@ -112,6 +180,16 @@ class NewsControllerTest {
         mockMvc.perform(get(URL_TEMPLATE_UPDATE_GET_DELETE, newsId))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    void getNewsWhenInvalidNewsId() throws Exception {
+        Long newsId = 1L;
+        when(newsService.isNewsExist(newsId)).thenReturn(false);
+
+        mockMvc.perform(get(URL_TEMPLATE_UPDATE_GET_DELETE, newsId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Invalid id: news not found\":\"id")));
     }
 
     @Test

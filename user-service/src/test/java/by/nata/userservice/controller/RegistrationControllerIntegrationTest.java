@@ -2,6 +2,7 @@ package by.nata.userservice.controller;
 
 import by.nata.userservice.database.repository.AppUserRepository;
 import by.nata.userservice.service.dto.AppUserRequestDto;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +21,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RegistrationControllerIntegrationTest {
 
-    public static final String URL_REGISTRATION = "/api/v1/app/users/register/";
     @Autowired
     private AppUserRepository userRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
+    public static final String URL_REGISTRATION = "/api/v1/app/users/register/";
     private static final String USERNAME = "user";
+    public static final String PASSWORD = "password";
 
     @ParameterizedTest
     @ValueSource(strings = {"admin", "journalist", "subscriber"})
     void shouldReturn201AndCorrectUsernameWhenRegisterAdministratorWithValidCredentials(String registrationUrlType) {
         AppUserRequestDto request = AppUserRequestDto.builder()
                 .withUsername(USERNAME)
-                .withPassword("password")
+                .withPassword(PASSWORD)
                 .build();
         HttpEntity<AppUserRequestDto> requestEntity = new HttpEntity<>(request);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -50,5 +52,60 @@ class RegistrationControllerIntegrationTest {
         assertEquals(USERNAME, response);
 
         userRepository.findByUsername(USERNAME).ifPresent(userRepository::delete);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"UsernameUsernameUsernameUsernameUsernameUsernameUsername", " "})
+    void shouldReturn400WhenRegisterWhenUserNameInvalid(String username) {
+        AppUserRequestDto request = AppUserRequestDto.builder()
+                .withUsername(username)
+                .withPassword(PASSWORD)
+                .build();
+        HttpEntity<AppUserRequestDto> requestEntity = new HttpEntity<>(request);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                URL_REGISTRATION + "admin",
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
+    }
+
+    @Test
+    void shouldReturn400WhenRegisterWhenUserNameIsNull() {
+        AppUserRequestDto request = AppUserRequestDto.builder()
+                .withUsername(null)
+                .withPassword(PASSWORD)
+                .build();
+        HttpEntity<AppUserRequestDto> requestEntity = new HttpEntity<>(request);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                URL_REGISTRATION + "admin",
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
+    }
+
+    @Test
+    void shouldReturn400WhenRegisterWhenPasswordIsNull() {
+        AppUserRequestDto request = AppUserRequestDto.builder()
+                .withUsername(USERNAME)
+                .withPassword(null)
+                .build();
+        HttpEntity<AppUserRequestDto> requestEntity = new HttpEntity<>(request);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                URL_REGISTRATION + "admin",
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
     }
 }

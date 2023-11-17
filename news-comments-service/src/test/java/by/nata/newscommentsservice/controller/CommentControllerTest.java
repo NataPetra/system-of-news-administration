@@ -1,5 +1,6 @@
 package by.nata.newscommentsservice.controller;
 
+import by.nata.exceptionhandlingstarter.handler.GlobalExceptionHandlerAdvice;
 import by.nata.newscommentsservice.security.filter.AuthenticationJwtFilter;
 import by.nata.newscommentsservice.service.api.ICommentService;
 import by.nata.newscommentsservice.service.api.INewsService;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -29,6 +31,7 @@ import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_GET_
 import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_SAVE;
 import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_SEARCH;
 import static by.nata.newscommentsservice.util.CommentTestData.URL_TEMPLATE_UPDATE_GET_DELETE;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,6 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc(addFilters = false)
+@Import(GlobalExceptionHandlerAdvice.class)
 class CommentControllerTest {
 
     @Autowired
@@ -78,6 +82,43 @@ class CommentControllerTest {
     }
 
     @Test
+    void saveCommentIsUnsuccessfulWithEmptyFieldText() throws Exception {
+        CommentRequestDto request = CommentRequestDto.builder().withNewsId(1L).build();
+
+        when(newsService.isNewsExist(1L)).thenReturn(true);
+
+        mockMvc.perform(post(URL_TEMPLATE_SAVE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Text must not be null or empty")));
+    }
+
+    @Test
+    void saveCommentIsUnsuccessfulWhenNewsIdIsNull() throws Exception {
+        CommentRequestDto request = CommentRequestDto.builder().withText("Text").withNewsId(null).build();
+
+        mockMvc.perform(post(URL_TEMPLATE_SAVE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("News id must not be null")));
+    }
+
+    @Test
+    void saveCommentIsUnsuccessfulWhenNewsIdIsNotExist() throws Exception {
+        CommentRequestDto request = CommentTestData.createCommentRequestDto().build();
+
+        when(newsService.isNewsExist(1L)).thenReturn(false);
+
+        mockMvc.perform(post(URL_TEMPLATE_SAVE)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Invalid id: news not found")));
+    }
+
+    @Test
     void updateComment() throws Exception {
         CommentRequestDto request = CommentTestData.createCommentRequestDto().build();
         CommentResponseDto response = CommentTestData.createCommentResponseDto().build();
@@ -91,6 +132,20 @@ class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    void updateCommentIsUnsuccessfulWhenCommentIdIsNotExist() throws Exception {
+        CommentRequestDto request = CommentTestData.createCommentRequestDto().build();
+
+        when(commentService.isCommentExist(COMMENT_ID)).thenReturn(false);
+        when(newsService.isNewsExist(1L)).thenReturn(true);
+
+        mockMvc.perform(put(URL_TEMPLATE_UPDATE_GET_DELETE, COMMENT_ID)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Invalid id: comment not found\":\"id")));
     }
 
     @Test

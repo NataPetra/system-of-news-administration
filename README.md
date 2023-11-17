@@ -30,7 +30,7 @@ System of News Administration is a microservices-based project designed for mana
 - Spring Boot
 - Spring Data JPA
 - Liquibase
-- Spring Cache
+- Caching
 - Spring Security
 - Spring Configuration Processor
 - Spring Cloud Feign
